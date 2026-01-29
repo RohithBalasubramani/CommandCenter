@@ -1,7 +1,7 @@
 "use client";
 
 import Canvas from "@/components/canvas/Canvas";
-import VoiceInterface from "@/components/layer1/VoiceInterface";
+import VoiceInterfaceV2 from "@/components/layer1/VoiceInterfaceV2";
 import TranscriptPanel from "@/components/layer1/TranscriptPanel";
 import StatusBar from "@/components/status-bar/StatusBar";
 import { DebugPanel } from "@/components/debug";
@@ -22,7 +22,7 @@ export default function CommandCenterPage() {
         {/* Layer 1: Voice I/O — Full canvas for now */}
         <div className="h-full w-full flex flex-col">
           {/* Main voice interface */}
-          <VoiceInterface />
+          <VoiceInterfaceV2 />
 
           {/* Transcript overlay — shows what flows to Layer 2 */}
           <TranscriptPanel />

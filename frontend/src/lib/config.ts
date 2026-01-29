@@ -19,6 +19,16 @@ export const config = {
     alwaysOn: process.env.NEXT_PUBLIC_SPOTVOX_ALWAYS_ON === "true",
   } satisfies PersonaPlexConfig,
 
+  stt: {
+    serverUrl:
+      process.env.NEXT_PUBLIC_STT_SERVER_URL || "http://localhost:8890",
+  },
+
+  tts: {
+    serverUrl:
+      process.env.NEXT_PUBLIC_TTS_SERVER_URL || "http://localhost:8880",
+  },
+
   spot: {
     enabled: process.env.NEXT_PUBLIC_SPOT_ENABLED !== "false",
   },

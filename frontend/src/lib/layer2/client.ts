@@ -76,7 +76,11 @@ export async function orchestrate(
   sessionId?: string,
   context?: Record<string, unknown>
 ): Promise<Layer2Response> {
-  const response = await fetch(`${API_BASE}/api/layer2/orchestrate/`, {
+  const url = `${API_BASE}/api/layer2/orchestrate/`;
+  console.info(`[Layer2] orchestrate() → POST ${url}`, { transcript, sessionId });
+  const t0 = performance.now();
+
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -88,12 +92,22 @@ export async function orchestrate(
     }),
   });
 
+  const elapsed = Math.round(performance.now() - t0);
+
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+    console.error(`[Layer2] orchestrate() failed (${response.status}) in ${elapsed}ms:`, error);
     throw new Error(error.error || `Layer 2 error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  console.info(`[Layer2] orchestrate() success in ${elapsed}ms:`, {
+    voice_response: data.voice_response?.slice(0, 100),
+    intent: data.intent?.type,
+    rag_results: data.rag_results?.length,
+    processing_time_ms: data.processing_time_ms,
+  });
+  return data;
 }
 
 /**
@@ -106,7 +120,10 @@ export async function getFiller(
   intentType: string = "query",
   domains: string[] = ["industrial"]
 ): Promise<string> {
-  const response = await fetch(`${API_BASE}/api/layer2/filler/`, {
+  const url = `${API_BASE}/api/layer2/filler/`;
+  console.info(`[Layer2] getFiller() → POST ${url}`, { intentType, domains });
+
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -118,12 +135,14 @@ export async function getFiller(
   });
 
   if (!response.ok) {
-    // Return default filler on error
+    console.warn(`[Layer2] getFiller() failed (${response.status}), using default`);
     return "One moment...";
   }
 
   const data = await response.json();
-  return data.filler_text || "Let me check that for you.";
+  const filler = data.filler_text || "Let me check that for you.";
+  console.info(`[Layer2] getFiller() → "${filler}"`);
+  return filler;
 }
 
 /**
@@ -207,29 +226,11 @@ export class Layer2Service {
   /**
    * Process a transcript through Layer 2.
    *
-   * This method:
-   * 1. Immediately gets and returns filler text
-   * 2. Sends transcript to orchestrator
-   * 3. Calls callbacks when response is ready
+   * Sends transcript to orchestrator and calls callbacks when response is ready.
+   * No filler speech — clean human→AI flow.
    */
   async processTranscript(transcript: string): Promise<Layer2Response> {
     console.info("[Layer2] Processing transcript:", transcript);
-
-    // Quick intent detection for filler
-    const intentType = this.detectIntentType(transcript);
-    const domains = this.detectDomains(transcript);
-
-    // Get filler text immediately (non-blocking)
-    getFiller(intentType, domains)
-      .then((filler) => {
-        if (this.onFillerCallback && filler) {
-          console.info("[Layer2] Filler:", filler);
-          this.onFillerCallback(filler);
-        }
-      })
-      .catch((err) => {
-        console.warn("[Layer2] Failed to get filler:", err);
-      });
 
     // Process through orchestrator
     try {

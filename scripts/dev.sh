@@ -2,43 +2,38 @@
 #
 # Command Center - Unified Development Server
 #
-# Single-terminal dev environment with:
-# - Backend (django) + Frontend (nextjs)
-# - Color-coded log output
-# - Persistent session logs (auto-cleanup >5 days)
-# - Smart process management
+# V2 Pipeline: STT (Parakeet/Whisper) + TTS (Kokoro) + Django + Next.js
+# V1 Pipeline: PersonaPlex (set USE_V2_PIPELINE=false)
 #
 # Usage:
-#   ./scripts/dev.sh                  # Start servers (assumes setup done)
-#   ./scripts/dev.sh --setup          # Run setup first, then start servers
+#   ./scripts/dev.sh                  # Start servers
+#   ./scripts/dev.sh --setup          # Run setup first, then start
 #   ./scripts/dev.sh --full           # Full reset + setup + start
-#   ./scripts/dev.sh --backend-port 8001 --frontend-port 3001
+#   ./scripts/dev.sh --v1             # Use V1 (PersonaPlex) pipeline
 #
 
-set -e
+set -uo pipefail
+# Not using set -e: many commands (curl, fuser, docker) are expected to fail gracefully
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  SETUP FLAGS                                                               ║
-# ╚════════════════════════════════════════════════════════════════════════════╝
-
-RUN_SETUP=false
-RUN_FULL_RESET=false
-
-# ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  CONFIGURATION - EDIT THESE FOR YOUR PROJECT                               ║
+# ║  CONFIGURATION                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 PROJECT_NAME="Command Center"
-PROJECT_SLUG="command-center"
 LOG_RETENTION_DAYS=5
 BACKEND_PORT=8100
 FRONTEND_PORT=3100
 PERSONAPLEX_PORT=8998
-BACKEND_TYPE="django"    # django | fastapi
-FRONTEND_TYPE="nextjs"  # nextjs | vite
+STT_PORT=8890
+TTS_PORT=8880
+BACKEND_TYPE="django"
+FRONTEND_TYPE="nextjs"
+USE_V2_PIPELINE=true
+RUN_SETUP=false
+RUN_FULL_RESET=false
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  PATHS                                                                      ║
+# ║  PATHS                                                                    ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -50,7 +45,7 @@ SESSION_ID=$(date +%Y%m%d-%H%M%S)
 SESSION_LOG="$LOG_DIR/session-$SESSION_ID.log"
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  COLORS                                                                     ║
+# ║  COLORS                                                                   ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 RED='\033[0;31m'
@@ -65,127 +60,90 @@ NC='\033[0m'
 BOLD='\033[1m'
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  PROCESS TRACKING                                                           ║
+# ║  PROCESS TRACKING                                                         ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 BACKEND_PID=""
 FRONTEND_PID=""
 PERSONAPLEX_PID=""
+STT_PID=""
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  LOGGING FUNCTIONS                                                          ║
+# ║  LOGGING                                                                  ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 log_line() {
     local source="$1"
     local message="$2"
-    local color="$3"
-    local time=$(date '+%H:%M:%S')
-    local full_time=$(date '+%Y-%m-%d %H:%M:%S')
+    local color="${3:-$NC}"
+    local time
+    time=$(date '+%H:%M:%S')
+    local full_time
+    full_time=$(date '+%Y-%m-%d %H:%M:%S')
 
-    local source_color
-    local source_tag
+    local source_color source_tag
     case "$source" in
         SYSTEM)      source_tag="[SYSTEM] "; source_color="$MAGENTA" ;;
         BACKEND)     source_tag="[BACKEND]"; source_color="$YELLOW" ;;
-        FRONTEND)    source_tag="[FRONTEND]"; source_color="$CYAN" ;;
-        BROWSER)     source_tag="[BROWSER]"; source_color="$BLUE" ;;
+        FRONTEND)    source_tag="[FRONT] "; source_color="$CYAN" ;;
+        STT)         source_tag="[STT]   "; source_color="$GREEN" ;;
+        TTS)         source_tag="[TTS]   "; source_color="$BLUE" ;;
         PERSONAPLEX) source_tag="[PERSONA]"; source_color="$GREEN" ;;
         *)           source_tag="         "; source_color="$WHITE" ;;
     esac
 
     echo -e "${DIM}[$time]${NC} ${source_color}${source_tag}${NC} ${color}${message}${NC}"
-    echo "[$full_time] $source_tag $message" >> "$SESSION_LOG"
+    echo "[$full_time] $source_tag $message" >> "$SESSION_LOG" 2>/dev/null || true
 }
 
-print_banner() {
-    clear
-    echo -e "${BOLD}${MAGENTA}"
-    echo "    +================================================================+"
-    echo "    |                                                                |"
-    printf "    |      %-50s      |\n" "${PROJECT_NAME^^}"
-    echo "    |      Development Server                                        |"
-    echo "    |                                                                |"
-    printf "    |      Session: %-43s |\n" "$SESSION_ID"
-    echo "    |                                                                |"
-    echo "    +================================================================+"
-    echo -e "${NC}"
-}
-
-print_status() {
-    local bport="$1"
-    local fport="$2"
-    local pport="$3"
-    echo -e "${GREEN}"
-    echo "    +------------------------------------------------------------------+"
-    echo "    |                                                                  |"
-    echo "    |    COMMAND CENTER - RUNNING                                      |"
-    echo "    |                                                                  |"
-    echo "    |    Layer 1 (Voice I/O):                                          |"
-    printf "    |      PersonaPlex:  wss://localhost:%s/api/chat%-13s|\n" "$pport" ""
-    echo "    |                                                                  |"
-    echo "    |    Layer 2 (AI + RAG):                                           |"
-    printf "    |      Backend API:   http://localhost:%s/api/layer2/%-9s|\n" "$bport" ""
-    printf "    |      Ollama LLM:    http://localhost:11434%-22s|\n" ""
-    echo "    |                                                                  |"
-    echo "    |    Frontend:                                                     |"
-    printf "    |      App:           http://localhost:%-26s|\n" "$fport"
-    echo "    |                                                                  |"
-    echo "    |    Logs:             scripts/dev-helpers/logs/                   |"
-    echo "    |                                                                  |"
-    echo "    |    Press Ctrl+C to stop                                          |"
-    echo "    |                                                                  |"
-    echo "    +------------------------------------------------------------------+"
-    echo -e "${NC}"
-}
-
-print_section() {
-    local title="$1"
-    local line_len=$((54 - ${#title}))
-    local line=$(printf '%*s' "$line_len" | tr ' ' '-')
-    echo ""
-    echo -e "  ${DIM}--- $title $line${NC}"
-    echo ""
+prefix_output() {
+    local source="$1"
+    local color="$2"
+    while IFS= read -r line || [ -n "$line" ]; do
+        if [ -n "$line" ]; then
+            local time
+            time=$(date '+%H:%M:%S')
+            local full_time
+            full_time=$(date '+%Y-%m-%d %H:%M:%S')
+            local line_color="$color"
+            if echo "$line" | grep -qiE "error|exception|traceback|failed"; then
+                line_color="$RED"
+            elif echo "$line" | grep -qiE "warning|warn"; then
+                line_color="$YELLOW"
+            elif echo "$line" | grep -qiE "ready|compiled|started|listening"; then
+                line_color="$GREEN"
+            fi
+            echo -e "${DIM}[$time]${NC} ${color}[$source]${NC} ${line_color}${line}${NC}"
+            echo "[$full_time] [$source] $line" >> "$SESSION_LOG" 2>/dev/null || true
+        fi
+    done
 }
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  CLEANUP                                                                    ║
+# ║  CLEANUP                                                                  ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 cleanup() {
     echo ""
     log_line "SYSTEM" "Shutting down..." "$YELLOW"
 
-    # Kill backend
-    if [ -n "$BACKEND_PID" ] && kill -0 "$BACKEND_PID" 2>/dev/null; then
-        kill "$BACKEND_PID" 2>/dev/null || true
-        wait "$BACKEND_PID" 2>/dev/null || true
-        log_line "SYSTEM" "  Stopped backend" "$DIM"
-    fi
+    for pid_var in BACKEND_PID FRONTEND_PID PERSONAPLEX_PID STT_PID; do
+        local pid="${!pid_var}"
+        if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+            kill "$pid" 2>/dev/null || true
+            wait "$pid" 2>/dev/null || true
+            log_line "SYSTEM" "  Stopped $pid_var ($pid)" "$DIM"
+        fi
+    done
 
-    # Kill frontend
-    if [ -n "$FRONTEND_PID" ] && kill -0 "$FRONTEND_PID" 2>/dev/null; then
-        kill "$FRONTEND_PID" 2>/dev/null || true
-        wait "$FRONTEND_PID" 2>/dev/null || true
-        log_line "SYSTEM" "  Stopped frontend" "$DIM"
-    fi
-
-    # Kill PersonaPlex ONLY if dev.sh started it (not the daemon)
-    if [ -n "$PERSONAPLEX_PID" ] && kill -0 "$PERSONAPLEX_PID" 2>/dev/null; then
-        kill "$PERSONAPLEX_PID" 2>/dev/null || true
-        wait "$PERSONAPLEX_PID" 2>/dev/null || true
-        log_line "SYSTEM" "  Stopped PersonaPlex" "$DIM"
-    fi
-
-    # Kill remaining processes on backend/frontend ports only
-    # Do NOT kill PersonaPlex port — daemon should survive dev.sh restarts
+    # Kill anything left on our ports (except TTS Docker which persists)
     fuser -k $BACKEND_PORT/tcp 2>/dev/null || true
     fuser -k $FRONTEND_PORT/tcp 2>/dev/null || true
+    fuser -k $STT_PORT/tcp 2>/dev/null || true
 
     echo ""
     log_line "SYSTEM" "Session ended: $SESSION_ID" "$DIM"
-    log_line "SYSTEM" "Log saved: $SESSION_LOG" "$DIM"
-    echo ""
+    log_line "SYSTEM" "Log: $SESSION_LOG" "$DIM"
     echo -e "    ${MAGENTA}Goodbye!${NC}"
     echo ""
     exit 0
@@ -194,407 +152,343 @@ cleanup() {
 trap cleanup SIGINT SIGTERM EXIT
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  LOG CLEANUP                                                                ║
-# ╚════════════════════════════════════════════════════════════════════════════╝
-
-cleanup_old_logs() {
-    if [ -d "$LOG_DIR" ]; then
-        local count=$(find "$LOG_DIR" -name "session-*.log" -mtime +$LOG_RETENTION_DAYS 2>/dev/null | wc -l)
-        if [ "$count" -gt 0 ]; then
-            log_line "SYSTEM" "Cleaning up $count old log file(s)..." "$DIM"
-            find "$LOG_DIR" -name "session-*.log" -mtime +$LOG_RETENTION_DAYS -delete 2>/dev/null || true
-        fi
-    fi
-}
-
-# ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  PORT MANAGEMENT                                                            ║
+# ║  HELPERS                                                                  ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 check_port() {
     local port=$1
-    if fuser $port/tcp 2>/dev/null; then
-        log_line "SYSTEM" "Port $port is in use, freeing it..." "$YELLOW"
-        fuser -k $port/tcp 2>/dev/null || true
+    if fuser "$port/tcp" 2>/dev/null; then
+        log_line "SYSTEM" "Port $port in use — freeing..." "$YELLOW"
+        fuser -k "$port/tcp" 2>/dev/null || true
         sleep 1
     fi
 }
 
-find_free_port() {
-    local start_port=$1
-    local port=$start_port
-    while [ $port -lt $((start_port + 100)) ]; do
-        if ! fuser $port/tcp 2>/dev/null; then
-            echo $port
-            return
+wait_for_url() {
+    local url="$1"
+    local label="$2"
+    local timeout="${3:-30}"
+    local i=0
+    while [ $i -lt "$timeout" ]; do
+        if curl -s --connect-timeout 2 "$url" > /dev/null 2>&1; then
+            return 0
         fi
-        port=$((port + 1))
+        echo -n "."
+        sleep 1
+        i=$((i + 1))
     done
-    echo $start_port
+    echo ""
+    return 1
+}
+
+activate_venv() {
+    local dir="$1"
+    if [ -d "$dir/venv" ]; then
+        # shellcheck disable=SC1091
+        source "$dir/venv/bin/activate"
+    elif [ -d "$dir/.venv" ]; then
+        # shellcheck disable=SC1091
+        source "$dir/.venv/bin/activate"
+    fi
 }
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  OUTPUT PREFIXING                                                           ║
+# ║  PARSE ARGS                                                               ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
-prefix_output() {
-    local source="$1"
-    local color="$2"
-    while IFS= read -r line || [ -n "$line" ]; do
-        if [ -n "$line" ]; then
-            local time=$(date '+%H:%M:%S')
-            local full_time=$(date '+%Y-%m-%d %H:%M:%S')
-
-            # Color based on content
-            local line_color="$color"
-            if echo "$line" | grep -qiE "error|exception|traceback|failed"; then
-                line_color="$RED"
-            elif echo "$line" | grep -qiE "warning|warn"; then
-                line_color="$YELLOW"
-            elif echo "$line" | grep -qE '"(GET|POST|PUT|DELETE).*" 20[0-9]'; then
-                line_color="$GREEN"
-            elif echo "$line" | grep -qE '"(GET|POST|PUT|DELETE).*" [45][0-9][0-9]'; then
-                line_color="$RED"
-            elif echo "$line" | grep -qiE "ready|compiled|started|listening"; then
-                line_color="$GREEN"
-            fi
-
-            echo -e "${DIM}[$time]${NC} ${color}[$source]${NC} ${line_color}${line}${NC}"
-            echo "[$full_time] [$source] $line" >> "$SESSION_LOG"
-        fi
-    done
-}
-
-# ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  BACKEND COMMANDS                                                           ║
-# ╚════════════════════════════════════════════════════════════════════════════╝
-
-get_backend_cmd() {
-    local port=$1
-    case "$BACKEND_TYPE" in
-        django)
-            echo "python manage.py runserver 0.0.0.0:$port"
-            ;;
-        fastapi)
-            echo "uvicorn app.main:app --reload --host 0.0.0.0 --port $port"
-            ;;
-        *)
-            echo "uvicorn app.main:app --reload --host 0.0.0.0 --port $port"
-            ;;
-    esac
-}
-
-# ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  FRONTEND COMMANDS                                                          ║
-# ╚════════════════════════════════════════════════════════════════════════════╝
-
-get_frontend_cmd() {
-    local port=$1
-    case "$FRONTEND_TYPE" in
-        nextjs)
-            echo "npm run dev -- -p $port"
-            ;;
-        vite)
-            echo "npm run dev -- --port $port --host"
-            ;;
-        *)
-            echo "npm run dev -- --port $port --host"
-            ;;
-    esac
-}
-
-# ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  MAIN                                                                       ║
-# ╚════════════════════════════════════════════════════════════════════════════╝
-
-# Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --backend-port)
-            BACKEND_PORT="$2"
-            shift 2
-            ;;
-        --frontend-port)
-            FRONTEND_PORT="$2"
-            shift 2
-            ;;
-        --setup)
-            RUN_SETUP=true
-            shift
-            ;;
-        --full)
-            RUN_FULL_RESET=true
-            RUN_SETUP=true
-            shift
-            ;;
+        --v1)             USE_V2_PIPELINE=false; shift ;;
+        --backend-port)   BACKEND_PORT="$2"; shift 2 ;;
+        --frontend-port)  FRONTEND_PORT="$2"; shift 2 ;;
+        --setup)          RUN_SETUP=true; shift ;;
+        --full)           RUN_FULL_RESET=true; RUN_SETUP=true; shift ;;
         --help|-h)
             echo "Usage: $0 [options]"
             echo ""
             echo "Options:"
-            echo "  --setup           Run setup before starting servers"
-            echo "  --full            Full reset + setup + start servers"
-            echo "  --backend-port N  Set backend port (default: 8100)"
-            echo "  --frontend-port N Set frontend port (default: 3100)"
-            echo "  --help            Show this help"
+            echo "  --v1              Use V1 pipeline (PersonaPlex) instead of V2"
+            echo "  --setup           Run setup before starting"
+            echo "  --full            Full reset + setup + start"
+            echo "  --backend-port N  Override backend port (default: 8100)"
+            echo "  --frontend-port N Override frontend port (default: 3100)"
             echo ""
-            echo "Examples:"
-            echo "  $0                  # Just start servers"
-            echo "  $0 --setup          # Setup + start servers"
-            echo "  $0 --full           # Reset everything + setup + start"
             exit 0
             ;;
-        *)
-            shift
-            ;;
+        *) shift ;;
     esac
 done
 
-# Create log directory
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  BANNER                                                                   ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
+
 mkdir -p "$LOG_DIR"
+clear
+echo -e "${BOLD}${MAGENTA}"
+echo "    +================================================================+"
+echo "    |                                                                |"
+printf "    |      %-50s      |\n" "${PROJECT_NAME^^}"
+if [ "$USE_V2_PIPELINE" = true ]; then
+echo "    |      V2 Pipeline: STT + TTS + Django + Next.js                 |"
+else
+echo "    |      V1 Pipeline: PersonaPlex + Django + Next.js               |"
+fi
+echo "    |                                                                |"
+printf "    |      Session: %-43s |\n" "$SESSION_ID"
+echo "    |                                                                |"
+echo "    +================================================================+"
+echo -e "${NC}"
 
-# Start
-print_banner
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  PREREQUISITES                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
 
-print_section "PREREQUISITES"
+echo -e "  ${DIM}--- PREREQUISITES ------------------------------------------${NC}"
+echo ""
 
-# Check backend venv
-if [ -d "$BACKEND_DIR/venv" ]; then
-    log_line "SYSTEM" "Python venv: OK" "$GREEN"
-elif [ -d "$BACKEND_DIR/.venv" ]; then
+if [ -d "$BACKEND_DIR/venv" ] || [ -d "$BACKEND_DIR/.venv" ]; then
     log_line "SYSTEM" "Python venv: OK" "$GREEN"
 else
-    log_line "SYSTEM" "Python venv not found at $BACKEND_DIR/venv" "$YELLOW"
-    log_line "SYSTEM" "Will try system Python" "$DIM"
+    log_line "SYSTEM" "Python venv not found — will try system Python" "$YELLOW"
 fi
 
-# Check npm
 if command -v npm &> /dev/null; then
-    npm_ver=$(npm --version)
-    log_line "SYSTEM" "npm: v$npm_ver" "$GREEN"
+    log_line "SYSTEM" "npm: v$(npm --version)" "$GREEN"
 else
     log_line "SYSTEM" "npm not found!" "$RED"
     exit 1
 fi
 
 # ╔════════════════════════════════════════════════════════════════════════════╗
-# ║  RUN SETUP IF REQUESTED                                                    ║
+# ║  SETUP (optional)                                                         ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
 
 if [ "$RUN_FULL_RESET" = true ]; then
-    log_line "SYSTEM" "Running full reset + setup..." "$MAGENTA"
+    log_line "SYSTEM" "Full reset + setup..." "$MAGENTA"
     "$SCRIPT_DIR/setup.sh" --reset
-    log_line "SYSTEM" "Setup complete, starting servers..." "$GREEN"
 elif [ "$RUN_SETUP" = true ]; then
     log_line "SYSTEM" "Running setup..." "$MAGENTA"
     "$SCRIPT_DIR/setup.sh"
-    log_line "SYSTEM" "Setup complete, starting servers..." "$GREEN"
 fi
 
-print_section "CLEANUP"
-cleanup_old_logs
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  CLEANUP OLD LOGS + PORTS                                                 ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
 
-# Stop existing processes on ports (but NOT PersonaPlex if daemon is running)
+echo ""
+echo -e "  ${DIM}--- CLEANUP ------------------------------------------------${NC}"
+echo ""
+
+# Old logs
+if [ -d "$LOG_DIR" ]; then
+    old_count=$(find "$LOG_DIR" -name "session-*.log" -mtime +$LOG_RETENTION_DAYS 2>/dev/null | wc -l)
+    if [ "$old_count" -gt 0 ]; then
+        log_line "SYSTEM" "Cleaning $old_count old log(s)" "$DIM"
+        find "$LOG_DIR" -name "session-*.log" -mtime +$LOG_RETENTION_DAYS -delete 2>/dev/null || true
+    fi
+fi
+
+# Free ports
 check_port $BACKEND_PORT
 check_port $FRONTEND_PORT
-# Don't kill PersonaPlex daemon — dev.sh will detect and reuse it
-if [ -f /tmp/personaplex.pid ] && kill -0 "$(cat /tmp/personaplex.pid)" 2>/dev/null; then
-    log_line "SYSTEM" "PersonaPlex daemon detected (PID: $(cat /tmp/personaplex.pid)) — preserving" "$GREEN"
-else
-    check_port $PERSONAPLEX_PORT
+if [ "$USE_V2_PIPELINE" = true ]; then
+    check_port $STT_PORT
 fi
 
-print_section "PORTS"
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  OLLAMA                                                                   ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
 
-actual_backend_port=$(find_free_port $BACKEND_PORT)
-actual_frontend_port=$(find_free_port $FRONTEND_PORT)
-actual_personaplex_port=$(find_free_port $PERSONAPLEX_PORT)
+echo ""
+echo -e "  ${DIM}--- OLLAMA (LLM) -------------------------------------------${NC}"
+echo ""
 
-if [ "$actual_backend_port" != "$BACKEND_PORT" ]; then
-    log_line "SYSTEM" "Port $BACKEND_PORT busy, using $actual_backend_port" "$YELLOW"
-else
-    log_line "SYSTEM" "Backend: $actual_backend_port" "$GREEN"
-fi
-
-if [ "$actual_frontend_port" != "$FRONTEND_PORT" ]; then
-    log_line "SYSTEM" "Port $FRONTEND_PORT busy, using $actual_frontend_port" "$YELLOW"
-else
-    log_line "SYSTEM" "Frontend: $actual_frontend_port" "$GREEN"
-fi
-
-if [ "$actual_personaplex_port" != "$PERSONAPLEX_PORT" ]; then
-    log_line "SYSTEM" "Port $PERSONAPLEX_PORT busy, using $actual_personaplex_port" "$YELLOW"
-else
-    log_line "SYSTEM" "PersonaPlex: $actual_personaplex_port" "$GREEN"
-fi
-
-print_section "OLLAMA (LLM)"
-
-# Check if Ollama is available for RAG
 if command -v ollama &> /dev/null; then
     if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
         log_line "SYSTEM" "Ollama: running" "$GREEN"
-        # Show available models
         models=$(curl -s http://localhost:11434/api/tags 2>/dev/null | grep -o '"name":"[^"]*"' | head -3 | sed 's/"name":"//g;s/"//g' | tr '\n' ', ')
-        if [ -n "$models" ]; then
-            log_line "SYSTEM" "  Models: $models" "$DIM"
-        fi
+        [ -n "$models" ] && log_line "SYSTEM" "  Models: $models" "$DIM"
     else
-        log_line "SYSTEM" "Ollama: not running" "$YELLOW"
-        log_line "SYSTEM" "  Starting Ollama in background..." "$DIM"
+        log_line "SYSTEM" "Ollama: starting..." "$YELLOW"
         ollama serve > /dev/null 2>&1 &
-        sleep 2
+        sleep 3
         if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
-            log_line "SYSTEM" "  Ollama started!" "$GREEN"
+            log_line "SYSTEM" "  Ollama started" "$GREEN"
         else
-            log_line "SYSTEM" "  Could not start Ollama (RAG will use fallbacks)" "$YELLOW"
+            log_line "SYSTEM" "  Ollama failed to start (RAG will use fallbacks)" "$YELLOW"
         fi
     fi
 else
-    log_line "SYSTEM" "Ollama: not installed (RAG will use fallback responses)" "$YELLOW"
-    log_line "SYSTEM" "  Install: curl -fsSL https://ollama.com/install.sh | sh" "$DIM"
+    log_line "SYSTEM" "Ollama: not installed (RAG will use fallbacks)" "$YELLOW"
 fi
 
-print_section "STARTING"
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  START SERVICES                                                           ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
 
-# Check if PersonaPlex is already running (daemon mode)
-# SSL is off by default (SSH tunnel provides encryption). Set PERSONAPLEX_SSL=true to enable.
-USE_SSL="${PERSONAPLEX_SSL:-false}"
-SSL_DIR="$PROJECT_DIR/personaplex/ssl"
-if [ "$USE_SSL" = "true" ]; then
-    PERSONAPLEX_PROTO="https"
+echo ""
+echo -e "  ${DIM}--- STARTING SERVICES --------------------------------------${NC}"
+echo ""
+
+# ---------- V2: STT + TTS --------------------------------------------------
+
+if [ "$USE_V2_PIPELINE" = true ]; then
+
+    # --- STT Server ---
+    if curl -s --connect-timeout 2 "http://localhost:$STT_PORT/v1/stt/health" > /dev/null 2>&1; then
+        log_line "STT" "Already running on :$STT_PORT" "$GREEN"
+    else
+        log_line "STT" "Starting (Parakeet + Whisper fallback)..." "$GREEN"
+        (
+            cd "$PROJECT_DIR/backend/stt"
+            activate_venv "$BACKEND_DIR"
+            exec python3 server.py 2>&1
+        ) | prefix_output "STT" "$GREEN" &
+        STT_PID=$!
+        log_line "STT" "  PID: $STT_PID" "$DIM"
+
+        # Non-blocking: just wait 10s, report status, continue
+        log_line "STT" "  Loading model (continuing in background)..." "$DIM"
+        if wait_for_url "http://localhost:$STT_PORT/v1/stt/health" "STT" 10; then
+            log_line "STT" "Ready on :$STT_PORT" "$GREEN"
+        else
+            log_line "STT" "Still loading (will be ready soon — first run downloads model)" "$YELLOW"
+        fi
+    fi
+
+    # --- TTS Server (Kokoro Docker) ---
+    if curl -s --connect-timeout 2 "http://localhost:$TTS_PORT/v1/models" > /dev/null 2>&1; then
+        log_line "TTS" "Kokoro already running on :$TTS_PORT" "$GREEN"
+    elif command -v docker &> /dev/null; then
+        # Start or restart existing container
+        if docker ps -a --format '{{.Names}}' | grep -q '^kokoro-tts$'; then
+            log_line "TTS" "Starting existing Kokoro container..." "$GREEN"
+            docker start kokoro-tts > /dev/null 2>&1 || true
+        else
+            log_line "TTS" "Creating Kokoro container..." "$GREEN"
+            # Try GPU, fall back to CPU
+            if ! docker run -d --name kokoro-tts --gpus all \
+                    -p "$TTS_PORT:8880" \
+                    ghcr.io/remsky/kokoro-fastapi-gpu:latest > /dev/null 2>&1; then
+                docker rm kokoro-tts > /dev/null 2>&1 || true
+                log_line "TTS" "  GPU unavailable — using CPU mode" "$YELLOW"
+                docker run -d --name kokoro-tts \
+                    -p "$TTS_PORT:8880" \
+                    ghcr.io/remsky/kokoro-fastapi-cpu:latest > /dev/null 2>&1 || true
+            fi
+        fi
+
+        if wait_for_url "http://localhost:$TTS_PORT/v1/models" "TTS" 15; then
+            log_line "TTS" "Kokoro ready on :$TTS_PORT" "$GREEN"
+        else
+            log_line "TTS" "Kokoro not ready yet (browser TTS fallback active)" "$YELLOW"
+        fi
+    else
+        log_line "TTS" "Docker not found — browser TTS fallback active" "$YELLOW"
+    fi
+
+# ---------- V1: PersonaPlex ------------------------------------------------
+
 else
+    USE_SSL="${PERSONAPLEX_SSL:-false}"
+    SSL_DIR="$PROJECT_DIR/personaplex/ssl"
     PERSONAPLEX_PROTO="http"
-fi
+    [ "$USE_SSL" = "true" ] && PERSONAPLEX_PROTO="https"
 
-# Check both http and https in case daemon used a different SSL setting
-PERSONAPLEX_ALREADY_RUNNING=false
-if curl -k -s --connect-timeout 2 "http://localhost:$actual_personaplex_port/" > /dev/null 2>&1; then
-    log_line "PERSONAPLEX" "Already running on http://localhost:$actual_personaplex_port (daemon)" "$GREEN"
-    PERSONAPLEX_ALREADY_RUNNING=true
-    PERSONAPLEX_PID=""
-elif curl -k -s --connect-timeout 2 "https://localhost:$actual_personaplex_port/" > /dev/null 2>&1; then
-    log_line "PERSONAPLEX" "Already running on https://localhost:$actual_personaplex_port (daemon)" "$GREEN"
-    PERSONAPLEX_ALREADY_RUNNING=true
-    PERSONAPLEX_PID=""
-fi
-
-if [ "$PERSONAPLEX_ALREADY_RUNNING" = false ]; then
-    # Start PersonaPlex-7B voice server (native speech-to-speech via Moshi)
-    log_line "SYSTEM" "Starting PersonaPlex-7B server..." "$GREEN"
-    log_line "SYSTEM" "  TIP: Run './scripts/personaplex-daemon.sh start' to keep it persistent" "$DIM"
-
-    SSL_ARGS=""
-    if [ "$USE_SSL" = "true" ]; then
-        # Generate self-signed SSL certs if not present
-        if [ ! -f "$SSL_DIR/cert.pem" ]; then
-            log_line "SYSTEM" "  Generating SSL certs..." "$DIM"
-            mkdir -p "$SSL_DIR"
-            openssl req -x509 -newkey rsa:2048 -keyout "$SSL_DIR/key.pem" \
-                -out "$SSL_DIR/cert.pem" -days 365 -nodes \
-                -subj "/CN=localhost" 2>/dev/null
-        fi
-        SSL_ARGS="--ssl $SSL_DIR"
-        log_line "SYSTEM" "  SSL: enabled" "$DIM"
+    if curl -k -s --connect-timeout 2 "http://localhost:$PERSONAPLEX_PORT/" > /dev/null 2>&1 ||
+       curl -k -s --connect-timeout 2 "https://localhost:$PERSONAPLEX_PORT/" > /dev/null 2>&1; then
+        log_line "PERSONAPLEX" "Already running on :$PERSONAPLEX_PORT" "$GREEN"
     else
-        log_line "SYSTEM" "  SSL: disabled (set PERSONAPLEX_SSL=true to enable)" "$DIM"
-    fi
-
-    (
-        cd "$PROJECT_DIR/personaplex"
-        if [ -d "venv" ]; then
-            source venv/bin/activate
-        elif [ -d ".venv" ]; then
-            source .venv/bin/activate
+        log_line "PERSONAPLEX" "Starting PersonaPlex-7B..." "$GREEN"
+        SSL_ARGS=""
+        if [ "$USE_SSL" = "true" ]; then
+            if [ ! -f "$SSL_DIR/cert.pem" ]; then
+                mkdir -p "$SSL_DIR"
+                openssl req -x509 -newkey rsa:2048 -keyout "$SSL_DIR/key.pem" \
+                    -out "$SSL_DIR/cert.pem" -days 365 -nodes \
+                    -subj "/CN=localhost" 2>/dev/null
+            fi
+            SSL_ARGS="--ssl $SSL_DIR"
         fi
-        python3 -m moshi.server \
-            --host "0.0.0.0" \
-            --port "$actual_personaplex_port" \
-            $SSL_ARGS \
-            2>&1
-    ) | prefix_output "PERSONAPLEX" "$GREEN" &
-    PERSONAPLEX_PID=$!
 
-    log_line "SYSTEM" "  PID: $PERSONAPLEX_PID" "$DIM"
+        (
+            cd "$PROJECT_DIR/personaplex"
+            activate_venv "$PROJECT_DIR/personaplex"
+            exec python3 -m moshi.server \
+                --host "0.0.0.0" --port "$PERSONAPLEX_PORT" $SSL_ARGS 2>&1
+        ) | prefix_output "PERSONAPLEX" "$GREEN" &
+        PERSONAPLEX_PID=$!
 
-    # Wait for PersonaPlex to be FULLY ready
-    log_line "SYSTEM" "  Loading models (30-60 seconds)..." "$DIM"
-    personaplex_ready=false
-    for i in {1..90}; do
-        if curl -k -s --connect-timeout 2 "${PERSONAPLEX_PROTO}://localhost:$actual_personaplex_port/" > /dev/null 2>&1; then
-            personaplex_ready=true
-            break
+        log_line "PERSONAPLEX" "  Loading models (30-60s)..." "$DIM"
+        if wait_for_url "${PERSONAPLEX_PROTO}://localhost:$PERSONAPLEX_PORT/" "PersonaPlex" 90; then
+            log_line "PERSONAPLEX" "Ready on :$PERSONAPLEX_PORT" "$GREEN"
+        else
+            log_line "PERSONAPLEX" "Timeout — may still be loading" "$YELLOW"
         fi
-        sleep 1
-        echo -n "."
-    done
-    echo ""
-
-    if [ "$personaplex_ready" = true ]; then
-        log_line "PERSONAPLEX" "Ready on ${PERSONAPLEX_PROTO}://localhost:$actual_personaplex_port" "$GREEN"
-    else
-        log_line "PERSONAPLEX" "Timeout - may still be loading" "$YELLOW"
     fi
 fi
 
-# Start backend
-log_line "SYSTEM" "Starting backend ($BACKEND_TYPE)..." "$YELLOW"
+# ---------- Backend (Django) ------------------------------------------------
 
-backend_cmd=$(get_backend_cmd $actual_backend_port)
-
+log_line "BACKEND" "Starting Django on :$BACKEND_PORT..." "$YELLOW"
 (
     cd "$BACKEND_DIR"
-    if [ -d "venv" ]; then
-        source venv/bin/activate
-    elif [ -d ".venv" ]; then
-        source .venv/bin/activate
-    fi
-    eval "$backend_cmd" 2>&1
+    activate_venv "$BACKEND_DIR"
+    exec python manage.py runserver "0.0.0.0:$BACKEND_PORT" 2>&1
 ) | prefix_output "BACKEND" "$YELLOW" &
 BACKEND_PID=$!
 
-log_line "SYSTEM" "  PID: $BACKEND_PID" "$DIM"
-
-# Wait for backend to be ready
-log_line "SYSTEM" "Waiting for backend..." "$DIM"
-ready=false
-for i in {1..30}; do
-    if curl -s "http://localhost:$actual_backend_port/admin/" > /dev/null 2>&1 || \
-       curl -s "http://localhost:$actual_backend_port/api/" > /dev/null 2>&1 || \
-       curl -s "http://localhost:$actual_backend_port/" > /dev/null 2>&1; then
-        ready=true
-        break
-    fi
-    sleep 1
-    echo -n "."
-done
-echo ""
-
-if [ "$ready" = true ]; then
-    log_line "BACKEND" "Ready!" "$GREEN"
+if wait_for_url "http://localhost:$BACKEND_PORT/" "Backend" 15; then
+    log_line "BACKEND" "Ready on :$BACKEND_PORT" "$GREEN"
 else
-    log_line "BACKEND" "Health check timed out (may still be starting)" "$YELLOW"
+    log_line "BACKEND" "Not ready yet (may still be starting)" "$YELLOW"
 fi
 
-# Start frontend
-log_line "SYSTEM" "Starting frontend ($FRONTEND_TYPE)..." "$CYAN"
+# ---------- Frontend (Next.js) ----------------------------------------------
 
-frontend_cmd=$(get_frontend_cmd $actual_frontend_port)
-
+log_line "FRONTEND" "Starting Next.js on :$FRONTEND_PORT..." "$CYAN"
 (
     cd "$FRONTEND_DIR"
-    eval "$frontend_cmd" 2>&1
+    exec npm run dev -- -p "$FRONTEND_PORT" 2>&1
 ) | prefix_output "FRONTEND" "$CYAN" &
 FRONTEND_PID=$!
 
-log_line "SYSTEM" "  PID: $FRONTEND_PID" "$DIM"
-
-# Wait a bit for frontend
 sleep 3
 
-print_status $actual_backend_port $actual_frontend_port $actual_personaplex_port
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  STATUS BANNER                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
 
-print_section "LIVE LOGS"
-log_line "SYSTEM" "Streaming logs... (Ctrl+C to stop)" "$DIM"
+echo ""
+echo -e "${GREEN}"
+echo "    +------------------------------------------------------------------+"
+echo "    |                                                                  |"
+echo "    |    COMMAND CENTER - RUNNING                                      |"
+echo "    |                                                                  |"
+if [ "$USE_V2_PIPELINE" = true ]; then
+echo "    |    V2 Voice Pipeline:                                            |"
+printf "    |      STT Server:   http://localhost:%-27s|\n" "$STT_PORT"
+printf "    |      TTS Server:   http://localhost:%-27s|\n" "$TTS_PORT"
+else
+echo "    |    V1 Voice Pipeline:                                            |"
+printf "    |      PersonaPlex:  wss://localhost:%s/api/chat%-14s|\n" "$PERSONAPLEX_PORT" ""
+fi
+echo "    |                                                                  |"
+echo "    |    Layer 2 (AI + RAG):                                           |"
+printf "    |      Backend API:  http://localhost:%-27s|\n" "$BACKEND_PORT"
+printf "    |      Ollama LLM:   http://localhost:%-27s|\n" "11434"
+echo "    |                                                                  |"
+echo "    |    Frontend:                                                     |"
+printf "    |      App:          http://localhost:%-27s|\n" "$FRONTEND_PORT"
+echo "    |                                                                  |"
+echo "    |    Press Ctrl+C to stop all services                             |"
+echo "    |                                                                  |"
+echo "    +------------------------------------------------------------------+"
+echo -e "${NC}"
 
-# Wait for processes
+echo -e "  ${DIM}--- LIVE LOGS (Ctrl+C to stop) ---${NC}"
+echo ""
+
+# Wait for all background processes
 wait
