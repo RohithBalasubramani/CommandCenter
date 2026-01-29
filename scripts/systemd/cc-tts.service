@@ -1,0 +1,16 @@
+[Unit]
+Description=CommandCenter TTS (Kokoro Docker)
+After=network.target
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/bin/docker rm -f kokoro-tts
+ExecStart=/usr/bin/docker run --name kokoro-tts --rm --gpus all -p 8880:8880 ghcr.io/remsky/kokoro-fastapi-gpu:latest
+ExecStop=/usr/bin/docker stop kokoro-tts
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/rohith/desktop/CommandCenter/logs/tts.log
+StandardError=append:/home/rohith/desktop/CommandCenter/logs/tts.log
+
+[Install]
+WantedBy=default.target

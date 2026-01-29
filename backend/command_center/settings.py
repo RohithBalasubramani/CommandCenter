@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-x@47$t6dtq$z9o%ihbh1m8-kosk9eul$ud@2a+9wtk)4-w45q+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -130,6 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS — allow Next.js frontend
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3100',
+    'http://192.168.1.20:3100',
 ]
 
 # DRF

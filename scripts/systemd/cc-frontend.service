@@ -1,0 +1,18 @@
+[Unit]
+Description=CommandCenter Frontend (Next.js Production)
+After=network.target cc-backend.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/rohith/desktop/CommandCenter/frontend
+Environment="PATH=/usr/bin:/bin"
+Environment="NODE_ENV=production"
+Environment="HOSTNAME=0.0.0.0"
+ExecStart=/usr/bin/npx next start -p 3100 -H 0.0.0.0
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/rohith/desktop/CommandCenter/logs/frontend.log
+StandardError=append:/home/rohith/desktop/CommandCenter/logs/frontend.log
+
+[Install]
+WantedBy=default.target
