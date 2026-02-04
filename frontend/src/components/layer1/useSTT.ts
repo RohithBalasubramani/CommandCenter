@@ -59,7 +59,7 @@ interface UseSTTReturn {
  * Audio is recorded via MediaRecorder (browser-native), sent as WAV blobs
  * to the STT server for transcription.
  */
-export function useSTT(): UseSTTReturn {
+export function useSTT(deviceId?: string): UseSTTReturn {
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -204,8 +204,11 @@ export function useSTT(): UseSTTReturn {
   // ------------------------------------------------------------------
   const startServerSTT = useCallback(async () => {
     try {
-      console.info("[STT] Requesting microphone access...");
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.info("[STT] Requesting microphone access...", deviceId ? `device=${deviceId}` : "default");
+      const audioConstraints: MediaTrackConstraints | boolean = deviceId
+        ? { deviceId: { exact: deviceId } }
+        : true;
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: audioConstraints });
       streamRef.current = stream;
       const audioTracks = stream.getAudioTracks();
       console.info("[STT] Microphone granted:", audioTracks.map(t => `${t.label} (${t.readyState})`).join(", "));
@@ -242,23 +245,42 @@ export function useSTT(): UseSTTReturn {
       setIsListening(true);
       setError(null);
 
-      // Cumulative buffering: send the FULL recording each time.
-      // Server returns the full transcript for all audio so far.
-      // We REPLACE the transcript state (not append) to avoid duplication.
+      // Cumulative sends with rolling window:
+      // WebM chunks MUST include the header (chunk 0) to be a valid file.
+      // We send ALL chunks as one blob each interval.
+      // After MAX_CHUNKS, restart the recorder to keep payloads bounded.
+      const MAX_CHUNKS = 40; // 40 × 0.5s = 20s max before restart
       let sendCount = 0;
+      let totalAudioSecs = 0;
+      let sending = false; // Guard against overlapping sends
 
       sendIntervalRef.current = setInterval(async () => {
-        if (chunksRef.current.length === 0) {
+        const totalChunks = chunksRef.current.length;
+        if (totalChunks === 0 || sending) return;
+
+        // Rolling window: restart recorder if audio is too long
+        if (totalChunks >= MAX_CHUNKS && recorder.state === "recording") {
+          console.info(`[STT] Rolling restart: ${totalChunks} chunks (~${totalChunks * 0.5}s), restarting recorder`);
+          recorder.stop();
+          chunksRef.current = [];
+          setTimeout(() => {
+            if (shouldBeListeningRef.current && recorder.state === "inactive") {
+              recorder.start(500);
+              console.info("[STT] Recorder restarted with fresh WebM header");
+            }
+          }, 50);
           return;
         }
 
-        // Send ALL accumulated chunks (cumulative — don't clear)
-        const chunkCount = chunksRef.current.length;
-        const blob = new Blob(chunksRef.current, { type: mimeType });
+        sending = true;
         sendCount++;
 
-        const durationEstimate = (chunkCount * 0.5).toFixed(1); // ~0.5s per chunk
-        console.info(`[STT] Sending cumulative audio #${sendCount}: ${blob.size} bytes, ~${durationEstimate}s (${chunkCount} chunks)`);
+        // Send ALL chunks (cumulative) — valid WebM with header at chunk 0
+        const blob = new Blob(chunksRef.current, { type: mimeType });
+        const audioDuration = totalChunks * 0.5;
+        totalAudioSecs = audioDuration;
+
+        console.info(`[STT] Sending audio #${sendCount}: ${blob.size} bytes, ~${audioDuration.toFixed(1)}s (${totalChunks} chunks)`);
 
         setInterimTranscript("...");
 
@@ -270,16 +292,14 @@ export function useSTT(): UseSTTReturn {
           const res = await fetch(`${sttUrl}/v1/stt`, {
             method: "POST",
             body: formData,
-            signal: AbortSignal.timeout(30000),
+            signal: AbortSignal.timeout(15000),
           });
           const elapsed = Math.round(performance.now() - t0);
-
-          const audioSecs = chunkCount * 0.5;
 
           if (res.ok) {
             const data = await res.json();
             const fullText = (data.text || "").trim();
-            console.info(`[STT] Response #${sendCount} (${elapsed}ms): model=${data.model}, text="${fullText.slice(0, 100)}...", server_ms=${data.duration_ms}`);
+            console.info(`[STT] Response #${sendCount} (${elapsed}ms): model=${data.model}, text="${fullText.slice(0, 100)}", server_ms=${data.duration_ms}`);
 
             // Update stats
             latencySumRef.current += elapsed;
@@ -289,27 +309,24 @@ export function useSTT(): UseSTTReturn {
               avgLatencyMs: Math.round(latencySumRef.current / sendCount),
               requestCount: prev.requestCount + 1,
               errorCount: prev.errorCount,
-              totalAudioSeconds: Math.round(audioSecs * 10) / 10,
+              totalAudioSeconds: Math.round(totalAudioSecs * 10) / 10,
               wordsTranscribed: wordCount,
             }));
 
             if (fullText) {
-              // REPLACE transcript with server's full result (not append)
-              // This avoids duplication since cumulative audio is re-transcribed each time
-              setTranscript((prev) => {
-                if (prev !== fullText) {
-                  console.info(`[STT] Transcript replaced: "${fullText.slice(0, 80)}..."`);
-                }
-                return fullText;
-              });
+              // Replace with full cumulative transcript (server sees all audio)
+              setTranscript(fullText);
               setInterimTranscript("");
             } else {
               console.info("[STT] Empty transcription (silence or noise)");
               setInterimTranscript("");
             }
+          } else if (res.status === 429) {
+            console.info("[STT] Server busy (429), will retry next cycle");
+            setInterimTranscript("");
           } else {
             const errText = await res.text().catch(() => "");
-            console.warn(`[STT] Server error ${res.status}: ${errText}`);
+            console.warn(`[STT] Server error ${res.status}: ${errText.slice(0, 200)}`);
             setStats(prev => ({ ...prev, requestCount: prev.requestCount + 1, errorCount: prev.errorCount + 1 }));
             setInterimTranscript("");
           }
@@ -317,8 +334,10 @@ export function useSTT(): UseSTTReturn {
           console.warn("[STT] Send failed:", e);
           setStats(prev => ({ ...prev, requestCount: prev.requestCount + 1, errorCount: prev.errorCount + 1 }));
           setInterimTranscript("");
+        } finally {
+          sending = false;
         }
-      }, 3000); // Send every 3s — gives Whisper enough audio context
+      }, 1500); // Send every 1.5s
 
     } catch (e) {
       console.error("[STT] Failed to start recording:", e);
@@ -429,6 +448,26 @@ export function useSTT(): UseSTTReturn {
       setTimeout(() => start(), 500);
     }
   }, [sttUrl, stop, start]);
+
+  // AUDIT FIX: Cleanup effect to prevent memory leak from uncleaned interval
+  useEffect(() => {
+    return () => {
+      // Clear any remaining interval on unmount
+      if (sendIntervalRef.current) {
+        clearInterval(sendIntervalRef.current);
+        sendIntervalRef.current = null;
+      }
+      // Stop media tracks
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+      // Stop recorder
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+        try { mediaRecorderRef.current.stop(); } catch { /* ignore */ }
+      }
+    };
+  }, []);
 
   return {
     transcript,

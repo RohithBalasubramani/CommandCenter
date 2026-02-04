@@ -1,0 +1,246 @@
+{
+  "run_id": "run_2026-01-31_164554",
+  "tag": "v2_phi4",
+  "timing": {
+    "avg_ms": 24280,
+    "p50_ms": 21933,
+    "p95_ms": 46142,
+    "min_ms": 10002,
+    "max_ms": 46860
+  },
+  "counts": {
+    "total": 51,
+    "successful": 29,
+    "failed": 22,
+    "with_layout": 29
+  },
+  "accuracy": {
+    "domain_match_pct": 0.97,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "alerts",
+      "category-bar",
+      "comparison",
+      "composition",
+      "distribution",
+      "eventlogstream",
+      "flow-sankey",
+      "helpview",
+      "kpi",
+      "peopleview",
+      "pulseview",
+      "timeline",
+      "trend",
+      "trend-multi-line",
+      "trends-cumulative"
+    ],
+    "fixtures_used": [
+      "banner-energy-peak-threshold-exceeded",
+      "chronological-timeline",
+      "default-render",
+      "dist_downtime_top_contributors-pareto-bar",
+      "efficiency-deviation",
+      "energy-consumption",
+      "energy-demand",
+      "flow_sankey_standard-classic-left-to-right-sankey",
+      "kpi_alert-critical-state",
+      "kpi_alert-warning-state",
+      "kpi_live-standard",
+      "linear-incident-timeline",
+      "side_by_side_visual-plain-values",
+      "stacked_bar",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 5.3
+  },
+  "by_category": {
+    "comparison": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 23111,
+      "avg_widgets": 7.0
+    },
+    "trend": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 18783,
+      "avg_widgets": 5.8
+    },
+    "distribution": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 29845,
+      "avg_widgets": 5.0
+    },
+    "maintenance": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 17652,
+      "avg_widgets": 5.0
+    },
+    "shift": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 25243,
+      "avg_widgets": 4.0
+    },
+    "work_orders": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 15347,
+      "avg_widgets": 5.0
+    },
+    "energy": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 29605,
+      "avg_widgets": 5.8
+    },
+    "health_status": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 31580,
+      "avg_widgets": 5.0
+    },
+    "flow_sankey": {
+      "count": 3,
+      "successful": 2,
+      "avg_time_ms": 25336,
+      "avg_widgets": 5.0
+    },
+    "cumulative": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "multi_source": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "power_quality": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "hvac": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "ups_dg": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "top_consumers": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    },
+    "cross_domain": {
+      "count": 3,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    }
+  },
+  "errors": [
+    {
+      "question_id": "q030",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q031",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q032",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q033",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q034",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q035",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q036",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q037",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q038",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q039",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q040",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q041",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q042",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q043",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q044",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q045",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q046",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q047",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q048",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q049",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q050",
+      "error": "Connection refused \u2014 is the backend running?"
+    },
+    {
+      "question_id": "q051",
+      "error": "Connection refused \u2014 is the backend running?"
+    }
+  ]
+}

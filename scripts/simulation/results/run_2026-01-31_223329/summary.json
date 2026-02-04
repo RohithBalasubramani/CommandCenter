@@ -1,0 +1,49 @@
+{
+  "run_id": "run_2026-01-31_223329",
+  "tag": "v2_layout_fix",
+  "timing": {
+    "avg_ms": 33152,
+    "p50_ms": 33152,
+    "p95_ms": 33152,
+    "min_ms": 33152,
+    "max_ms": 33152
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "category-bar",
+      "composition",
+      "distribution",
+      "kpi",
+      "trend",
+      "trend-multi-line"
+    ],
+    "fixtures_used": [
+      "dist_downtime_top_contributors-pareto-bar",
+      "efficiency-deviation",
+      "energy-demand",
+      "kpi_live-standard",
+      "stacked_bar",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "distribution": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 33152,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

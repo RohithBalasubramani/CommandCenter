@@ -1,0 +1,478 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_220846",
+    "tag": "v2_quality_fixes",
+    "started_at": "2026-01-31T22:08:46.564845",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:09:22.487558",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q005",
+      "question": "What is the temperature history for AHU 1?",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the temperature history for AHU 1?",
+        "session_id": "d74a21c5-d1a1-49bc-8f82-61a14d3221de",
+        "sent_at": "2026-01-31T22:08:46.564865"
+      },
+      "response": {
+        "voice_response": "The temperature history for AHU 1, as shown on the \"AHU 1 Temperature History\" dashboard, indicates that the current temperature is within normal operating range. Over the last 24 hours, the trend widget shows no deviations from the setpoint, with all readings between 18 and 22 degrees Celsius. The distribution widget provides further detail on temperature patterns over the last week.",
+        "layout_json": {
+          "heading": "AHU 1 Temperature History",
+          "widgets": [
+            {
+              "scenario": "trend",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Shows the temperature history for AHU 1 over the last 24 hours, highlighting any deviations from the normal operating range.",
+              "data_override": {
+                "demoData": {
+                  "label": "AHU 1 - Main Plant Second Floor",
+                  "unit": "units",
+                  "timeSeries": [],
+                  "timeRange": "last_24h"
+                }
+              },
+              "fixture": "trend_live-line",
+              "heightHint": "tall",
+              "description": "Shows the temperature history for AHU 1 over the last 24 hours, highlighting any deviations from the normal operating range."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.8,
+              "why": "Displays the current temperature of AHU 1, providing a quick glance at its health status.",
+              "data_override": {
+                "demoData": {
+                  "label": "AHU 1 - Main Plant Second Floor",
+                  "value": "87",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current temperature of AHU 1, providing a quick glance at its health status."
+            },
+            {
+              "scenario": "distribution",
+              "size": "normal",
+              "relevance": 0.7,
+              "why": "Shows the distribution of temperature readings for AHU 1 over the last week, helping to identify any patterns or anomalies.",
+              "data_override": {
+                "demoData": {
+                  "total": 0.0,
+                  "unit": "%",
+                  "series": [
+                    {
+                      "label": "Ahu",
+                      "value": 0.0
+                    }
+                  ]
+                }
+              },
+              "fixture": "dist_downtime_top_contributors-pareto-bar",
+              "heightHint": "tall",
+              "description": "Shows the distribution of temperature readings for AHU 1 over the last week, helping to identify any patterns or anomalies."
+            },
+            {
+              "scenario": "alerts",
+              "size": "normal",
+              "relevance": 0.6,
+              "why": "Lists any active alerts related to AHU 1's temperature, ensuring that potential issues are addressed promptly.",
+              "data_override": {
+                "demoData": [
+                  {
+                    "id": "AHU-AD-F16",
+                    "title": "supply_air_temp",
+                    "message": "Supply air temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 16 - Admin Building First Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "supply_air_temp",
+                      "value": "23.4",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "16.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "AHU-BL-F26",
+                    "title": "supply_air_temp",
+                    "message": "Supply air temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 26 - Block A First Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "supply_air_temp",
+                      "value": "22.9",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "16.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "AHU-BL-F26",
+                    "title": "supply_air_temp",
+                    "message": "Supply air temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 26 - Block A First Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "supply_air_temp",
+                      "value": "22.9",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "16.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "AHU-UT-G40",
+                    "title": "supply_air_temp",
+                    "message": "Supply air temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 40 - Utility Building Ground Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "supply_air_temp",
+                      "value": "19.7",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "16.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "AHU-BL-G14",
+                    "title": "supply_air_temp",
+                    "message": "Supply air temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 14 - Block B Ground Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "supply_air_temp",
+                      "value": "19.0",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "16.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium",
+              "description": "Lists any active alerts related to AHU 1's temperature, ensuring that potential issues are addressed promptly."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.5,
+              "why": "Provides a chronological view of maintenance events and temperature readings for AHU 1, helping to correlate changes in temperature with maintenance activities.",
+              "data_override": {
+                "demoData": {
+                  "title": "Event Log",
+                  "events": [
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Scheduled preventive maintenance | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: preventive | Work Done: Completed sche",
+                      "source": "AHU 1 - Main Plant Second Floor"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Scheduled preventive maintenance | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: preventive | Work Done: Completed sche",
+                      "source": "AHU 1 - Main Plant Second Floor"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Scheduled preventive maintenance | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: preventive | Work Done: Completed sche",
+                      "source": "AHU 1 - Main Plant Second Floor"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Scheduled preventive maintenance | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: preventive | Work Done: Completed sche",
+                      "source": "AHU 1 - Main Plant Second Floor"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Scheduled preventive maintenance | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: preventive | Work Done: Completed sche",
+                      "source": "AHU 1 - Main Plant Second Floor"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Incident Report \u2014 AHU 1 - Main Plant Second Floor | Type: incident_report | Incident Report\nEquipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01)\nLo",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Inspection Report \u2014 AHU 19 - Warehouse Terrace (AHU-WA-T19) | Type: inspection_report | Equipment Inspection Report\nEquipment: AHU 19 - Warehouse Terr",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Inspection Report \u2014 AHU 22 - Main Plant First Floor (AHU-MA-F22) | Type: inspection_report | Equipment Inspection Report\nEquipment: AHU 22 - Main Plan",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Inspection Report \u2014 AHU 42 - Utility Building First Floor (AHU-UT-F42) | Type: inspection_report | Equipment Inspection Report\nEquipment: AHU 42 - Uti",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Inspection Report \u2014 AHU 16 - Admin Building First Floor (AHU-AD-F16) | Type: inspection_report | Equipment Inspection Report\nEquipment: AHU 16 - Admin",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: Ahu | Location: Main Plant - Second Floor | Building: Main Plant | Status: running | Health Score",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "AHU 42 - Utility Building First Floor (AHU-UT-F42) | Type: Ahu | Location: Utility Building - First Floor | Building: Utility Building | Status: runni",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "AHU 23 - Main Plant First Floor (AHU-MA-F23) | Type: Ahu | Location: Main Plant - First Floor | Building: Main Plant | Status: standby | Health Score:",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "AHU 22 - Main Plant First Floor (AHU-MA-F22) | Type: Ahu | Location: Main Plant - First Floor | Building: Main Plant | Status: standby | Health Score:",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "AHU 16 - Admin Building First Floor (AHU-AD-F16) | Type: Ahu | Location: Admin Building - First Floor | Building: Admin Building | Status: running | H",
+                      "source": "System"
+                    }
+                  ]
+                }
+              },
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Provides a chronological view of maintenance events and temperature readings for AHU 1, helping to correlate changes in temperature with maintenance activities."
+            },
+            {
+              "scenario": "edgedevicepanel",
+              "size": "hero",
+              "relevance": 0.4,
+              "why": "Offers a detailed view of AHU 1's parameters, including temperature, allowing for in-depth analysis and troubleshooting.",
+              "data_override": {
+                "demoData": {
+                  "device": {
+                    "name": "AHU 16 - Admin Building First Floor",
+                    "id": "AHU-AD-F16",
+                    "type": "ahu",
+                    "status": "running",
+                    "health": 95,
+                    "location": "Admin Building - First Floor",
+                    "criticality": "high"
+                  },
+                  "readings": [],
+                  "alerts": [
+                    {
+                      "message": "Alert: Return air humidity high | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Severity",
+                      "severity": "low"
+                    },
+                    {
+                      "message": "Alert: Return air humidity high | Equipment: AHU 25 - Admin Building First Floor (AHU-AD-F25) | Seve",
+                      "severity": "low"
+                    },
+                    {
+                      "message": "Alert: Return air humidity high | Equipment: AHU 26 - Block A First Floor (AHU-BL-F26) | Severity: l",
+                      "severity": "low"
+                    }
+                  ],
+                  "maintenance": [
+                    {
+                      "description": "Maintenance: Routine inspection | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: in",
+                      "type": "inspection"
+                    },
+                    {
+                      "description": "Maintenance: Routine inspection | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: in",
+                      "type": "inspection"
+                    },
+                    {
+                      "description": "Maintenance: Routine inspection | Equipment: AHU 1 - Main Plant Second Floor (AHU-MA-S01) | Type: in",
+                      "type": "inspection"
+                    }
+                  ]
+                }
+              },
+              "fixture": "default-render",
+              "heightHint": "x-tall",
+              "description": "Offers a detailed view of AHU 1's parameters, including temperature, allowing for in-depth analysis and troubleshooting."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "AHU 1"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 35919
+      },
+      "analysis": {
+        "total_time_ms": 35922,
+        "network_overhead_ms": 3,
+        "widget_count": 6,
+        "scenarios_used": [
+          "trend",
+          "kpi",
+          "distribution",
+          "alerts",
+          "timeline",
+          "edgedevicepanel"
+        ],
+        "fixtures_used": [
+          "trend_live-line",
+          "kpi_live-standard",
+          "dist_downtime_top_contributors-pareto-bar",
+          "banner-energy-peak-threshold-exceeded",
+          "linear-incident-timeline",
+          "default-render"
+        ],
+        "heading": "AHU 1 Temperature History",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "trend",
+            "kpi"
+          ],
+          "present": [
+            "kpi",
+            "trend"
+          ],
+          "missing": [],
+          "unexpected": [
+            "alerts",
+            "edgedevicepanel",
+            "distribution",
+            "timeline"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

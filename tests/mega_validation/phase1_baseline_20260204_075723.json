@@ -1,0 +1,460 @@
+{
+  "timestamp": "2026-02-04T07:45:38.850713",
+  "per_layer_latency": {
+    "intent_parse": {
+      "name": "Intent Parse",
+      "p50": 1401,
+      "p90": 1489,
+      "p95": 1572,
+      "p99": 1572,
+      "min_ms": 1155,
+      "max_ms": 1572,
+      "mean_ms": 1342.8333333333333,
+      "std_dev": 131.27613736861792,
+      "sample_count": 12,
+      "throughput_ops_sec": 0.7446940548591287
+    },
+    "data_prefetch": {
+      "name": "Data Prefetch",
+      "p50": 25,
+      "p90": 226,
+      "p95": 3530,
+      "p99": 3530,
+      "min_ms": 6,
+      "max_ms": 3530,
+      "mean_ms": 325.6666666666667,
+      "std_dev": 1010.9691419922797,
+      "sample_count": 12,
+      "throughput_ops_sec": 3.0706243602865917
+    },
+    "widget_select": {
+      "name": "Widget Select",
+      "p50": 14510,
+      "p90": 15702,
+      "p95": 15746,
+      "p99": 15746,
+      "min_ms": 13182,
+      "max_ms": 15746,
+      "mean_ms": 14329.833333333334,
+      "std_dev": 898.5532648079187,
+      "sample_count": 12,
+      "throughput_ops_sec": 0.06978448225729539
+    },
+    "data_collect": {
+      "name": "Data Collect",
+      "p50": 59,
+      "p90": 80,
+      "p95": 93,
+      "p99": 93,
+      "min_ms": 36,
+      "max_ms": 93,
+      "mean_ms": 59.416666666666664,
+      "std_dev": 17.010469147147607,
+      "sample_count": 12,
+      "throughput_ops_sec": 16.83029453015428
+    },
+    "fixture_select": {
+      "name": "Fixture Select",
+      "p50": 2540,
+      "p90": 3346,
+      "p95": 4019,
+      "p99": 4019,
+      "min_ms": 1650,
+      "max_ms": 4019,
+      "mean_ms": 2633.25,
+      "std_dev": 656.4373715193801,
+      "sample_count": 12,
+      "throughput_ops_sec": 0.3797588531282636
+    },
+    "voice_generate": {
+      "name": "Voice Generate",
+      "p50": 4438,
+      "p90": 5098,
+      "p95": 5224,
+      "p99": 5224,
+      "min_ms": 3634,
+      "max_ms": 5224,
+      "mean_ms": 4402.083333333333,
+      "std_dev": 512.6112222254943,
+      "sample_count": 12,
+      "throughput_ops_sec": 0.22716516800757217
+    },
+    "total": {
+      "name": "Total",
+      "p50": 23356,
+      "p90": 25483,
+      "p95": 26334,
+      "p99": 26334,
+      "min_ms": 20423,
+      "max_ms": 26334,
+      "mean_ms": 23095.416666666668,
+      "std_dev": 1860.6307561163394,
+      "sample_count": 12,
+      "throughput_ops_sec": 0.04329863428891014
+    }
+  },
+  "end_to_end_latency": {
+    "name": "End-to-End",
+    "p50": 23356,
+    "p90": 25483,
+    "p95": 26334,
+    "p99": 26334,
+    "min_ms": 20423,
+    "max_ms": 26334,
+    "mean_ms": 23095.416666666668,
+    "std_dev": 1860.6307561163394,
+    "sample_count": 12,
+    "throughput_ops_sec": 0.04329863428891014
+  },
+  "accuracy": {
+    "intent_classification": 0.8333333333333334,
+    "domain_detection": 1.0,
+    "widget_selection_valid": 0.9166666666666666,
+    "data_schema_valid": 0.16666666666666666,
+    "voice_response_valid": 0.25,
+    "details": {
+      "intent_results": [
+        {
+          "query": "What is the status of pump 1?",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "What is the status of pump 1?",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Show me the temperature trend for AHU-1",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Show me the temperature trend for AHU-1",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Are there any critical alerts?",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Are there any critical alerts?",
+          "error": "Validation failed for 'alerts': Missing required field 'id'; Missing required field 'title'; Missing required field 'message'; Missing required field 'severity'; Missing required field 'source'"
+        },
+        {
+          "query": "Compare the load on transformer 1 vs yesterday",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Compare the load on transformer 1 vs yesterday",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "What is the current power consumption?",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "What is the current power consumption?",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Show me all equipment in Building A",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Show me all equipment in Building A",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Who is on shift today?",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Who is on shift today?",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Show pending work orders",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "Show pending work orders",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "What is the chiller efficiency?",
+          "expected": "query",
+          "actual": "query",
+          "match": true
+        },
+        {
+          "query": "What is the chiller efficiency?",
+          "error": "'NoneType' object has no attribute 'get'"
+        },
+        {
+          "query": "Turn on pump 3",
+          "expected": "action_control",
+          "actual": "action",
+          "match": false
+        },
+        {
+          "query": "Hello, good morning",
+          "expected": "greeting",
+          "actual": "conversation",
+          "match": true
+        },
+        {
+          "query": "What is the weather like?",
+          "expected": "out_of_scope",
+          "actual": "conversation",
+          "match": false
+        }
+      ],
+      "domain_results": [
+        {
+          "query": "What is the status of pump 1?",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        {
+          "query": "Show me the temperature trend for AHU-1",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        {
+          "query": "Are there any critical alerts?",
+          "expected": [
+            "alerts"
+          ],
+          "actual": [
+            "industrial",
+            "alerts"
+          ],
+          "match": true
+        },
+        {
+          "query": "Compare the load on transformer 1 vs yesterday",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial"
+          ],
+          "match": true
+        },
+        {
+          "query": "What is the current power consumption?",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial"
+          ],
+          "match": true
+        },
+        {
+          "query": "Show me all equipment in Building A",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        {
+          "query": "Who is on shift today?",
+          "expected": [
+            "people"
+          ],
+          "actual": [
+            "industrial",
+            "people"
+          ],
+          "match": true
+        },
+        {
+          "query": "Show pending work orders",
+          "expected": [
+            "tasks"
+          ],
+          "actual": [
+            "tasks",
+            "industrial"
+          ],
+          "match": true
+        },
+        {
+          "query": "What is the chiller efficiency?",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial"
+          ],
+          "match": true
+        },
+        {
+          "query": "Turn on pump 3",
+          "expected": [
+            "industrial"
+          ],
+          "actual": [
+            "industrial"
+          ],
+          "match": true
+        },
+        {
+          "query": "Hello, good morning",
+          "expected": [],
+          "actual": [],
+          "match": true
+        },
+        {
+          "query": "What is the weather like?",
+          "expected": [],
+          "actual": [],
+          "match": true
+        }
+      ],
+      "widget_results": [
+        {
+          "query": "What is the status of pump 1?",
+          "widget_count": 4,
+          "valid": true
+        },
+        {
+          "query": "Show me the temperature trend for AHU-1",
+          "widget_count": 5,
+          "valid": true
+        },
+        {
+          "query": "Are there any critical alerts?",
+          "widget_count": 4,
+          "valid": true
+        },
+        {
+          "query": "Compare the load on transformer 1 vs yesterday",
+          "widget_count": 6,
+          "valid": true
+        },
+        {
+          "query": "What is the current power consumption?",
+          "widget_count": 4,
+          "valid": true
+        },
+        {
+          "query": "Show me all equipment in Building A",
+          "widget_count": 5,
+          "valid": true
+        },
+        {
+          "query": "Who is on shift today?",
+          "widget_count": 5,
+          "valid": true
+        },
+        {
+          "query": "Show pending work orders",
+          "widget_count": 4,
+          "valid": true
+        },
+        {
+          "query": "What is the chiller efficiency?",
+          "widget_count": 5,
+          "valid": true
+        }
+      ],
+      "data_results": [],
+      "voice_results": [
+        {
+          "query": "Turn on pump 3",
+          "response_len": 78,
+          "valid": true
+        },
+        {
+          "query": "Hello, good morning",
+          "response_len": 62,
+          "valid": true
+        },
+        {
+          "query": "What is the weather like?",
+          "response_len": 62,
+          "valid": true
+        }
+      ]
+    }
+  },
+  "determinism": {
+    "runs": 10,
+    "unique_layout_hashes": 10,
+    "unique_intent_hashes": 1,
+    "unique_widget_counts": 2,
+    "variance_score": 1.0,
+    "is_deterministic": true,
+    "sample_diffs": [
+      "Layout variation: ['a14bbc4830fd', 'ecb1ded77258', '96cf3e35fa7b', 'a9bdf653da6a', '50022f6065fb', 'a34373296111', 'c0ac6214c774', '3c6c2bafe2a9', 'fd079005a441', 'adbf384c388d']"
+    ]
+  },
+  "guardrail_violations": [
+    "Latency intent_parse_p99: 1572ms > 500ms budget",
+    "Latency data_prefetch_p99: 3530ms > 200ms budget",
+    "Latency widget_select_p99: 15746ms > 1000ms budget",
+    "Latency fixture_select_p99: 4019ms > 800ms budget",
+    "Latency voice_generate_p99: 5224ms > 3000ms budget",
+    "Latency total_p99: 26334ms > 8000ms budget",
+    "Accuracy data_schema_valid: 16.7% < 85.0% minimum",
+    "Accuracy voice_response_valid: 25.0% < 95.0% minimum"
+  ],
+  "release_blocked": true,
+  "block_reasons": [
+    "Latency total_p99: 26334ms > 8000ms budget"
+  ],
+  "guardrails_used": {
+    "latency_budgets_ms": {
+      "intent_parse_p99": 500.0,
+      "data_prefetch_p99": 200.0,
+      "widget_select_p99": 1000.0,
+      "data_collect_p99": 2000.0,
+      "fixture_select_p99": 800.0,
+      "voice_generate_p99": 3000.0,
+      "total_p99": 8000.0
+    },
+    "accuracy_minimums": {
+      "intent_classification": 0.7,
+      "domain_detection": 0.6,
+      "widget_selection_valid": 0.9,
+      "data_schema_valid": 0.85,
+      "voice_response_valid": 0.95
+    },
+    "determinism": {
+      "max_intent_variance": 0.0,
+      "max_layout_variance": 0.2
+    }
+  }
+}

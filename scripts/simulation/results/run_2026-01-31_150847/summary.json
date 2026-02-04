@@ -1,0 +1,179 @@
+{
+  "run_id": "run_2026-01-31_150847",
+  "tag": "baseline",
+  "timing": {
+    "avg_ms": 1262,
+    "p50_ms": 975,
+    "p95_ms": 3822,
+    "min_ms": 2,
+    "max_ms": 5044
+  },
+  "counts": {
+    "total": 51,
+    "successful": 50,
+    "failed": 1,
+    "with_layout": 48
+  },
+  "accuracy": {
+    "domain_match_pct": 0.84,
+    "layout_generated_pct": 0.96
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "alerts",
+      "category-bar",
+      "comparison",
+      "composition",
+      "distribution",
+      "edgedevicepanel",
+      "eventlogstream",
+      "flow-sankey",
+      "kpi",
+      "matrix-heatmap",
+      "peoplehexgrid",
+      "peoplenetwork",
+      "peopleview",
+      "supplychainglobe",
+      "timeline",
+      "trend",
+      "trend-multi-line",
+      "trends-cumulative"
+    ],
+    "fixtures_used": [
+      "banner-energy-peak-threshold-exceeded",
+      "chronological-timeline",
+      "default-render",
+      "delta_bar_visual-deviation-bar",
+      "dist_downtime_top_contributors-pareto-bar",
+      "dist_energy_source_share-donut",
+      "dist_load_by_asset-horizontal-bar",
+      "efficiency-deviation",
+      "energy-consumption",
+      "energy-demand",
+      "flow_sankey_energy_balance-sankey-with-explicit-loss-branches-dropping-out",
+      "flow_sankey_multi_source-many-to-one-flow-diagram",
+      "flow_sankey_standard-classic-left-to-right-sankey",
+      "flow_sankey_time_sliced-sankey-with-time-scrubberplayer",
+      "kpi_accumulated-daily-total",
+      "kpi_alert-critical-state",
+      "kpi_alert-warning-state",
+      "kpi_lifecycle-dark-mode-gauge",
+      "kpi_lifecycle-progress-bar",
+      "kpi_live-high-contrast",
+      "kpi_live-standard",
+      "kpi_status-offline",
+      "linear-incident-timeline",
+      "side_by_side_visual-plain-values",
+      "stacked_bar",
+      "treemap",
+      "trend_live-area",
+      "trend_live-line",
+      "value-heatmap"
+    ],
+    "avg_widgets_per_dashboard": 6.8
+  },
+  "by_category": {
+    "comparison": {
+      "count": 3,
+      "successful": 2,
+      "avg_time_ms": 2523,
+      "avg_widgets": 3.0
+    },
+    "trend": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 994,
+      "avg_widgets": 7.8
+    },
+    "distribution": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1229,
+      "avg_widgets": 7.3
+    },
+    "maintenance": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 921,
+      "avg_widgets": 6.0
+    },
+    "shift": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 2,
+      "avg_widgets": 6.3
+    },
+    "work_orders": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1401,
+      "avg_widgets": 7.7
+    },
+    "energy": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 842,
+      "avg_widgets": 7.8
+    },
+    "health_status": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 1311,
+      "avg_widgets": 5.2
+    },
+    "flow_sankey": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1032,
+      "avg_widgets": 5.7
+    },
+    "cumulative": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 666,
+      "avg_widgets": 7.7
+    },
+    "multi_source": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1076,
+      "avg_widgets": 7.3
+    },
+    "power_quality": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1886,
+      "avg_widgets": 7.3
+    },
+    "hvac": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 1099,
+      "avg_widgets": 7.0
+    },
+    "ups_dg": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 934,
+      "avg_widgets": 6.7
+    },
+    "top_consumers": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 875,
+      "avg_widgets": 7.3
+    },
+    "cross_domain": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 4030,
+      "avg_widgets": 7.7
+    }
+  },
+  "errors": [
+    {
+      "question_id": "q001",
+      "error": "HTTP 500: <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n  <meta name=\"robots\" content=\"NONE,NOARCHIVE\">\n  <title>TimeoutError\n          at /api/layer2/orchestrate/</title>\n  <style>\n    html * { padding:0; margin:0; }\n    body * { padding:10px 20px; }\n    body * * { padding:0; }\n    body { font-family: sans-serif; background-color:#fff; color:#000; }\n    body > :where(header, main, footer) { border-bottom:1px solid #ddd; }\n    h1 { font-weigh"
+    }
+  ]
+}

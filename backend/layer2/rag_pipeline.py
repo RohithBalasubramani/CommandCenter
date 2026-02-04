@@ -27,6 +27,13 @@ try:
 except ImportError:
     CHROMADB_AVAILABLE = False
 
+# BM25 for hybrid search
+try:
+    from rank_bm25 import BM25Okapi
+    BM25_AVAILABLE = True
+except ImportError:
+    BM25_AVAILABLE = False
+
 try:
     from sentence_transformers import SentenceTransformer
     SENTENCE_TRANSFORMERS_AVAILABLE = True
@@ -45,21 +52,31 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ============================================================
 
-# Embedding model - use lightweight for dev, BGE-M3 for production
-EMBEDDING_MODEL = os.getenv("RAG_EMBEDDING_MODEL", "all-MiniLM-L6-v2")
-# For production: "BAAI/bge-m3" or "intfloat/e5-mistral-7b-instruct"
+# Embedding model — BGE-base-en-v1.5: best balance of quality vs speed for industrial RAG.
+# MTEB retrieval score ~63 (vs 56 for MiniLM). 768-dim, 110MB, sentence-transformers compatible.
+EMBEDDING_MODEL = os.getenv("RAG_EMBEDDING_MODEL", "BAAI/bge-base-en-v1.5")
 
-# ChromaDB persistence directory
-CHROMA_PERSIST_DIR = os.getenv("RAG_CHROMA_DIR", "./chroma_db")
+# ChromaDB persistence directory (absolute path to avoid CWD issues)
+_BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CHROMA_PERSIST_DIR = os.getenv("RAG_CHROMA_DIR", os.path.join(_BACKEND_DIR, "chroma_db"))
 
 # Ollama settings
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi4")  # or "qwen3:30b", "llama3.2"
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "phi4")  # legacy single-model (used by existing code)
+
+# Dual-model config for Pipeline v2
+# FAST: small model for intent parsing + widget selection (~5GB VRAM)
+# QUALITY: large model for voice response generation (~40-55GB VRAM)
+OLLAMA_MODEL_FAST = os.getenv("OLLAMA_MODEL_FAST", "llama3.1:8b")
+OLLAMA_MODEL_QUALITY = os.getenv("OLLAMA_MODEL_QUALITY", "llama3.3")
 
 # Collection names
 EQUIPMENT_COLLECTION = "industrial_equipment"
 ALERTS_COLLECTION = "industrial_alerts"
 MAINTENANCE_COLLECTION = "maintenance_records"
+OPERATIONAL_DOCS_COLLECTION = "operational_documents"
+SHIFT_LOGS_COLLECTION = "shift_logs"
+WORK_ORDERS_COLLECTION = "work_orders"
 
 
 # ============================================================
@@ -141,6 +158,8 @@ class VectorStoreService:
         self.persist_dir = persist_dir
         self._client = None
         self._embedding_service = None
+        # BM25 indices for hybrid search (collection_name -> (bm25, doc_ids, doc_contents))
+        self._bm25_indices: dict[str, tuple] = {}
 
     @property
     def client(self):
@@ -197,6 +216,10 @@ class VectorStoreService:
             documents=contents,
         )
 
+        # Build BM25 index for hybrid search
+        if BM25_AVAILABLE:
+            self._build_bm25_index(collection_name, ids, contents)
+
         logger.info(f"Added {len(documents)} documents to collection: {collection_name}")
 
     def search(
@@ -237,9 +260,196 @@ class VectorStoreService:
         """Delete a collection."""
         try:
             self.client.delete_collection(collection_name)
+            # Clear BM25 index
+            if collection_name in self._bm25_indices:
+                del self._bm25_indices[collection_name]
             logger.info(f"Deleted collection: {collection_name}")
         except Exception as e:
             logger.warning(f"Failed to delete collection {collection_name}: {e}")
+
+    # ============================================================
+    # BM25 Hybrid Search
+    # ============================================================
+
+    def _build_bm25_index(self, collection_name: str, doc_ids: list[str], doc_contents: list[str]):
+        """Build BM25 index for a collection."""
+        if not BM25_AVAILABLE:
+            return
+
+        # Tokenize documents (simple whitespace + lowercase)
+        tokenized = [self._tokenize(doc) for doc in doc_contents]
+
+        # Build BM25 index
+        bm25 = BM25Okapi(tokenized)
+        self._bm25_indices[collection_name] = (bm25, doc_ids, doc_contents)
+        logger.info(f"Built BM25 index for {collection_name} with {len(doc_ids)} documents")
+
+    def _tokenize(self, text: str) -> list[str]:
+        """Simple tokenization for BM25."""
+        import re
+        # Lowercase, split on non-alphanumeric, filter short tokens
+        tokens = re.split(r'[^a-zA-Z0-9]+', text.lower())
+        return [t for t in tokens if len(t) > 1]
+
+    def _ensure_bm25_index(self, collection_name: str):
+        """Ensure BM25 index exists for collection, build if needed."""
+        if not BM25_AVAILABLE:
+            return False
+
+        if collection_name in self._bm25_indices:
+            return True
+
+        # Build from existing collection
+        try:
+            collection = self.get_or_create_collection(collection_name)
+            count = collection.count()
+            if count == 0:
+                return False
+
+            # Fetch all documents
+            results = collection.get(include=["documents"])
+            if results and results["ids"] and results["documents"]:
+                self._build_bm25_index(collection_name, results["ids"], results["documents"])
+                return True
+        except Exception as e:
+            logger.warning(f"Failed to build BM25 index for {collection_name}: {e}")
+
+        return False
+
+    def search_hybrid(
+        self,
+        collection_name: str,
+        query: str,
+        n_results: int = 5,
+        alpha: float = 0.7,
+        filter_metadata: dict = None,
+    ) -> list[RAGSearchResult]:
+        """
+        Hybrid search combining vector similarity and BM25.
+
+        Args:
+            collection_name: Collection to search
+            query: Search query
+            n_results: Number of results to return
+            alpha: Weight for vector search (1-alpha for BM25). Default 0.7 favors vectors.
+            filter_metadata: Optional metadata filter
+
+        Returns:
+            List of RAGSearchResult ordered by hybrid score
+        """
+        # Get more candidates from each method for better fusion
+        n_candidates = n_results * 3
+
+        # Vector search
+        vector_results = self.search(collection_name, query, n_candidates, filter_metadata)
+
+        # BM25 search
+        bm25_results = self._search_bm25(collection_name, query, n_candidates)
+
+        # If BM25 not available, return pure vector results
+        if not bm25_results:
+            return vector_results[:n_results]
+
+        # Reciprocal Rank Fusion (RRF)
+        k = 60  # RRF constant
+        scores = {}  # doc_id -> score
+
+        # Add vector search contributions
+        for rank, result in enumerate(vector_results):
+            rrf_score = 1.0 / (k + rank + 1)
+            scores[result.id] = scores.get(result.id, 0) + alpha * rrf_score
+
+        # Add BM25 contributions
+        for rank, (doc_id, bm25_score) in enumerate(bm25_results):
+            rrf_score = 1.0 / (k + rank + 1)
+            scores[doc_id] = scores.get(doc_id, 0) + (1 - alpha) * rrf_score
+
+        # Sort by combined score
+        sorted_ids = sorted(scores.keys(), key=lambda x: scores[x], reverse=True)
+
+        # Build results from vector_results (which have full metadata)
+        result_map = {r.id: r for r in vector_results}
+        final_results = []
+
+        for doc_id in sorted_ids[:n_results]:
+            if doc_id in result_map:
+                result = result_map[doc_id]
+                # Update score to hybrid score
+                result.score = scores[doc_id]
+                final_results.append(result)
+            else:
+                # Result only from BM25, need to fetch from collection
+                try:
+                    collection = self.get_or_create_collection(collection_name)
+                    fetched = collection.get(ids=[doc_id], include=["documents", "metadatas"])
+                    if fetched and fetched["ids"]:
+                        final_results.append(RAGSearchResult(
+                            id=doc_id,
+                            content=fetched["documents"][0] if fetched["documents"] else "",
+                            metadata=fetched["metadatas"][0] if fetched["metadatas"] else {},
+                            score=scores[doc_id],
+                        ))
+                except Exception:
+                    pass
+
+        return final_results
+
+    def _search_bm25(
+        self, collection_name: str, query: str, n_results: int
+    ) -> list[tuple[str, float]]:
+        """
+        Search using BM25 only.
+
+        Returns:
+            List of (doc_id, bm25_score) tuples
+        """
+        if not self._ensure_bm25_index(collection_name):
+            return []
+
+        bm25, doc_ids, _ = self._bm25_indices[collection_name]
+        query_tokens = self._tokenize(query)
+
+        if not query_tokens:
+            return []
+
+        # Get BM25 scores for all documents
+        scores = bm25.get_scores(query_tokens)
+
+        # Get top N by score
+        top_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:n_results]
+
+        return [(doc_ids[i], scores[i]) for i in top_indices if scores[i] > 0]
+
+    def query_entity(
+        self,
+        entity: str,
+        metric: str = "",
+        collection_name: str = EQUIPMENT_COLLECTION,
+        n_results: int = 3,
+    ) -> list[RAGSearchResult]:
+        """Targeted query for a specific entity + metric combination.
+
+        Used by the schema-driven data collector to fetch data for individual widgets.
+        """
+        query_text = f"{entity} {metric}".strip()
+        return self.search(collection_name, query_text, n_results=n_results)
+
+    def search_multiple_collections(
+        self,
+        query: str,
+        collections: list[str],
+        n_results_per: int = 3,
+    ) -> list[RAGSearchResult]:
+        """Search across multiple collections, merging results sorted by score."""
+        all_results = []
+        for coll in collections:
+            try:
+                results = self.search(coll, query, n_results=n_results_per)
+                all_results.extend(results)
+            except Exception:
+                continue
+        all_results.sort(key=lambda r: r.score, reverse=True)
+        return all_results
 
     def get_collection_count(self, collection_name: str) -> int:
         """Get document count in a collection."""
@@ -278,9 +488,14 @@ class OllamaLLMService:
 
         url = f"{self.base_url}/api/generate"
 
+        # Prepend /no_think for qwen3 models to disable thinking mode
+        actual_prompt = prompt
+        if "qwen3" in self.model.lower():
+            actual_prompt = "/no_think\n" + prompt
+
         payload = {
             "model": self.model,
-            "prompt": prompt,
+            "prompt": actual_prompt,
             "stream": False,
             "options": {
                 "temperature": temperature,
@@ -292,10 +507,14 @@ class OllamaLLMService:
             payload["system"] = system_prompt
 
         try:
-            response = requests.post(url, json=payload, timeout=60)
+            response = requests.post(url, json=payload, timeout=120)
             response.raise_for_status()
             result = response.json()
-            return result.get("response", "")
+            raw = result.get("response", "")
+            # Strip any remaining <think>...</think> tags (qwen3, deepseek-r1)
+            import re as _re
+            clean = _re.sub(r'<think>.*?</think>', '', raw, flags=_re.DOTALL).strip()
+            return clean if clean else raw.strip()
         except requests.exceptions.ConnectionError:
             logger.error(f"Failed to connect to Ollama at {self.base_url}")
             return "[LLM unavailable - Ollama not running]"
@@ -337,6 +556,52 @@ class OllamaLLMService:
             logger.error(f"LLM chat failed: {e}")
             return f"[LLM error: {str(e)}]"
 
+    def generate_json(
+        self,
+        prompt: str,
+        system_prompt: str = None,
+        temperature: float = 0.3,
+        max_tokens: int = 2048,
+    ) -> dict | None:
+        """Generate structured JSON response from LLM.
+
+        Uses Ollama's JSON format mode and validates the output.
+        Returns parsed dict on success, None on failure.
+        """
+        if not REQUESTS_AVAILABLE:
+            raise ImportError("requests not installed. Run: pip install requests")
+
+        url = f"{self.base_url}/api/generate"
+        payload = {
+            "model": self.model,
+            "prompt": prompt,
+            "stream": False,
+            "format": "json",
+            "options": {
+                "temperature": temperature,
+                "num_predict": max_tokens,
+            },
+        }
+        if system_prompt:
+            payload["system"] = system_prompt
+
+        for attempt in range(2):
+            try:
+                response = requests.post(url, json=payload, timeout=90)
+                response.raise_for_status()
+                raw = response.json().get("response", "")
+                return json.loads(raw)
+            except json.JSONDecodeError:
+                logger.warning(f"JSON parse failed (attempt {attempt + 1}): {raw[:200]}")
+                continue
+            except requests.exceptions.ConnectionError:
+                logger.error(f"Failed to connect to Ollama at {self.base_url}")
+                return None
+            except Exception as e:
+                logger.error(f"LLM JSON generation failed: {e}")
+                return None
+        return None
+
     def is_available(self) -> bool:
         """Check if Ollama is available."""
         try:
@@ -361,7 +626,10 @@ class IndustrialRAGPipeline:
 
     def __init__(self):
         self.vector_store = VectorStoreService()
-        self.llm = OllamaLLMService()
+        self.llm = OllamaLLMService()  # legacy single-model (backward compat)
+        # Pipeline v2: dual-model LLM instances
+        self.llm_fast = OllamaLLMService(model=OLLAMA_MODEL_FAST)
+        self.llm_quality = OllamaLLMService(model=OLLAMA_MODEL_QUALITY)
         self._indexed = False
 
     def index_equipment_from_db(self):
@@ -401,7 +669,7 @@ class IndustrialRAGPipeline:
 
         # Index alerts
         alert_docs = []
-        for alert in Alert.objects.filter(resolved=False):
+        for alert in Alert.objects.all()[:2000]:  # All alerts (resolved + unresolved) for historical context
             doc = self._alert_to_document(alert)
             alert_docs.append(doc)
 
@@ -411,13 +679,25 @@ class IndustrialRAGPipeline:
 
         # Index maintenance records
         maint_docs = []
-        for record in MaintenanceRecord.objects.all()[:500]:  # Limit for performance
+        for record in MaintenanceRecord.objects.all()[:4000]:  # Up to 4000 records
             doc = self._maintenance_to_document(record)
             maint_docs.append(doc)
 
         if maint_docs:
             self.vector_store.add_documents(MAINTENANCE_COLLECTION, maint_docs)
             logger.info(f"Indexed {len(maint_docs)} maintenance documents")
+
+        # Index operational documents (SOPs, inspection reports, etc.)
+        op_docs = self._index_operational_documents()
+        logger.info(f"Indexed {op_docs} operational documents")
+
+        # Index shift logs
+        shift_docs = self._index_shift_logs()
+        logger.info(f"Indexed {shift_docs} shift log documents")
+
+        # Index work orders
+        wo_docs = self._index_work_orders()
+        logger.info(f"Indexed {wo_docs} work order documents")
 
         self._indexed = True
         logger.info("Equipment indexing complete!")
@@ -511,47 +791,254 @@ class IndustrialRAGPipeline:
             },
         )
 
+    def _index_operational_documents(self) -> int:
+        """Index operational documents (SOPs, inspection reports, etc.) from raw SQL table."""
+        from django.db import connection
+        try:
+            with connection.cursor() as c:
+                c.execute("SELECT doc_id, doc_type, title, equipment_type, equipment_id, content, author, department FROM operational_documents")
+                rows = c.fetchall()
+        except Exception:
+            logger.warning("operational_documents table not found — skipping")
+            return 0
+
+        if not rows:
+            return 0
+
+        docs = []
+        for row in rows:
+            doc_id, doc_type, title, eq_type, eq_id, content, author, department = row
+            docs.append(RAGDocument(
+                id=f"opdoc_{doc_id}",
+                content=f"{title} | Type: {doc_type} | {content}",
+                metadata={
+                    "doc_id": doc_id or "",
+                    "doc_type": doc_type or "",
+                    "title": title or "",
+                    "equipment_type": eq_type or "",
+                    "equipment_id": eq_id or "",
+                    "author": author or "",
+                    "department": department or "",
+                },
+            ))
+
+        self.vector_store.add_documents(OPERATIONAL_DOCS_COLLECTION, docs)
+        return len(docs)
+
+    def _index_shift_logs(self) -> int:
+        """Index shift handover logs from raw SQL table."""
+        from django.db import connection
+        try:
+            with connection.cursor() as c:
+                c.execute("SELECT log_id, shift_date, shift_name, supervisor, events, pending_actions, notes FROM shift_logs")
+                rows = c.fetchall()
+        except Exception:
+            logger.warning("shift_logs table not found — skipping")
+            return 0
+
+        if not rows:
+            return 0
+
+        docs = []
+        for row in rows:
+            log_id, shift_date, shift_name, supervisor, events, pending_actions, notes = row
+            content = (
+                f"Shift Log {shift_date} {shift_name} | "
+                f"Supervisor: {supervisor} | "
+                f"Events: {events} | "
+                f"Pending: {pending_actions} | "
+                f"Notes: {notes}"
+            )
+            docs.append(RAGDocument(
+                id=f"shift_{log_id}",
+                content=content,
+                metadata={
+                    "log_id": log_id or "",
+                    "shift_date": shift_date or "",
+                    "shift_name": shift_name or "",
+                    "supervisor": supervisor or "",
+                },
+            ))
+
+        self.vector_store.add_documents(SHIFT_LOGS_COLLECTION, docs)
+        return len(docs)
+
+    def _index_work_orders(self) -> int:
+        """Index work orders from raw SQL table."""
+        from django.db import connection
+        try:
+            with connection.cursor() as c:
+                c.execute("""
+                    SELECT wo_id, equipment_id, equipment_name, equipment_type,
+                           work_type, priority, status, description, assigned_to, vendor, notes
+                    FROM work_orders
+                """)
+                rows = c.fetchall()
+        except Exception:
+            logger.warning("work_orders table not found — skipping")
+            return 0
+
+        if not rows:
+            return 0
+
+        docs = []
+        for row in rows:
+            wo_id, eq_id, eq_name, eq_type, work_type, priority, status, desc, assigned, vendor, notes = row
+            content = (
+                f"Work Order {wo_id} | Equipment: {eq_name} ({eq_id}) | "
+                f"Type: {work_type} | Priority: {priority} | Status: {status} | "
+                f"Description: {desc} | Assigned: {assigned}"
+            )
+            if vendor:
+                content += f" | Vendor: {vendor}"
+            if notes:
+                content += f" | Notes: {notes}"
+
+            docs.append(RAGDocument(
+                id=f"wo_{wo_id}",
+                content=content,
+                metadata={
+                    "wo_id": wo_id or "",
+                    "equipment_id": eq_id or "",
+                    "equipment_name": eq_name or "",
+                    "work_type": work_type or "",
+                    "priority": priority or "",
+                    "status": status or "",
+                },
+            ))
+
+        self.vector_store.add_documents(WORK_ORDERS_COLLECTION, docs)
+        return len(docs)
+
+    def query_energy_sql(self, equipment_id: str = None, days: int = 30) -> list[dict]:
+        """Direct SQL query for energy time-series data (not vector search)."""
+        from django.db import connection
+        try:
+            with connection.cursor() as c:
+                if equipment_id:
+                    c.execute("""
+                        SELECT meter_id, meter_name, timestamp, power_kw, power_factor, voltage_avg
+                        FROM energy_readings
+                        WHERE meter_id = %s
+                        ORDER BY timestamp DESC
+                        LIMIT 100
+                    """, [equipment_id])
+                else:
+                    c.execute("""
+                        SELECT meter_id, meter_name, timestamp, power_kw, power_factor, voltage_avg
+                        FROM energy_readings
+                        ORDER BY timestamp DESC
+                        LIMIT 100
+                    """)
+                rows = c.fetchall()
+                return [
+                    {"meter_id": r[0], "meter_name": r[1], "timestamp": r[2],
+                     "power_kw": r[3], "power_factor": r[4], "voltage_avg": r[5]}
+                    for r in rows
+                ]
+        except Exception as e:
+            logger.warning(f"Energy SQL query failed: {e}")
+            return []
+
     def query(
         self,
         question: str,
         n_results: int = 5,
         include_alerts: bool = True,
-        include_maintenance: bool = False,
+        include_maintenance: bool = True,
+        include_documents: bool = True,
+        include_work_orders: bool = True,
+        include_shift_logs: bool = False,
+        use_hybrid: bool = True,
     ) -> RAGResponse:
         """
         Query the RAG pipeline with a natural language question.
 
+        Searches across all indexed collections:
+        - Equipment (always)
+        - Alerts (default on)
+        - Maintenance records (default on)
+        - Operational documents / SOPs (default on)
+        - Work orders (default on)
+        - Shift logs (on demand)
+
+        Args:
+            use_hybrid: If True, use hybrid BM25+vector search for better
+                        accuracy on technical queries (default: True)
+
         Returns retrieved context and LLM-generated response.
         """
-        logger.info(f"RAG Query: {question}")
+        logger.info(f"RAG Query: {question} (hybrid={use_hybrid})")
 
-        # Search equipment
-        equipment_results = self.vector_store.search(
+        # Choose search method
+        search_fn = self.vector_store.search_hybrid if use_hybrid else self.vector_store.search
+
+        # Search equipment (always use hybrid for equipment - critical for IDs like TX-001)
+        equipment_results = search_fn(
             EQUIPMENT_COLLECTION,
             question,
             n_results=n_results,
         )
 
-        # Search alerts if requested
+        # Search alerts
         alert_results = []
         if include_alerts:
-            alert_results = self.vector_store.search(
+            alert_results = search_fn(
                 ALERTS_COLLECTION,
                 question,
                 n_results=3,
             )
 
-        # Search maintenance if requested
+        # Search maintenance
         maint_results = []
         if include_maintenance:
-            maint_results = self.vector_store.search(
+            maint_results = search_fn(
                 MAINTENANCE_COLLECTION,
                 question,
                 n_results=3,
             )
 
-        # Combine results
-        all_results = equipment_results + alert_results + maint_results
+        # Search operational documents (SOPs, inspection reports, etc.)
+        doc_results = []
+        if include_documents:
+            try:
+                doc_results = search_fn(
+                    OPERATIONAL_DOCS_COLLECTION,
+                    question,
+                    n_results=3,
+                )
+            except Exception:
+                pass  # Collection may not exist yet
+
+        # Search work orders
+        wo_results = []
+        if include_work_orders:
+            try:
+                wo_results = search_fn(
+                    WORK_ORDERS_COLLECTION,
+                    question,
+                    n_results=3,
+                )
+            except Exception:
+                pass
+
+        # Search shift logs
+        shift_results = []
+        if include_shift_logs:
+            try:
+                shift_results = search_fn(
+                    SHIFT_LOGS_COLLECTION,
+                    question,
+                    n_results=3,
+                )
+            except Exception:
+                pass
+
+        # Combine all results
+        all_results = (
+            equipment_results + alert_results + maint_results +
+            doc_results + wo_results + shift_results
+        )
 
         # Build context for LLM
         context_parts = []
@@ -603,15 +1090,22 @@ Provide a concise, data-rich spoken response."""
             "equipment_count": self.vector_store.get_collection_count(EQUIPMENT_COLLECTION),
             "alerts_count": self.vector_store.get_collection_count(ALERTS_COLLECTION),
             "maintenance_count": self.vector_store.get_collection_count(MAINTENANCE_COLLECTION),
+            "operational_docs_count": self.vector_store.get_collection_count(OPERATIONAL_DOCS_COLLECTION),
+            "shift_logs_count": self.vector_store.get_collection_count(SHIFT_LOGS_COLLECTION),
+            "work_orders_count": self.vector_store.get_collection_count(WORK_ORDERS_COLLECTION),
             "llm_available": self.llm.is_available(),
             "llm_model": self.llm.model,
+            "llm_model_fast": self.llm_fast.model,
+            "llm_model_quality": self.llm_quality.model,
         }
 
     def clear_index(self):
         """Clear all indexed data."""
-        self.vector_store.delete_collection(EQUIPMENT_COLLECTION)
-        self.vector_store.delete_collection(ALERTS_COLLECTION)
-        self.vector_store.delete_collection(MAINTENANCE_COLLECTION)
+        for collection in [
+            EQUIPMENT_COLLECTION, ALERTS_COLLECTION, MAINTENANCE_COLLECTION,
+            OPERATIONAL_DOCS_COLLECTION, SHIFT_LOGS_COLLECTION, WORK_ORDERS_COLLECTION,
+        ]:
+            self.vector_store.delete_collection(collection)
         self._indexed = False
         logger.info("Cleared all indexed data")
 

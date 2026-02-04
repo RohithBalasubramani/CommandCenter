@@ -1,0 +1,293 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_220803",
+    "tag": "v2_quality_fixes",
+    "started_at": "2026-01-31T22:08:03.136238",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:08:39.772376",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q001",
+      "question": "Compare transformer 1 versus transformer 2",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare transformer 1 versus transformer 2",
+        "session_id": "ee3f319d-a3e6-46ed-bc0d-a95ddcc4ff5f",
+        "sent_at": "2026-01-31T22:08:03.136259"
+      },
+      "response": {
+        "voice_response": "Transformer 1, or TR-MAIN-01, is operating at 50.5% load, while Transformer 2, or TR-MAIN-02, is at 82.0% load. The Transformer Comparison Dashboard shows their performance differences, including temperature and energy distribution trends. Currently, TR-MAIN-01 has a health score of 100%, whereas TR-MAIN-02 has a health score of 85%.",
+        "layout_json": {
+          "heading": "Transformer Comparison Dashboard",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Compares the performance of transformer 1 and transformer 2, highlighting their differences and similarities.",
+              "data_override": {
+                "demoData": {
+                  "label": "Efficiency",
+                  "unit": "%",
+                  "labelA": "Main Transformer 1",
+                  "valueA": 100,
+                  "labelB": "Main Transformer 2",
+                  "valueB": 85,
+                  "delta": 15.0,
+                  "deltaPct": 17.6
+                }
+              },
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium",
+              "description": "Compares the performance of transformer 1 and transformer 2, highlighting their differences and similarities."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Shows the temperature and load trends of transformer 1 and transformer 2 over time, allowing for correlation analysis.",
+              "data_override": {
+                "demoData": {
+                  "label": "Temperature, Load",
+                  "unit": "units",
+                  "series": [
+                    {
+                      "name": "Main Transformer 1",
+                      "timeSeries": []
+                    },
+                    {
+                      "name": "Main Transformer 2",
+                      "timeSeries": []
+                    }
+                  ]
+                }
+              },
+              "fixture": "hvac-performance",
+              "heightHint": "tall",
+              "description": "Shows the temperature and load trends of transformer 1 and transformer 2 over time, allowing for correlation analysis."
+            },
+            {
+              "scenario": "distribution",
+              "size": "normal",
+              "relevance": 0.6,
+              "why": "Displays the energy distribution of transformer 1 and transformer 2, showing how they contribute to the overall energy output.",
+              "data_override": {
+                "demoData": {
+                  "total": 190.0,
+                  "unit": "%",
+                  "series": [
+                    {
+                      "label": "Energy Meter",
+                      "value": 100.0
+                    },
+                    {
+                      "label": "Transformer",
+                      "value": 90.0
+                    }
+                  ]
+                }
+              },
+              "fixture": "dist_downtime_top_contributors-pareto-bar",
+              "heightHint": "tall",
+              "description": "Displays the energy distribution of transformer 1 and transformer 2, showing how they contribute to the overall energy output."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Shows the current status of transformer 1, including any active alerts or warnings.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 1",
+                  "value": "100",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Shows the current status of transformer 1, including any active alerts or warnings."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Shows the current status of transformer 2, including any active alerts or warnings.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 2",
+                  "value": "85",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Shows the current status of transformer 2, including any active alerts or warnings."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.2,
+              "why": "Displays the maintenance history of transformer 1 and transformer 2, showing any upcoming or recent maintenance events.",
+              "data_override": {
+                "demoData": {
+                  "title": "Event Log",
+                  "events": [
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Main Transformer 2 (TR-MAIN-02) | Type: Transformer | Location: Block B - Substation | Building: Block A | Status: running | Health Score: 85% | Criti",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Main Transformer 1 (TR-MAIN-01) | Type: Transformer | Location: Utility Building - Substation | Building: Main Plant | Status: running | Health Score:",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Dry Type Transformer 2 (TR-DRY-02) | Type: Transformer | Location: Main Plant | Building: Main Plant | Status: running | Health Score: 95% | Criticali",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Dry Type Transformer 1 (TR-DRY-01) | Type: Transformer | Location: Block A | Building: Block A | Status: standby | Health Score: 77% | Criticality: hi",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "info",
+                      "message": "Main Transformer 3 (TR-MAIN-03) | Type: Transformer | Location: Utility Building - Substation | Building: Block A | Status: running | Health Score: 10",
+                      "source": "System"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "preventive",
+                      "message": "Maintenance: Annual transformer maintenance | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: preventive | Work Done: Checked oil level, silica ",
+                      "source": "Dry Type Transformer 2"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    }
+                  ]
+                }
+              },
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Displays the maintenance history of transformer 1 and transformer 2, showing any upcoming or recent maintenance events."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "transformer 1",
+              "transformer 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 36633
+      },
+      "analysis": {
+        "total_time_ms": 36636,
+        "network_overhead_ms": 3,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "distribution",
+          "kpi",
+          "kpi",
+          "timeline"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "hvac-performance",
+          "dist_downtime_top_contributors-pareto-bar",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "linear-incident-timeline"
+        ],
+        "heading": "Transformer Comparison Dashboard",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "timeline",
+            "distribution",
+            "trend-multi-line"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

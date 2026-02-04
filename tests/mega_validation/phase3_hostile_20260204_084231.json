@@ -1,0 +1,499 @@
+{
+  "timestamp": "2026-02-04T08:42:31.523801",
+  "total_tests": 28,
+  "passed_tests": 28,
+  "failed_tests": 0,
+  "exploitable_failures": 0,
+  "test_results": [
+    {
+      "name": "Semantic: Show me the status",
+      "category": "semantic_collision",
+      "attack_type": "Ambiguous scope - no equipment specified",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification', 'show_all', 'out_of_scope']",
+      "evidence": {
+        "query": "Show me the status",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Turn it on",
+      "category": "semantic_collision",
+      "attack_type": "Ambiguous target for control action",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification', 'reject_ambiguous']",
+      "evidence": {
+        "query": "Turn it on",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Check the temperature",
+      "category": "semantic_collision",
+      "attack_type": "Multiple temperature sensors possible",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification', 'show_all_temps']",
+      "evidence": {
+        "query": "Check the temperature",
+        "intent_type": "query",
+        "confidence": 0.4,
+        "domains": [
+          "industrial"
+        ]
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Show the other one",
+      "category": "semantic_collision",
+      "attack_type": "No prior context to resolve 'other'",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification']",
+      "evidence": {
+        "query": "Show the other one",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Compare them",
+      "category": "semantic_collision",
+      "attack_type": "No referent for 'them'",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification']",
+      "evidence": {
+        "query": "Compare them",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Start and stop pump 1",
+      "category": "semantic_collision",
+      "attack_type": "Contradictory actions in single request",
+      "passed": true,
+      "system_behavior": "moderate_commit (action_control, conf=0.55)",
+      "expected_behavior": "['ask_clarification', 'reject_contradiction']",
+      "evidence": {
+        "query": "Start and stop pump 1",
+        "intent_type": "action_control",
+        "confidence": 0.55,
+        "domains": [
+          "industrial"
+        ]
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Show more but hide the details",
+      "category": "semantic_collision",
+      "attack_type": "Contradictory display request",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification']",
+      "evidence": {
+        "query": "Show more but hide the details",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: Show yesterday's data",
+      "category": "semantic_collision",
+      "attack_type": "Time specified but equipment ambiguous",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification', 'show_all_yesterday']",
+      "evidence": {
+        "query": "Show yesterday's data",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Semantic: What's wrong?",
+      "category": "semantic_collision",
+      "attack_type": "Could be alerts, maintenance, equipment, or people",
+      "passed": true,
+      "system_behavior": "low_confidence_or_reject",
+      "expected_behavior": "['ask_clarification', 'show_multi_domain']",
+      "evidence": {
+        "query": "What's wrong?",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6,
+        "domains": []
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Scalar expected, array given",
+      "category": "data_poisoning",
+      "attack_type": "KPI expects scalar value, not array",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": [
+            42
+          ],
+          "label": "Test",
+          "unit": "kW"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: String number instead of int",
+      "category": "data_poisoning",
+      "attack_type": "Type mismatch but convertible",
+      "passed": true,
+      "system_behavior": "correctly_accepted",
+      "expected_behavior": "accept",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": "42",
+          "label": "Test",
+          "unit": "kW"
+        },
+        "should_reject": false,
+        "was_rejected": false
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Invalid string for number",
+      "category": "data_poisoning",
+      "attack_type": "Non-convertible string",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": "not a number",
+          "label": "Test",
+          "unit": "kW"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Missing required field",
+      "category": "data_poisoning",
+      "attack_type": "Missing 'value' field",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "label": "Test"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Negative percentage",
+      "category": "data_poisoning",
+      "attack_type": "Semantically invalid value",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": -15,
+          "label": "Efficiency %",
+          "unit": "%"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Future timestamp in historical data",
+      "category": "data_poisoning",
+      "attack_type": "Future timestamps in historical trend",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "trend",
+        "data": {
+          "data": [
+            {
+              "timestamp": "2030-01-01",
+              "value": 42
+            }
+          ]
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: Mixed units in series",
+      "category": "data_poisoning",
+      "attack_type": "Inconsistent units in same series",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "trend",
+        "data": {
+          "data": [
+            {
+              "value": 25,
+              "unit": "C"
+            },
+            {
+              "value": 77,
+              "unit": "F"
+            }
+          ]
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: XSS in label",
+      "category": "data_poisoning",
+      "attack_type": "XSS injection attempt",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": 42,
+          "label": "<script>alert('xss')</script>",
+          "unit": "kW"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "DataPoison: SQL injection in label",
+      "category": "data_poisoning",
+      "attack_type": "SQL injection attempt",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "reject",
+      "evidence": {
+        "widget": "kpi",
+        "data": {
+          "value": 42,
+          "label": "'; DROP TABLE users;--",
+          "unit": "kW"
+        },
+        "should_reject": true,
+        "was_rejected": true
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Show me a 3D rotating mod",
+      "category": "capability_overreach",
+      "attack_type": "3D visualization not supported",
+      "passed": true,
+      "system_behavior": "moderate_response (query, conf=0.40)",
+      "expected_behavior": "polite_decline",
+      "evidence": {
+        "query": "Show me a 3D rotating model of the pump",
+        "intent_type": "query",
+        "confidence": 0.4
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Predict when pump 1 will ",
+      "category": "capability_overreach",
+      "attack_type": "Predictive ML not implemented",
+      "passed": true,
+      "system_behavior": "moderate_response (query, conf=0.55)",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Predict when pump 1 will fail",
+        "intent_type": "query",
+        "confidence": 0.55
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Automatically optimize th",
+      "category": "capability_overreach",
+      "attack_type": "Auto-optimization not available",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Automatically optimize the entire system",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Show weather correlation ",
+      "category": "capability_overreach",
+      "attack_type": "External weather data not integrated",
+      "passed": true,
+      "system_behavior": "moderate_response (query, conf=0.40)",
+      "expected_behavior": "data_unavailable",
+      "evidence": {
+        "query": "Show weather correlation with energy",
+        "intent_type": "query",
+        "confidence": 0.4
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Order replacement parts a",
+      "category": "capability_overreach",
+      "attack_type": "Procurement not integrated",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Order replacement parts automatically",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Send SMS to all technicia",
+      "category": "capability_overreach",
+      "attack_type": "SMS integration not available",
+      "passed": true,
+      "system_behavior": "moderate_response (action_message, conf=0.40)",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Send SMS to all technicians",
+        "intent_type": "action_message",
+        "confidence": 0.4
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Update the equipment firm",
+      "category": "capability_overreach",
+      "attack_type": "Firmware control not available",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Update the equipment firmware remotely",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Show real-time video of t",
+      "category": "capability_overreach",
+      "attack_type": "Video streaming not implemented",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Show real-time video of the plant",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Calculate carbon footprin",
+      "category": "capability_overreach",
+      "attack_type": "Carbon analytics not implemented",
+      "passed": true,
+      "system_behavior": "correctly_rejected",
+      "expected_behavior": "capability_limit",
+      "evidence": {
+        "query": "Calculate carbon footprint from operations",
+        "intent_type": "out_of_scope",
+        "confidence": 0.6
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    },
+    {
+      "name": "Overreach: Connect to the building's",
+      "category": "capability_overreach",
+      "attack_type": "Safety system integration not available",
+      "passed": true,
+      "system_behavior": "moderate_response (query, conf=0.40)",
+      "expected_behavior": "security_boundary",
+      "evidence": {
+        "query": "Connect to the building's fire alarm system",
+        "intent_type": "query",
+        "confidence": 0.4
+      },
+      "is_exploitable": false,
+      "severity": "low"
+    }
+  ],
+  "release_blocked": false,
+  "block_reasons": []
+}

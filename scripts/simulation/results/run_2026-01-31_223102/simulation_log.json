@@ -1,0 +1,175 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_223102",
+    "tag": "v2_layout_fix",
+    "started_at": "2026-01-31T22:31:02.514872",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:31:41.339356",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q045",
+      "question": "Is the AMF panel ready for transfer?",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Is the AMF panel ready for transfer?",
+        "session_id": "b4468a69-95c2-4fd4-9f2d-076b052709aa",
+        "sent_at": "2026-01-31T22:31:02.514899"
+      },
+      "response": {
+        "voice_response": "Here's what I found for AMF Panel Readiness for Transfer. I've prepared a dashboard with 6 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "AMF Panel Readiness for Transfer",
+          "widgets": [
+            {
+              "scenario": "edgedevicepanel",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Shows the current status and all parameters of the AMF panel, indicating if it's ready for transfer.",
+              "data_override": {},
+              "fixture": "default-render",
+              "heightHint": "x-tall",
+              "description": "Shows the current status and all parameters of the AMF panel, indicating if it's ready for transfer."
+            },
+            {
+              "scenario": "kpi",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Displays the AMF panel's current operational status, providing a quick glance at its readiness.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the AMF panel's current operational status, providing a quick glance at its readiness."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.7,
+              "why": "Shows the maintenance and operational history of the AMF panel, helping to identify any recent issues or scheduled maintenance.",
+              "data_override": {},
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Shows the maintenance and operational history of the AMF panel, helping to identify any recent issues or scheduled maintenance."
+            },
+            {
+              "scenario": "alerts",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Lists any active alerts or warnings related to the AMF panel, indicating potential issues that need attention before transfer.",
+              "data_override": {},
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium",
+              "description": "Lists any active alerts or warnings related to the AMF panel, indicating potential issues that need attention before transfer."
+            },
+            {
+              "scenario": "category-bar",
+              "size": "expanded",
+              "relevance": 0.5,
+              "why": "Compares the AMF panel's readiness with other similar equipment, providing context on its relative status.",
+              "data_override": {},
+              "fixture": "efficiency-deviation",
+              "heightHint": "tall",
+              "description": "Compares the AMF panel's readiness with other similar equipment, providing context on its relative status."
+            },
+            {
+              "scenario": "trend",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Displays the historical trend of the AMF panel's operational status, helping to identify any patterns or anomalies.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall",
+              "description": "Displays the historical trend of the AMF panel's operational status, helping to identify any patterns or anomalies."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "AMF panel"
+            ],
+            "time": [
+              "transfer"
+            ]
+          },
+          "confidence": 1.0
+        },
+        "rag_results": [],
+        "processing_time_ms": 38821
+      },
+      "analysis": {
+        "total_time_ms": 38824,
+        "network_overhead_ms": 3,
+        "widget_count": 6,
+        "scenarios_used": [
+          "edgedevicepanel",
+          "kpi",
+          "timeline",
+          "alerts",
+          "category-bar",
+          "trend"
+        ],
+        "fixtures_used": [
+          "default-render",
+          "kpi_live-standard",
+          "linear-incident-timeline",
+          "banner-energy-peak-threshold-exceeded",
+          "efficiency-deviation",
+          "trend_live-line"
+        ],
+        "heading": "AMF Panel Readiness for Transfer",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "kpi",
+            "alerts"
+          ],
+          "present": [
+            "alerts",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend",
+            "category-bar",
+            "timeline",
+            "edgedevicepanel"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

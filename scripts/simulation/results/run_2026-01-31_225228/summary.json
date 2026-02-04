@@ -1,0 +1,48 @@
+{
+  "run_id": "run_2026-01-31_225228",
+  "tag": "v2_fixtures_fix",
+  "timing": {
+    "avg_ms": 47649,
+    "p50_ms": 47649,
+    "p95_ms": 47649,
+    "min_ms": 47649,
+    "max_ms": 47649
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "comparison",
+      "distribution",
+      "kpi",
+      "timeline",
+      "trend-multi-line"
+    ],
+    "fixtures_used": [
+      "delta_bar_visual-deviation-bar",
+      "dist_energy_source_share-donut",
+      "hvac-performance",
+      "kpi_alert-critical-state",
+      "kpi_live-standard",
+      "multi-lane-shift-schedule"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "comparison": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 47649,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,5680 @@
+{
+ "run_id": "exhaustive_2026-02-01_124606",
+ "created_at": "2026-02-01T12:46:57.957462",
+ "question_bank": "question_bank_exhaustive.json",
+ "total_questions": 1,
+ "failed_questions": 0,
+ "entries": [
+  {
+   "entry_id": "e00001",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "waterfall_visual-loss-analysis",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00002",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "grouped_bar_visual-phase-comparison",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00003",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "delta_bar_visual-deviation-bar",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00004",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "small_multiples_visual-temp-grid",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00005",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "composition_split_visual-load-type",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00006",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "comparison",
+   "fixture": "side_by_side_visual-plain-values",
+   "size": "hero",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "grouped_bar_visual-phase-comparison",
+   "widget_index": 0,
+   "data_override": {
+    "demoData": {
+     "label": "['Health', 'Status', 'Criticality']",
+     "unit": "%",
+     "labelA": "Main Transformer 1",
+     "valueA": 100,
+     "labelB": "Main Transformer 2",
+     "valueB": 85,
+     "delta": 15.0,
+     "deltaPct": 17.6,
+     "_query_context": "compare key performance indicators for transformer 1 and transformer 2. health status criticality direct comparison of key metrics between transformer 1 and transformer 2. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 0
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00007",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_alert_context-line-threshold",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00008",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_live-area",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00009",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_phased-rgb-phase-line",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00010",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_pattern-heatmap",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00011",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_standard-step-line",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00012",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend",
+   "fixture": "trend_live-line",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "trend_live-line",
+   "widget_index": 1,
+   "data_override": {
+    "demoData": {
+     "_query_context": "show health trend for transformer 1 and transformer 2 over the last week. health shows the health trend over time for both transformers, highlighting any recent changes. compare transformer 1 versus transformer 2",
+     "label": [
+      "health"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00013",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "alerts",
+   "fixture": "modal-ups-battery-critical",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "toast-power-factor-critical-low",
+   "widget_index": 2,
+   "data_override": {
+    "demoData": {
+     "_raw": [
+      {
+       "id": "TR-MAIN-04",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Main Transformer 4",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "5.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "APFC-2",
+       "title": "",
+       "message": "Capacitor bank inspection due",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Auto Power Factor Panel 2",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "",
+        "value": "None",
+        "unit": "",
+        "trend": "stable"
+       },
+       "threshold": "None",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-03",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 3",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "6.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-09",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 9",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "7.4",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-01",
+       "title": "load_percent",
+       "message": "Load exceeding 80% of rated capacity",
+       "severity": "medium",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 1",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "load_percent",
+        "value": "88.2",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "80.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      }
+     ],
+     "_query_context": "show active alerts for transformer 1 and transformer 2. highlights any active alerts or critical issues for either transformer. compare transformer 1 versus transformer 2",
+     "label": "Highlights any active alerts or critical issues fo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 2
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00014",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "alerts",
+   "fixture": "toast-power-factor-critical-low",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "toast-power-factor-critical-low",
+   "widget_index": 2,
+   "data_override": {
+    "demoData": {
+     "_raw": [
+      {
+       "id": "TR-MAIN-04",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Main Transformer 4",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "5.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "APFC-2",
+       "title": "",
+       "message": "Capacitor bank inspection due",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Auto Power Factor Panel 2",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "",
+        "value": "None",
+        "unit": "",
+        "trend": "stable"
+       },
+       "threshold": "None",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-03",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 3",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "6.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-09",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 9",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "7.4",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-01",
+       "title": "load_percent",
+       "message": "Load exceeding 80% of rated capacity",
+       "severity": "medium",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 1",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "load_percent",
+        "value": "88.2",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "80.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      }
+     ],
+     "_query_context": "show active alerts for transformer 1 and transformer 2. highlights any active alerts or critical issues for either transformer. compare transformer 1 versus transformer 2",
+     "label": "Highlights any active alerts or critical issues fo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 2
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00015",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "alerts",
+   "fixture": "card-dg-02-started-successfully",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "toast-power-factor-critical-low",
+   "widget_index": 2,
+   "data_override": {
+    "demoData": {
+     "_raw": [
+      {
+       "id": "TR-MAIN-04",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Main Transformer 4",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "5.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "APFC-2",
+       "title": "",
+       "message": "Capacitor bank inspection due",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Auto Power Factor Panel 2",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "",
+        "value": "None",
+        "unit": "",
+        "trend": "stable"
+       },
+       "threshold": "None",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-03",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 3",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "6.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-09",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 9",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "7.4",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-01",
+       "title": "load_percent",
+       "message": "Load exceeding 80% of rated capacity",
+       "severity": "medium",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 1",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "load_percent",
+        "value": "88.2",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "80.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      }
+     ],
+     "_query_context": "show active alerts for transformer 1 and transformer 2. highlights any active alerts or critical issues for either transformer. compare transformer 1 versus transformer 2",
+     "label": "Highlights any active alerts or critical issues fo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 2
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00016",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "alerts",
+   "fixture": "badge-ahu-01-high-temperature",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "toast-power-factor-critical-low",
+   "widget_index": 2,
+   "data_override": {
+    "demoData": {
+     "_raw": [
+      {
+       "id": "TR-MAIN-04",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Main Transformer 4",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "5.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "APFC-2",
+       "title": "",
+       "message": "Capacitor bank inspection due",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Auto Power Factor Panel 2",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "",
+        "value": "None",
+        "unit": "",
+        "trend": "stable"
+       },
+       "threshold": "None",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-03",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 3",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "6.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-09",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 9",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "7.4",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-01",
+       "title": "load_percent",
+       "message": "Load exceeding 80% of rated capacity",
+       "severity": "medium",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 1",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "load_percent",
+        "value": "88.2",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "80.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      }
+     ],
+     "_query_context": "show active alerts for transformer 1 and transformer 2. highlights any active alerts or critical issues for either transformer. compare transformer 1 versus transformer 2",
+     "label": "Highlights any active alerts or critical issues fo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 2
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00017",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "alerts",
+   "fixture": "banner-energy-peak-threshold-exceeded",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "toast-power-factor-critical-low",
+   "widget_index": 2,
+   "data_override": {
+    "demoData": {
+     "_raw": [
+      {
+       "id": "TR-MAIN-04",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Main Transformer 4",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "5.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "APFC-2",
+       "title": "",
+       "message": "Capacitor bank inspection due",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Auto Power Factor Panel 2",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "",
+        "value": "None",
+        "unit": "",
+        "trend": "stable"
+       },
+       "threshold": "None",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-03",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 3",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "6.9",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-09",
+       "title": "impedance_percent",
+       "message": "Impedance test deviation detected",
+       "severity": "low",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 9",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "impedance_percent",
+        "value": "7.4",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "6.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      },
+      {
+       "id": "TR-DRY-01",
+       "title": "load_percent",
+       "message": "Load exceeding 80% of rated capacity",
+       "severity": "medium",
+       "category": "Equipment",
+       "source": "Dry Type Transformer 1",
+       "state": "acknowledged",
+       "evidence": {
+        "label": "load_percent",
+        "value": "88.2",
+        "unit": "%",
+        "trend": "stable"
+       },
+       "threshold": "80.0 %",
+       "actions": [
+        {
+         "label": "Acknowledge",
+         "intent": "ack",
+         "type": "primary"
+        },
+        {
+         "label": "View Details",
+         "intent": "open",
+         "type": "secondary"
+        }
+       ]
+      }
+     ],
+     "_query_context": "show active alerts for transformer 1 and transformer 2. highlights any active alerts or critical issues for either transformer. compare transformer 1 versus transformer 2",
+     "label": "Highlights any active alerts or critical issues fo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 2
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00018",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_energy_source_share-donut",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00019",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_energy_source_share-100-stacked-bar",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00020",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_load_by_asset-horizontal-bar",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00021",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_consumption_by_category-pie",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00022",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_consumption_by_shift-grouped-bar",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00023",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "distribution",
+   "fixture": "dist_downtime_top_contributors-pareto-bar",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "dist_energy_source_share-100-stacked-bar",
+   "widget_index": 3,
+   "data_override": {
+    "demoData": {
+     "total": 0.0,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Other",
+       "value": 0.0
+      }
+     ],
+     "_query_context": "show maintenance type distribution for transformer 1 and transformer 2. shows the distribution of maintenance types for both transformers, helping identify any patterns. compare transformer 1 versus transformer 2",
+     "label": "Shows the distribution of maintenance types for bo"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 3
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00024",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "category-bar",
+   "fixture": "oee-by-machine",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "efficiency-deviation",
+   "widget_index": 4,
+   "data_override": {
+    "demoData": {
+     "total": 93.7,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Transformer",
+       "value": 93.7
+      }
+     ],
+     "_query_context": "compare criticality for transformer 1 and transformer 2. criticality compares the criticality of both transformers, helping identify any differences. compare transformer 1 versus transformer 2",
+     "label": [
+      "criticality"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 4
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00025",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "category-bar",
+   "fixture": "downtime-duration",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "efficiency-deviation",
+   "widget_index": 4,
+   "data_override": {
+    "demoData": {
+     "total": 93.7,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Transformer",
+       "value": 93.7
+      }
+     ],
+     "_query_context": "compare criticality for transformer 1 and transformer 2. criticality compares the criticality of both transformers, helping identify any differences. compare transformer 1 versus transformer 2",
+     "label": [
+      "criticality"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 4
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00026",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "category-bar",
+   "fixture": "production-states",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "efficiency-deviation",
+   "widget_index": 4,
+   "data_override": {
+    "demoData": {
+     "total": 93.7,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Transformer",
+       "value": 93.7
+      }
+     ],
+     "_query_context": "compare criticality for transformer 1 and transformer 2. criticality compares the criticality of both transformers, helping identify any differences. compare transformer 1 versus transformer 2",
+     "label": [
+      "criticality"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 4
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00027",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "category-bar",
+   "fixture": "shift-comparison",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "efficiency-deviation",
+   "widget_index": 4,
+   "data_override": {
+    "demoData": {
+     "total": 93.7,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Transformer",
+       "value": 93.7
+      }
+     ],
+     "_query_context": "compare criticality for transformer 1 and transformer 2. criticality compares the criticality of both transformers, helping identify any differences. compare transformer 1 versus transformer 2",
+     "label": [
+      "criticality"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 4
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00028",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "category-bar",
+   "fixture": "efficiency-deviation",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "efficiency-deviation",
+   "widget_index": 4,
+   "data_override": {
+    "demoData": {
+     "total": 93.7,
+     "unit": "%",
+     "series": [
+      {
+       "label": "Transformer",
+       "value": 93.7
+      }
+     ],
+     "_query_context": "compare criticality for transformer 1 and transformer 2. criticality compares the criticality of both transformers, helping identify any differences. compare transformer 1 versus transformer 2",
+     "label": [
+      "criticality"
+     ]
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 4
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00029",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_alert-critical-state",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00030",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_alert-warning-state",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00031",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_status-offline",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00032",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_live-high-contrast",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00033",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_status-badge",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00034",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_lifecycle-dark-mode-gauge",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00035",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_accumulated-daily-total",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00036",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_lifecycle-progress-bar",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00037",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "kpi",
+   "fixture": "kpi_live-standard",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "kpi_alert-critical-state",
+   "widget_index": 5,
+   "data_override": {
+    "demoData": {
+     "label": "Main Transformer 1",
+     "value": "100",
+     "unit": "%",
+     "state": "normal",
+     "_query_context": "show current health percentage for transformer 1 and transformer 2. health displays the current health percentage for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 5
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00038",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "matrix-heatmap",
+   "fixture": "correlation-matrix",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "correlation-matrix",
+   "widget_index": 6,
+   "data_override": {
+    "demoData": {
+     "label": "Equipment Health Matrix",
+     "rows": [
+      "Transformer",
+      "Energy Meter",
+      "Electrical Panel"
+     ],
+     "cols": [
+      "Unit 1",
+      "Unit 2",
+      "Unit 3",
+      "Unit 4",
+      "Unit 5",
+      "Unit 6"
+     ],
+     "dataset": [
+      [
+       0.85,
+       1.0,
+       1.0,
+       0.92,
+       1.0,
+       0.95
+      ],
+      [
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0
+      ],
+      [
+       0.87,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "_query_context": "show correlation matrix for health and criticality for transformer 1 and transformer 2. health criticality provides a heatmap showing the correlation between health and criticality for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 6
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00039",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "matrix-heatmap",
+   "fixture": "calendar-heatmap",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "correlation-matrix",
+   "widget_index": 6,
+   "data_override": {
+    "demoData": {
+     "label": "Equipment Health Matrix",
+     "rows": [
+      "Transformer",
+      "Energy Meter",
+      "Electrical Panel"
+     ],
+     "cols": [
+      "Unit 1",
+      "Unit 2",
+      "Unit 3",
+      "Unit 4",
+      "Unit 5",
+      "Unit 6"
+     ],
+     "dataset": [
+      [
+       0.85,
+       1.0,
+       1.0,
+       0.92,
+       1.0,
+       0.95
+      ],
+      [
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0
+      ],
+      [
+       0.87,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "_query_context": "show correlation matrix for health and criticality for transformer 1 and transformer 2. health criticality provides a heatmap showing the correlation between health and criticality for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 6
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00040",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "matrix-heatmap",
+   "fixture": "status-matrix",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "correlation-matrix",
+   "widget_index": 6,
+   "data_override": {
+    "demoData": {
+     "label": "Equipment Health Matrix",
+     "rows": [
+      "Transformer",
+      "Energy Meter",
+      "Electrical Panel"
+     ],
+     "cols": [
+      "Unit 1",
+      "Unit 2",
+      "Unit 3",
+      "Unit 4",
+      "Unit 5",
+      "Unit 6"
+     ],
+     "dataset": [
+      [
+       0.85,
+       1.0,
+       1.0,
+       0.92,
+       1.0,
+       0.95
+      ],
+      [
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0
+      ],
+      [
+       0.87,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "_query_context": "show correlation matrix for health and criticality for transformer 1 and transformer 2. health criticality provides a heatmap showing the correlation between health and criticality for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 6
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00041",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "matrix-heatmap",
+   "fixture": "density-matrix",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "correlation-matrix",
+   "widget_index": 6,
+   "data_override": {
+    "demoData": {
+     "label": "Equipment Health Matrix",
+     "rows": [
+      "Transformer",
+      "Energy Meter",
+      "Electrical Panel"
+     ],
+     "cols": [
+      "Unit 1",
+      "Unit 2",
+      "Unit 3",
+      "Unit 4",
+      "Unit 5",
+      "Unit 6"
+     ],
+     "dataset": [
+      [
+       0.85,
+       1.0,
+       1.0,
+       0.92,
+       1.0,
+       0.95
+      ],
+      [
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0
+      ],
+      [
+       0.87,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "_query_context": "show correlation matrix for health and criticality for transformer 1 and transformer 2. health criticality provides a heatmap showing the correlation between health and criticality for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 6
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00042",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "matrix-heatmap",
+   "fixture": "value-heatmap",
+   "size": "expanded",
+   "natural": true,
+   "forced": false,
+   "pipeline_selected_fixture": "correlation-matrix",
+   "widget_index": 6,
+   "data_override": {
+    "demoData": {
+     "label": "Equipment Health Matrix",
+     "rows": [
+      "Transformer",
+      "Energy Meter",
+      "Electrical Panel"
+     ],
+     "cols": [
+      "Unit 1",
+      "Unit 2",
+      "Unit 3",
+      "Unit 4",
+      "Unit 5",
+      "Unit 6"
+     ],
+     "dataset": [
+      [
+       0.85,
+       1.0,
+       1.0,
+       0.92,
+       1.0,
+       0.95
+      ],
+      [
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       1.0,
+       0
+      ],
+      [
+       0.87,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "_query_context": "show correlation matrix for health and criticality for transformer 1 and transformer 2. health criticality provides a heatmap showing the correlation between health and criticality for both transformers. compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": 6
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00043",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "composition",
+   "fixture": "stacked_area",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "categories": [
+      "Morning",
+      "Evening",
+      "Night"
+     ],
+     "series": [
+      {
+       "name": "HVAC",
+       "values": [
+        120,
+        180,
+        100
+       ]
+      },
+      {
+       "name": "Production",
+       "values": [
+        200,
+        250,
+        80
+       ]
+      },
+      {
+       "name": "Lighting",
+       "values": [
+        80,
+        90,
+        60
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00044",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "composition",
+   "fixture": "donut_pie",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "categories": [
+      "Morning",
+      "Evening",
+      "Night"
+     ],
+     "series": [
+      {
+       "name": "HVAC",
+       "values": [
+        120,
+        180,
+        100
+       ]
+      },
+      {
+       "name": "Production",
+       "values": [
+        200,
+        250,
+        80
+       ]
+      },
+      {
+       "name": "Lighting",
+       "values": [
+        80,
+        90,
+        60
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00045",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "composition",
+   "fixture": "waterfall",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "categories": [
+      "Morning",
+      "Evening",
+      "Night"
+     ],
+     "series": [
+      {
+       "name": "HVAC",
+       "values": [
+        120,
+        180,
+        100
+       ]
+      },
+      {
+       "name": "Production",
+       "values": [
+        200,
+        250,
+        80
+       ]
+      },
+      {
+       "name": "Lighting",
+       "values": [
+        80,
+        90,
+        60
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00046",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "composition",
+   "fixture": "treemap",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "categories": [
+      "Morning",
+      "Evening",
+      "Night"
+     ],
+     "series": [
+      {
+       "name": "HVAC",
+       "values": [
+        120,
+        180,
+        100
+       ]
+      },
+      {
+       "name": "Production",
+       "values": [
+        200,
+        250,
+        80
+       ]
+      },
+      {
+       "name": "Lighting",
+       "values": [
+        80,
+        90,
+        60
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00047",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "composition",
+   "fixture": "stacked_bar",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "categories": [
+      "Morning",
+      "Evening",
+      "Night"
+     ],
+     "series": [
+      {
+       "name": "HVAC",
+       "values": [
+        120,
+        180,
+        100
+       ]
+      },
+      {
+       "name": "Production",
+       "values": [
+        200,
+        250,
+        80
+       ]
+      },
+      {
+       "name": "Lighting",
+       "values": [
+        80,
+        90,
+        60
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00048",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "eventlogstream",
+   "fixture": "tabular-log-view",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Log",
+     "events": [
+      {
+       "timestamp": "2026-01-31T10:00:00Z",
+       "type": "warning",
+       "message": "High temperature on Transformer 1",
+       "source": "Transformer 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:30:00Z",
+       "type": "info",
+       "message": "Maintenance completed on Pump 1",
+       "source": "Pump 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:00:00Z",
+       "type": "error",
+       "message": "Power factor below threshold",
+       "source": "Main Panel"
+      },
+      {
+       "timestamp": "2026-01-31T08:30:00Z",
+       "type": "info",
+       "message": "Shift handover completed",
+       "source": "System"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00049",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "eventlogstream",
+   "fixture": "correlation-stack",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Log",
+     "events": [
+      {
+       "timestamp": "2026-01-31T10:00:00Z",
+       "type": "warning",
+       "message": "High temperature on Transformer 1",
+       "source": "Transformer 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:30:00Z",
+       "type": "info",
+       "message": "Maintenance completed on Pump 1",
+       "source": "Pump 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:00:00Z",
+       "type": "error",
+       "message": "Power factor below threshold",
+       "source": "Main Panel"
+      },
+      {
+       "timestamp": "2026-01-31T08:30:00Z",
+       "type": "info",
+       "message": "Shift handover completed",
+       "source": "System"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00050",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "eventlogstream",
+   "fixture": "grouped-by-asset",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Log",
+     "events": [
+      {
+       "timestamp": "2026-01-31T10:00:00Z",
+       "type": "warning",
+       "message": "High temperature on Transformer 1",
+       "source": "Transformer 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:30:00Z",
+       "type": "info",
+       "message": "Maintenance completed on Pump 1",
+       "source": "Pump 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:00:00Z",
+       "type": "error",
+       "message": "Power factor below threshold",
+       "source": "Main Panel"
+      },
+      {
+       "timestamp": "2026-01-31T08:30:00Z",
+       "type": "info",
+       "message": "Shift handover completed",
+       "source": "System"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00051",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "eventlogstream",
+   "fixture": "compact-card-feed",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Log",
+     "events": [
+      {
+       "timestamp": "2026-01-31T10:00:00Z",
+       "type": "warning",
+       "message": "High temperature on Transformer 1",
+       "source": "Transformer 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:30:00Z",
+       "type": "info",
+       "message": "Maintenance completed on Pump 1",
+       "source": "Pump 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:00:00Z",
+       "type": "error",
+       "message": "Power factor below threshold",
+       "source": "Main Panel"
+      },
+      {
+       "timestamp": "2026-01-31T08:30:00Z",
+       "type": "info",
+       "message": "Shift handover completed",
+       "source": "System"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00052",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "eventlogstream",
+   "fixture": "chronological-timeline",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Log",
+     "events": [
+      {
+       "timestamp": "2026-01-31T10:00:00Z",
+       "type": "warning",
+       "message": "High temperature on Transformer 1",
+       "source": "Transformer 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:30:00Z",
+       "type": "info",
+       "message": "Maintenance completed on Pump 1",
+       "source": "Pump 1"
+      },
+      {
+       "timestamp": "2026-01-31T09:00:00Z",
+       "type": "error",
+       "message": "Power factor below threshold",
+       "source": "Main Panel"
+      },
+      {
+       "timestamp": "2026-01-31T08:30:00Z",
+       "type": "info",
+       "message": "Shift handover completed",
+       "source": "System"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00053",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "flow-sankey",
+   "fixture": "flow_sankey_energy_balance-sankey-with-explicit-loss-branches-dropping-out",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "nodes": [
+      {
+       "id": "grid",
+       "label": "Grid"
+      },
+      {
+       "id": "solar",
+       "label": "Solar"
+      },
+      {
+       "id": "main_panel",
+       "label": "Main Panel"
+      },
+      {
+       "id": "hvac",
+       "label": "HVAC"
+      },
+      {
+       "id": "production",
+       "label": "Production"
+      },
+      {
+       "id": "lighting",
+       "label": "Lighting"
+      },
+      {
+       "id": "loss",
+       "label": "Loss"
+      }
+     ],
+     "links": [
+      {
+       "source": "grid",
+       "target": "main_panel",
+       "value": 600
+      },
+      {
+       "source": "solar",
+       "target": "main_panel",
+       "value": 200
+      },
+      {
+       "source": "main_panel",
+       "target": "hvac",
+       "value": 300
+      },
+      {
+       "source": "main_panel",
+       "target": "production",
+       "value": 350
+      },
+      {
+       "source": "main_panel",
+       "target": "lighting",
+       "value": 100
+      },
+      {
+       "source": "main_panel",
+       "target": "loss",
+       "value": 50
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00054",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "flow-sankey",
+   "fixture": "flow_sankey_multi_source-many-to-one-flow-diagram",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "nodes": [
+      {
+       "id": "grid",
+       "label": "Grid"
+      },
+      {
+       "id": "solar",
+       "label": "Solar"
+      },
+      {
+       "id": "main_panel",
+       "label": "Main Panel"
+      },
+      {
+       "id": "hvac",
+       "label": "HVAC"
+      },
+      {
+       "id": "production",
+       "label": "Production"
+      },
+      {
+       "id": "lighting",
+       "label": "Lighting"
+      },
+      {
+       "id": "loss",
+       "label": "Loss"
+      }
+     ],
+     "links": [
+      {
+       "source": "grid",
+       "target": "main_panel",
+       "value": 600
+      },
+      {
+       "source": "solar",
+       "target": "main_panel",
+       "value": 200
+      },
+      {
+       "source": "main_panel",
+       "target": "hvac",
+       "value": 300
+      },
+      {
+       "source": "main_panel",
+       "target": "production",
+       "value": 350
+      },
+      {
+       "source": "main_panel",
+       "target": "lighting",
+       "value": 100
+      },
+      {
+       "source": "main_panel",
+       "target": "loss",
+       "value": 50
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00055",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "flow-sankey",
+   "fixture": "flow_sankey_layered-multi-stage-hierarchical-flow",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "nodes": [
+      {
+       "id": "grid",
+       "label": "Grid"
+      },
+      {
+       "id": "solar",
+       "label": "Solar"
+      },
+      {
+       "id": "main_panel",
+       "label": "Main Panel"
+      },
+      {
+       "id": "hvac",
+       "label": "HVAC"
+      },
+      {
+       "id": "production",
+       "label": "Production"
+      },
+      {
+       "id": "lighting",
+       "label": "Lighting"
+      },
+      {
+       "id": "loss",
+       "label": "Loss"
+      }
+     ],
+     "links": [
+      {
+       "source": "grid",
+       "target": "main_panel",
+       "value": 600
+      },
+      {
+       "source": "solar",
+       "target": "main_panel",
+       "value": 200
+      },
+      {
+       "source": "main_panel",
+       "target": "hvac",
+       "value": 300
+      },
+      {
+       "source": "main_panel",
+       "target": "production",
+       "value": 350
+      },
+      {
+       "source": "main_panel",
+       "target": "lighting",
+       "value": 100
+      },
+      {
+       "source": "main_panel",
+       "target": "loss",
+       "value": 50
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00056",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "flow-sankey",
+   "fixture": "flow_sankey_time_sliced-sankey-with-time-scrubberplayer",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "nodes": [
+      {
+       "id": "grid",
+       "label": "Grid"
+      },
+      {
+       "id": "solar",
+       "label": "Solar"
+      },
+      {
+       "id": "main_panel",
+       "label": "Main Panel"
+      },
+      {
+       "id": "hvac",
+       "label": "HVAC"
+      },
+      {
+       "id": "production",
+       "label": "Production"
+      },
+      {
+       "id": "lighting",
+       "label": "Lighting"
+      },
+      {
+       "id": "loss",
+       "label": "Loss"
+      }
+     ],
+     "links": [
+      {
+       "source": "grid",
+       "target": "main_panel",
+       "value": 600
+      },
+      {
+       "source": "solar",
+       "target": "main_panel",
+       "value": 200
+      },
+      {
+       "source": "main_panel",
+       "target": "hvac",
+       "value": 300
+      },
+      {
+       "source": "main_panel",
+       "target": "production",
+       "value": 350
+      },
+      {
+       "source": "main_panel",
+       "target": "lighting",
+       "value": 100
+      },
+      {
+       "source": "main_panel",
+       "target": "loss",
+       "value": 50
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00057",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "flow-sankey",
+   "fixture": "flow_sankey_standard-classic-left-to-right-sankey",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "nodes": [
+      {
+       "id": "grid",
+       "label": "Grid"
+      },
+      {
+       "id": "solar",
+       "label": "Solar"
+      },
+      {
+       "id": "main_panel",
+       "label": "Main Panel"
+      },
+      {
+       "id": "hvac",
+       "label": "HVAC"
+      },
+      {
+       "id": "production",
+       "label": "Production"
+      },
+      {
+       "id": "lighting",
+       "label": "Lighting"
+      },
+      {
+       "id": "loss",
+       "label": "Loss"
+      }
+     ],
+     "links": [
+      {
+       "source": "grid",
+       "target": "main_panel",
+       "value": 600
+      },
+      {
+       "source": "solar",
+       "target": "main_panel",
+       "value": 200
+      },
+      {
+       "source": "main_panel",
+       "target": "hvac",
+       "value": 300
+      },
+      {
+       "source": "main_panel",
+       "target": "production",
+       "value": 350
+      },
+      {
+       "source": "main_panel",
+       "target": "lighting",
+       "value": 100
+      },
+      {
+       "source": "main_panel",
+       "target": "loss",
+       "value": 50
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00058",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "timeline",
+   "fixture": "machine-state-timeline",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Timeline",
+     "range": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+     },
+     "events": [
+      {
+       "time": "2026-01-05",
+       "label": "Preventive Maintenance",
+       "type": "maintenance"
+      },
+      {
+       "time": "2026-01-12",
+       "label": "Alarm: High Temperature",
+       "type": "alert"
+      },
+      {
+       "time": "2026-01-20",
+       "label": "Inspection Completed",
+       "type": "inspection"
+      },
+      {
+       "time": "2026-01-28",
+       "label": "Work Order Created",
+       "type": "work_order"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00059",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "timeline",
+   "fixture": "multi-lane-shift-schedule",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Timeline",
+     "range": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+     },
+     "events": [
+      {
+       "time": "2026-01-05",
+       "label": "Preventive Maintenance",
+       "type": "maintenance"
+      },
+      {
+       "time": "2026-01-12",
+       "label": "Alarm: High Temperature",
+       "type": "alert"
+      },
+      {
+       "time": "2026-01-20",
+       "label": "Inspection Completed",
+       "type": "inspection"
+      },
+      {
+       "time": "2026-01-28",
+       "label": "Work Order Created",
+       "type": "work_order"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00060",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "timeline",
+   "fixture": "forensic-annotated-view",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Timeline",
+     "range": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+     },
+     "events": [
+      {
+       "time": "2026-01-05",
+       "label": "Preventive Maintenance",
+       "type": "maintenance"
+      },
+      {
+       "time": "2026-01-12",
+       "label": "Alarm: High Temperature",
+       "type": "alert"
+      },
+      {
+       "time": "2026-01-20",
+       "label": "Inspection Completed",
+       "type": "inspection"
+      },
+      {
+       "time": "2026-01-28",
+       "label": "Work Order Created",
+       "type": "work_order"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00061",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "timeline",
+   "fixture": "log-density-burst-analysis",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Timeline",
+     "range": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+     },
+     "events": [
+      {
+       "time": "2026-01-05",
+       "label": "Preventive Maintenance",
+       "type": "maintenance"
+      },
+      {
+       "time": "2026-01-12",
+       "label": "Alarm: High Temperature",
+       "type": "alert"
+      },
+      {
+       "time": "2026-01-20",
+       "label": "Inspection Completed",
+       "type": "inspection"
+      },
+      {
+       "time": "2026-01-28",
+       "label": "Work Order Created",
+       "type": "work_order"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00062",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "timeline",
+   "fixture": "linear-incident-timeline",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "title": "Event Timeline",
+     "range": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+     },
+     "events": [
+      {
+       "time": "2026-01-05",
+       "label": "Preventive Maintenance",
+       "type": "maintenance"
+      },
+      {
+       "time": "2026-01-12",
+       "label": "Alarm: High Temperature",
+       "type": "alert"
+      },
+      {
+       "time": "2026-01-20",
+       "label": "Inspection Completed",
+       "type": "inspection"
+      },
+      {
+       "time": "2026-01-28",
+       "label": "Work Order Created",
+       "type": "work_order"
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00063",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "power-sources-stacked",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00064",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "main-lt-phases-current",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00065",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "ups-health-dual-axis",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00066",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "power-quality",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00067",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "hvac-performance",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00068",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trend-multi-line",
+   "fixture": "energy-demand",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "demoData": {
+     "label": "Compare transformer 1 versus transformer 2",
+     "unit": "kW",
+     "series": [
+      {
+       "name": "Source A",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 30
+        },
+        {
+         "time": "06:00",
+         "value": 45
+        },
+        {
+         "time": "12:00",
+         "value": 60
+        },
+        {
+         "time": "18:00",
+         "value": 40
+        }
+       ]
+      },
+      {
+       "name": "Source B",
+       "timeSeries": [
+        {
+         "time": "00:00",
+         "value": 20
+        },
+        {
+         "time": "06:00",
+         "value": 35
+        },
+        {
+         "time": "12:00",
+         "value": 50
+        },
+        {
+         "time": "18:00",
+         "value": 30
+        }
+       ]
+      }
+     ],
+     "_query_context": "compare transformer 1 versus transformer 2"
+    }
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00069",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "instantaneous-power",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00070",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "source-mix",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00071",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "performance-vs-baseline",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00072",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "cost-vs-budget",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00073",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "batch-production",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  },
+  {
+   "entry_id": "e00074",
+   "question_id": "q001",
+   "question": "Compare transformer 1 versus transformer 2",
+   "category": "comparison",
+   "scenario": "trends-cumulative",
+   "fixture": "energy-consumption",
+   "size": "normal",
+   "natural": false,
+   "forced": true,
+   "pipeline_selected_fixture": null,
+   "widget_index": -1,
+   "data_override": {
+    "config": {
+     "title": "Compare transformer 1 versus transformer 2",
+     "subtitle": "",
+     "variant": "V1",
+     "mode": "cumulative",
+     "series": [
+      {
+       "id": "S1",
+       "label": "Energy",
+       "unit": "kWh",
+       "color": "#2563eb"
+      }
+     ]
+    },
+    "data": [
+     {
+      "x": "2026-01-31T00:00:00Z",
+      "S1_raw": 10,
+      "S1_cumulative": 10
+     },
+     {
+      "x": "2026-01-31T04:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 25
+     },
+     {
+      "x": "2026-01-31T08:00:00Z",
+      "S1_raw": 25,
+      "S1_cumulative": 50
+     },
+     {
+      "x": "2026-01-31T12:00:00Z",
+      "S1_raw": 30,
+      "S1_cumulative": 80
+     },
+     {
+      "x": "2026-01-31T16:00:00Z",
+      "S1_raw": 20,
+      "S1_cumulative": 100
+     },
+     {
+      "x": "2026-01-31T20:00:00Z",
+      "S1_raw": 15,
+      "S1_cumulative": 115
+     }
+    ]
+   },
+   "layout_context": {
+    "heading": "Transformer Comparison Dashboard",
+    "total_widgets": 7,
+    "position": -1
+   },
+   "pipeline_meta": {
+    "intent": {
+     "type": "query",
+     "domains": [
+      "industrial",
+      "tasks"
+     ],
+     "entities": {
+      "devices": [
+       "transformer 1",
+       "transformer 2"
+      ]
+     },
+     "confidence": 0.9
+    },
+    "voice_response": "Transformer 1, TR-MAIN-01, has a health score of 100% and is operating at 50.5% load, while Transformer 2, TR-MAIN-02, has a health score of 85% and is operating at 82.0% load. The \"Transformer Comparison Dashboard\" shows these key metrics side-by-side for direct comparison. Transformer 2's lower health score may indicate potential issues, with its current load nearing 83% of its 1500 kVA capacity.",
+    "processing_time_ms": 51651
+   },
+   "rating": null,
+   "tags": [],
+   "notes": ""
+  }
+ ]
+}

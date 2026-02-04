@@ -1,0 +1,40 @@
+{
+  "run_id": "run_2026-01-31_223404",
+  "tag": "v2_layout_fix",
+  "timing": {
+    "avg_ms": 0,
+    "p50_ms": 0,
+    "p95_ms": 0,
+    "min_ms": 0,
+    "max_ms": 0
+  },
+  "counts": {
+    "total": 1,
+    "successful": 0,
+    "failed": 1,
+    "with_layout": 0
+  },
+  "accuracy": {
+    "domain_match_pct": 0,
+    "layout_generated_pct": 0
+  },
+  "widget_coverage": {
+    "scenarios_used": [],
+    "fixtures_used": [],
+    "avg_widgets_per_dashboard": 0
+  },
+  "by_category": {
+    "shift": {
+      "count": 1,
+      "successful": 0,
+      "avg_time_ms": 0,
+      "avg_widgets": 0
+    }
+  },
+  "errors": [
+    {
+      "question_id": "q015",
+      "error": "Connection refused \u2014 is the backend running?"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[Unit]
+Description=CommandCenter Backend (Django + Gunicorn)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/rohith/desktop/CommandCenter/backend
+Environment="PATH=/home/rohith/desktop/CommandCenter/backend/venv/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="DJANGO_SETTINGS_MODULE=command_center.settings"
+ExecStart=/home/rohith/desktop/CommandCenter/backend/venv/bin/gunicorn command_center.wsgi:application --bind 0.0.0.0:8100 --workers 3 --timeout 120
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/rohith/desktop/CommandCenter/logs/backend.log
+StandardError=append:/home/rohith/desktop/CommandCenter/logs/backend.log
+
+[Install]
+WantedBy=default.target

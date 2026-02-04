@@ -80,13 +80,28 @@ class ParakeetASR:
     def load(self):
         try:
             import nemo.collections.asr as nemo_asr  # type: ignore
+            from omegaconf import OmegaConf  # type: ignore
             logger.info("Loading Parakeet model (this may download ~5GB on first run)...")
             self.model = nemo_asr.models.ASRModel.from_pretrained(
                 model_name="nvidia/parakeet-tdt-0.6b-v2"
             )
+            # Fix: NeMo 2.6 greedy_batch decoder uses CUDA graphs that are
+            # broken with PyTorch 2.10 (cu_call return value mismatch).
+            # Switch to non-batch greedy decoding which avoids CUDA graphs.
+            try:
+                decoding_cfg = OmegaConf.create({
+                    'strategy': 'greedy',
+                    'model_type': 'tdt',
+                    'durations': [0, 1, 2, 3, 4],
+                    'greedy': {'max_symbols': 10},
+                })
+                self.model.change_decoding_strategy(decoding_cfg)
+                logger.info("Parakeet: switched to greedy decoding (CUDA graph workaround)")
+            except (AttributeError, TypeError, ValueError, RuntimeError) as e:
+                logger.warning(f"Parakeet: could not change decoding strategy: {e}")
             self.available = True
             logger.info("Parakeet loaded successfully")
-        except Exception as e:
+        except (ImportError, ModuleNotFoundError, RuntimeError, OSError) as e:
             logger.warning(f"Parakeet unavailable: {e}")
             self.available = False
 
@@ -129,22 +144,18 @@ class ParakeetASR:
 
             logger.info(f"Parakeet: transcribing from {tmp_path} ({len(audio)} samples)")
 
-            # NeMo API varies by version — try multiple calling conventions
+            # NeMo 2.6+ API: transcribe(audio=[path], ...)
             result = None
-            # Try 1: paths2audio_files keyword (newer NeMo >= 2.x)
             try:
-                result = self.model.transcribe(paths2audio_files=[tmp_path])
-                logger.info(f"Parakeet: transcribe(paths2audio_files=) returned type={type(result)}")
+                result = self.model.transcribe(audio=[tmp_path])
+                logger.info(f"Parakeet: transcribe(audio=) returned type={type(result)}")
             except TypeError:
-                pass
-
-            # Try 2: positional list of paths (older NeMo)
-            if result is None:
+                # Fallback for older NeMo: paths2audio_files keyword
                 try:
-                    result = self.model.transcribe([tmp_path])
-                    logger.info(f"Parakeet: transcribe([path]) returned type={type(result)}")
+                    result = self.model.transcribe(paths2audio_files=[tmp_path])
+                    logger.info(f"Parakeet: transcribe(paths2audio_files=) returned type={type(result)}")
                 except TypeError as e:
-                    logger.error(f"Parakeet: both calling conventions failed: {e}")
+                    logger.error(f"Parakeet: all calling conventions failed: {e}")
                     raise
 
             # Parse result — NeMo returns various formats depending on version
@@ -198,7 +209,7 @@ class WhisperASR:
             )
             self.available = True
             logger.info("Faster-Whisper loaded successfully")
-        except Exception as e:
+        except (ImportError, ModuleNotFoundError, RuntimeError, OSError, ValueError) as e:
             logger.warning(f"Faster-Whisper unavailable: {e}")
             self.available = False
 
@@ -253,6 +264,7 @@ parakeet = ParakeetASR()
 whisper = WhisperASR()
 active_model: ModelName = ModelName.PARAKEET
 _lock = asyncio.Lock()
+_transcribe_semaphore = asyncio.Semaphore(1)  # Max 1 concurrent transcription
 
 
 def get_active_asr():
@@ -307,7 +319,7 @@ app.add_middleware(
 # Endpoints
 # ---------------------------------------------------------------------------
 
-def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]:
+async def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]:
     """Decode audio bytes to numpy array, handling webm/opus via ffmpeg."""
     # Try soundfile first (handles WAV, FLAC, OGG/Vorbis)
     try:
@@ -317,12 +329,12 @@ def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]
             data = data.mean(axis=1)
         logger.info(f"Decoded with soundfile: {len(data)} samples @ {sample_rate}Hz")
         return data, sample_rate
-    except Exception as sf_err:
+    except (RuntimeError, sf.LibsndfileError, ValueError, OSError) as sf_err:
         logger.info(f"soundfile failed ({sf_err}), trying ffmpeg...")
 
-    # Fallback: use ffmpeg to convert any format → WAV PCM
-    import subprocess
+    # Fallback: use asyncio subprocess to avoid blocking the event loop
     import tempfile
+    import os
 
     suffix = ".webm" if "webm" in (filename or "") else ".ogg"
     with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp_in:
@@ -336,10 +348,22 @@ def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]
             "-ar", "16000", "-ac", "1", "-f", "wav",
             tmp_out_path,
         ]
-        result = subprocess.run(cmd, capture_output=True, timeout=10)
-        if result.returncode != 0:
-            stderr = result.stderr.decode("utf-8", errors="replace")[:500]
-            raise RuntimeError(f"ffmpeg failed (rc={result.returncode}): {stderr}")
+        # Use asyncio subprocess to avoid blocking the event loop
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        try:
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=10)
+        except asyncio.TimeoutError:
+            proc.kill()
+            await proc.wait()
+            raise RuntimeError("ffmpeg timed out after 10s")
+
+        if proc.returncode != 0:
+            stderr_text = stderr.decode("utf-8", errors="replace")[:500]
+            raise RuntimeError(f"ffmpeg failed (rc={proc.returncode}): {stderr_text}")
 
         data, sample_rate = sf.read(tmp_out_path, dtype="float32")
         if data.ndim > 1:
@@ -347,7 +371,6 @@ def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]
         logger.info(f"Decoded with ffmpeg: {len(data)} samples @ {sample_rate}Hz")
         return data, sample_rate
     finally:
-        import os
         for p in [tmp_in_path, tmp_out_path]:
             try:
                 os.unlink(p)
@@ -357,7 +380,21 @@ def _decode_audio_bytes(content: bytes, filename: str) -> tuple[np.ndarray, int]
 
 @app.post("/v1/stt", response_model=TranscribeResponse)
 async def transcribe_audio(audio: UploadFile = File(...)):
-    """Transcribe an audio file to text."""
+    """Transcribe an audio file to text. Max 1 concurrent request — rejects if busy."""
+    global active_model
+
+    # Concurrency guard: reject if another transcription is in progress.
+    # This prevents CUDA OOM from multiple large audio files queuing up.
+    if _transcribe_semaphore.locked():
+        logger.warning("STT busy — rejecting concurrent request")
+        raise HTTPException(status_code=429, detail="STT busy, try again shortly")
+
+    async with _transcribe_semaphore:
+        return await _do_transcribe(audio)
+
+
+async def _do_transcribe(audio: UploadFile) -> TranscribeResponse:
+    """Internal: actual transcription logic."""
     global active_model
     start = time.monotonic()
 
@@ -369,8 +406,8 @@ async def transcribe_audio(audio: UploadFile = File(...)):
 
     # Decode audio (handles webm/opus via ffmpeg fallback)
     try:
-        data, sample_rate = _decode_audio_bytes(content, audio.filename or "")
-    except Exception as e:
+        data, sample_rate = await _decode_audio_bytes(content, audio.filename or "")
+    except (RuntimeError, OSError, ValueError) as e:
         logger.error(f"Audio decode failed: {e}")
         raise HTTPException(status_code=400, detail=f"Could not decode audio: {e}")
 
@@ -388,7 +425,7 @@ async def transcribe_audio(audio: UploadFile = File(...)):
         text = None
         try:
             text = await asyncio.to_thread(asr.transcribe, data, sample_rate)
-        except Exception as e:
+        except (RuntimeError, TypeError, ValueError, OSError) as e:
             logger.error(f"Transcription with {active_model.value} failed: {e}")
             # Mark the failed model as runtime-broken
             failed_asr = get_active_asr()
@@ -412,7 +449,7 @@ async def transcribe_audio(audio: UploadFile = File(...)):
                     # Auto-switch: make the fallback the active model
                     logger.warning(f"Auto-switching active model from {active_model.value} to {fallback_name} (primary failed at runtime)")
                     active_model = ModelName(fallback_name)
-                except Exception as e2:
+                except (RuntimeError, TypeError, ValueError, OSError) as e2:
                     logger.error(f"Fallback {fallback_name} also failed: {e2}")
                     fallback.runtime_broken = True
                     raise HTTPException(status_code=500, detail=f"Both models failed: {e} / {e2}")

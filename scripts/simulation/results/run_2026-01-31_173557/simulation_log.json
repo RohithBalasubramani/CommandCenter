@@ -1,0 +1,1998 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_173557",
+    "tag": "v2_llama33",
+    "started_at": "2026-01-31T17:35:57.225870",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 51,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T17:37:55.070644",
+    "successful": 5,
+    "failed": 46
+  },
+  "results": [
+    {
+      "question_id": "q001",
+      "question": "Compare transformer 1 versus transformer 2",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare transformer 1 versus transformer 2",
+        "session_id": "c9739588-984a-445e-87f4-601d0c9cf91f",
+        "sent_at": "2026-01-31T17:35:57.225902"
+      },
+      "response": {
+        "voice_response": "Here's what I found for Transformer Comparison. I've prepared a dashboard with 5 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "Transformer Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Directly answers the user's question by comparing the two transformers.",
+              "data_override": {},
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "trend",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Provides a historical context for the comparison by showing how energy consumption and health status have changed over time.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "kpi",
+              "size": "normal",
+              "relevance": 0.7,
+              "why": "Provides a quick overview of the current status of each transformer.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "alerts",
+              "size": "normal",
+              "relevance": 0.6,
+              "why": "Highlights any critical issues or alerts related to the transformers.",
+              "data_override": {},
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "helpview",
+              "size": "compact",
+              "relevance": 0.5,
+              "why": "Provides a quick reference for the user on how to use the dashboard.",
+              "data_override": {
+                "demoData": {}
+              },
+              "fixture": "default-render",
+              "heightHint": "short"
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial"
+          ],
+          "entities": {
+            "devices": [
+              "transformer 1",
+              "transformer 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 15938
+      },
+      "analysis": {
+        "total_time_ms": 15941,
+        "network_overhead_ms": 3,
+        "widget_count": 5,
+        "scenarios_used": [
+          "comparison",
+          "trend",
+          "kpi",
+          "alerts",
+          "helpview"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "trend_live-line",
+          "kpi_live-standard",
+          "banner-energy-peak-threshold-exceeded",
+          "default-render"
+        ],
+        "heading": "Transformer Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend",
+            "helpview",
+            "alerts"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q002",
+      "question": "What is the difference between chiller 1 and chiller 2 performance?",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the difference between chiller 1 and chiller 2 performance?",
+        "session_id": "14422609-1bbc-42ff-bbfe-2ab0218945b2",
+        "sent_at": "2026-01-31T17:36:13.167963"
+      },
+      "response": {
+        "voice_response": "Here's what I found for Chiller Performance Comparison. I've prepared a dashboard with 6 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "Chiller Performance Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Directly answers the user's question by showing the difference between chiller 1 and chiller 2 performance.",
+              "data_override": {},
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "trend",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Provides a time series view of the performance difference between chiller 1 and chiller 2.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "kpi",
+              "size": "normal",
+              "relevance": 0.6,
+              "why": "Provides a current status of chiller 1 and chiller 2 performance.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "alerts",
+              "size": "normal",
+              "relevance": 0.4,
+              "why": "Identifies any alerts or issues related to chiller 1 and chiller 2 performance.",
+              "data_override": {},
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.3,
+              "why": "Provides a multi-metric view of chiller 1 and chiller 2 performance over time.",
+              "data_override": {},
+              "fixture": "energy-demand",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "helpview",
+              "size": "compact",
+              "relevance": 0.1,
+              "why": "Provides help and capabilities information for the dashboard.",
+              "data_override": {
+                "demoData": {}
+              },
+              "fixture": "default-render",
+              "heightHint": "short"
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "chiller 1",
+              "chiller 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 21763
+      },
+      "analysis": {
+        "total_time_ms": 21767,
+        "network_overhead_ms": 4,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend",
+          "kpi",
+          "alerts",
+          "trend-multi-line",
+          "helpview"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "trend_live-line",
+          "kpi_live-standard",
+          "banner-energy-peak-threshold-exceeded",
+          "energy-demand",
+          "default-render"
+        ],
+        "heading": "Chiller Performance Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi",
+            "trend"
+          ],
+          "present": [
+            "comparison",
+            "trend",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "helpview",
+            "alerts"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q003",
+      "question": "Show me DG 1 vs DG 2 health and runtime",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison",
+        "ups_dg",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me DG 1 vs DG 2 health and runtime",
+        "session_id": "77fa85ba-0eb6-41d9-80e6-cc1311ff1451",
+        "sent_at": "2026-01-31T17:36:34.935478"
+      },
+      "response": {
+        "voice_response": "Here's what I found for DG Health and Runtime Comparison. I've prepared a dashboard with 6 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "DG Health and Runtime Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Directly answers the user's question by comparing DG1 and DG2 health and runtime.",
+              "data_override": {},
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Provides a multi-metric trend analysis to show how DG1 and DG2 health status and runtime have changed over time.",
+              "data_override": {},
+              "fixture": "energy-demand",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "kpi",
+              "size": "normal",
+              "relevance": 0.7,
+              "why": "Provides a single metric display to show the current health status of DG1 and DG2.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "kpi",
+              "size": "normal",
+              "relevance": 0.6,
+              "why": "Provides a single metric display to show the current runtime of DG1 and DG2.",
+              "data_override": {},
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "alerts",
+              "size": "normal",
+              "relevance": 0.5,
+              "why": "Provides a list of active alerts for DG1 and DG2 to show any critical issues.",
+              "data_override": {},
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "trend",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Provides a time series line chart to show how the cumulative runtime of DG1 and DG2 has changed over time.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall"
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "alerts"
+          ],
+          "entities": {
+            "devices": [
+              "DG 1",
+              "DG 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 26316
+      },
+      "analysis": {
+        "total_time_ms": 26320,
+        "network_overhead_ms": 4,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "kpi",
+          "kpi",
+          "alerts",
+          "trend"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "energy-demand",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "banner-energy-peak-threshold-exceeded",
+          "trend_live-line"
+        ],
+        "heading": "DG Health and Runtime Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "alerts"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "trend",
+            "alerts"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q004",
+      "question": "Show me the power trend over the last 24 hours",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the power trend over the last 24 hours",
+        "session_id": "d0f344db-6eaf-495f-b3bd-590d374d3d49",
+        "sent_at": "2026-01-31T17:37:01.255808"
+      },
+      "response": {
+        "voice_response": "Here's what I found for Power Trend. I've prepared a dashboard with 5 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "Power Trend",
+          "widgets": [
+            {
+              "scenario": "trend",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Directly answers the user's question about power trend over last 24 hours",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "kpi",
+              "size": "normal",
+              "relevance": 0.8,
+              "why": "Provides a single metric to give an overview of current power consumption",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Provides a multi-metric trend to show power consumption and other related metrics over time",
+              "data_override": {},
+              "fixture": "energy-demand",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "comparison",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Provides a comparison of power consumption between different equipment or locations",
+              "data_override": {},
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "pulseview",
+              "size": "normal",
+              "relevance": 0.2,
+              "why": "Provides a real-time pulse view to show live system activity related to power consumption",
+              "data_override": {
+                "demoData": {}
+              },
+              "fixture": "default-render",
+              "heightHint": "medium"
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial"
+          ],
+          "entities": {
+            "time": [
+              "last 24 hours"
+            ]
+          },
+          "confidence": 1.0
+        },
+        "rag_results": [],
+        "processing_time_ms": 22262
+      },
+      "analysis": {
+        "total_time_ms": 22265,
+        "network_overhead_ms": 3,
+        "widget_count": 5,
+        "scenarios_used": [
+          "trend",
+          "kpi",
+          "trend-multi-line",
+          "comparison",
+          "pulseview"
+        ],
+        "fixtures_used": [
+          "trend_live-line",
+          "kpi_live-standard",
+          "energy-demand",
+          "side_by_side_visual-plain-values",
+          "default-render"
+        ],
+        "heading": "Power Trend",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "trend",
+            "kpi"
+          ],
+          "present": [
+            "trend",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "pulseview",
+            "comparison"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q005",
+      "question": "What is the temperature history for AHU 1?",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the temperature history for AHU 1?",
+        "session_id": "9c6510f0-c284-495b-9964-550d23ab5fc3",
+        "sent_at": "2026-01-31T17:37:23.521666"
+      },
+      "response": {
+        "voice_response": "Here's what I found for AHU 1 Temperature History. I've prepared a dashboard with 5 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "AHU 1 Temperature History",
+          "widgets": [
+            {
+              "scenario": "trend",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Directly answers the user's question about temperature history.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Provides a more detailed view of temperature history, including other relevant metrics.",
+              "data_override": {},
+              "fixture": "energy-demand",
+              "heightHint": "tall"
+            },
+            {
+              "scenario": "alerts",
+              "size": "normal",
+              "relevance": 0.7,
+              "why": "Highlights any temperature-related alerts or issues for AHU 1.",
+              "data_override": {},
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium"
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.6,
+              "why": "Provides a quick overview of AHU 1's current temperature status.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short"
+            },
+            {
+              "scenario": "trends-cumulative",
+              "size": "expanded",
+              "relevance": 0.5,
+              "why": "Shows the cumulative temperature history for AHU 1, providing context for secondary characteristics.",
+              "data_override": {},
+              "fixture": "energy-consumption",
+              "heightHint": "tall"
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "AHU 1"
+            ],
+            "time": [
+              "history"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 20672
+      },
+      "analysis": {
+        "total_time_ms": 20675,
+        "network_overhead_ms": 3,
+        "widget_count": 5,
+        "scenarios_used": [
+          "trend",
+          "trend-multi-line",
+          "alerts",
+          "kpi",
+          "trends-cumulative"
+        ],
+        "fixtures_used": [
+          "trend_live-line",
+          "energy-demand",
+          "banner-energy-peak-threshold-exceeded",
+          "kpi_live-standard",
+          "energy-consumption"
+        ],
+        "heading": "AHU 1 Temperature History",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "trend",
+            "kpi"
+          ],
+          "present": [
+            "trend",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "trends-cumulative",
+            "alerts"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q006",
+      "question": "Graph the voltage trend for the past 7 days",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "trend-multi-line"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Graph the voltage trend for the past 7 days",
+        "session_id": "058f9e0f-35db-4820-ba49-c54c8b789557",
+        "sent_at": "2026-01-31T17:37:44.197317"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 10852
+      }
+    },
+    {
+      "question_id": "q007",
+      "question": "Show historical energy consumption over time",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "trends-cumulative"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show historical energy consumption over time",
+        "session_id": "993c8d83-6b6f-4f04-94d6-41febcc94f51",
+        "sent_at": "2026-01-31T17:37:55.049575"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 1
+      }
+    },
+    {
+      "question_id": "q008",
+      "question": "Show me the breakdown of equipment by status",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the breakdown of equipment by status",
+        "session_id": "6434241b-4817-423a-bcfe-83e1786d97e7",
+        "sent_at": "2026-01-31T17:37:55.050908"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q009",
+      "question": "What is the energy source share distribution?",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "composition"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the energy source share distribution?",
+        "session_id": "828a5fc2-4e7f-4f34-acb7-b5f6ead99ea2",
+        "sent_at": "2026-01-31T17:37:55.051458"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q010",
+      "question": "Show the composition split of load by asset type",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "composition",
+        "category-bar"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show the composition split of load by asset type",
+        "session_id": "f9ed00ad-7f81-4ad4-9bbc-670196c598f4",
+        "sent_at": "2026-01-31T17:37:55.051860"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q011",
+      "question": "What maintenance records do we have for pump 1?",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What maintenance records do we have for pump 1?",
+        "session_id": "b236590f-9d75-4ef0-a024-e621ff4ca5d8",
+        "sent_at": "2026-01-31T17:37:55.052228"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q012",
+      "question": "Show me all pending repair tasks",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance",
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me all pending repair tasks",
+        "session_id": "ef7debed-a413-4f96-b8d1-3cd9cba45496",
+        "sent_at": "2026-01-31T17:37:55.052601"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q013",
+      "question": "When was the last service inspection on transformer 2?",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "When was the last service inspection on transformer 2?",
+        "session_id": "44d9ff89-59fb-4f69-bc17-4de11901f76d",
+        "sent_at": "2026-01-31T17:37:55.052978"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q014",
+      "question": "What happened during the last night shift?",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What happened during the last night shift?",
+        "session_id": "7d84646a-f380-4bbf-b1a8-a6b01a0867d1",
+        "sent_at": "2026-01-31T17:37:55.053346"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q015",
+      "question": "Show me the morning shift handover notes",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the morning shift handover notes",
+        "session_id": "ab2552a4-2f20-4799-8a2a-e6aacb2a157f",
+        "sent_at": "2026-01-31T17:37:55.053814"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q016",
+      "question": "What did the evening supervisor report?",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What did the evening supervisor report?",
+        "session_id": "f2d9748c-9a16-4dac-8203-27897dbbd010",
+        "sent_at": "2026-01-31T17:37:55.054158"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q017",
+      "question": "Show me all open work orders",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me all open work orders",
+        "session_id": "57a81457-7c1e-4a5f-949d-6889f42a9526",
+        "sent_at": "2026-01-31T17:37:55.054500"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q018",
+      "question": "Which tasks are overdue this week?",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Which tasks are overdue this week?",
+        "session_id": "60c25659-9fe8-4398-8f41-d1fa21a9dbf4",
+        "sent_at": "2026-01-31T17:37:55.054844"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q019",
+      "question": "What pending work orders are assigned to the electrical team?",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What pending work orders are assigned to the electrical team?",
+        "session_id": "03454017-1f73-48be-8f9c-e7492a009434",
+        "sent_at": "2026-01-31T17:37:55.055195"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q020",
+      "question": "What is the current power consumption?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the current power consumption?",
+        "session_id": "ad335d7e-8dc7-40e3-ada1-efd867bf68f1",
+        "sent_at": "2026-01-31T17:37:55.055656"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q021",
+      "question": "Show me the total energy usage for today",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy",
+        "cumulative"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trends-cumulative"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the total energy usage for today",
+        "session_id": "9a4052e8-d877-4a4d-9cfc-7349dd278c2f",
+        "sent_at": "2026-01-31T17:37:55.056029"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q022",
+      "question": "How much load is on the main panel?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "How much load is on the main panel?",
+        "session_id": "af528acc-49f8-4a46-8c5b-7c21ee4a80e8",
+        "sent_at": "2026-01-31T17:37:55.056371"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q023",
+      "question": "What is the current voltage and current reading across all meters?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend-multi-line",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the current voltage and current reading across all meters?",
+        "session_id": "a3f76200-d80b-43a3-8bd1-cf783e00a3c9",
+        "sent_at": "2026-01-31T17:37:55.056715"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q024",
+      "question": "Give me a health overview of all equipment",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Give me a health overview of all equipment",
+        "session_id": "ebff7b55-379c-4a3d-b0ae-f76f338ff00f",
+        "sent_at": "2026-01-31T17:37:55.057056"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q025",
+      "question": "Show me the equipment dashboard summary",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the equipment dashboard summary",
+        "session_id": "40485689-4949-4eb2-b62f-9ee537d2f333",
+        "sent_at": "2026-01-31T17:37:55.057398"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q026",
+      "question": "What is the overall condition of the plant?",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the overall condition of the plant?",
+        "session_id": "3bd69ebf-ac85-4da4-afae-e6a5d2ce4a76",
+        "sent_at": "2026-01-31T17:37:55.057882"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q027",
+      "question": "Monitor all equipment status right now",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Monitor all equipment status right now",
+        "session_id": "d617cce3-06c1-437e-b8bf-b5690ffb134b",
+        "sent_at": "2026-01-31T17:37:55.058225"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q028",
+      "question": "Where does the energy go from the main panel?",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey",
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Where does the energy go from the main panel?",
+        "session_id": "ec470c47-3732-4815-b6d0-6b8b997ee18a",
+        "sent_at": "2026-01-31T17:37:55.058557"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q029",
+      "question": "Show me the energy balance with losses",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me the energy balance with losses",
+        "session_id": "23422c5a-7f03-4f40-b932-6d941eb285c3",
+        "sent_at": "2026-01-31T17:37:55.058909"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q030",
+      "question": "What feeds into the production lines from which sources?",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What feeds into the production lines from which sources?",
+        "session_id": "dc53b107-bbf2-414c-a2ea-bff99cf67a0b",
+        "sent_at": "2026-01-31T17:37:55.059253"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q031",
+      "question": "How much energy have we consumed so far today?",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "How much energy have we consumed so far today?",
+        "session_id": "a2b2ab33-659c-43b6-8fcc-e28dea96e30c",
+        "sent_at": "2026-01-31T17:37:55.059597"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q032",
+      "question": "Show me the accumulated daily total for power",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the accumulated daily total for power",
+        "session_id": "142d1732-f04b-4b1c-91ca-69c82c1eb2c3",
+        "sent_at": "2026-01-31T17:37:55.060077"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q033",
+      "question": "What is the running total of consumption this month?",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the running total of consumption this month?",
+        "session_id": "0728c1cb-431b-40d4-8e60-0273460c97d0",
+        "sent_at": "2026-01-31T17:37:55.060417"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q034",
+      "question": "Compare EB vs DG vs solar power sources",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "comparison",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "distribution",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare EB vs DG vs solar power sources",
+        "session_id": "cb32b583-315d-4551-8f3d-4ac3f5454aea",
+        "sent_at": "2026-01-31T17:37:55.060770"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q035",
+      "question": "Show me energy by source for all meters",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "distribution",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me energy by source for all meters",
+        "session_id": "20136005-521a-4d1c-b1d0-4f55ba829afc",
+        "sent_at": "2026-01-31T17:37:55.061115"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q036",
+      "question": "What is the phase-wise current for the main LT panel?",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the phase-wise current for the main LT panel?",
+        "session_id": "1526be4b-f8e7-4b25-aa05-a7786af34e07",
+        "sent_at": "2026-01-31T17:37:55.061454"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q037",
+      "question": "What is the current power factor across all panels?",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "trend"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the current power factor across all panels?",
+        "session_id": "d8001191-86d2-4a8f-bb90-171bae15a7de",
+        "sent_at": "2026-01-31T17:37:55.061803"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q038",
+      "question": "Are there any harmonic issues or THD violations?",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "alerts",
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Are there any harmonic issues or THD violations?",
+        "session_id": "1b21d3ba-b0ae-4ee8-80af-c89dfca07222",
+        "sent_at": "2026-01-31T17:37:55.062707"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q039",
+      "question": "Show me voltage dip and sag events this week",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq",
+        "trend"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "timeline",
+        "alerts",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me voltage dip and sag events this week",
+        "session_id": "99d948da-bfee-4ac0-ac70-6862d4a0fcf4",
+        "sent_at": "2026-01-31T17:37:55.063052"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q040",
+      "question": "What is the status of all chillers and AHUs?",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the status of all chillers and AHUs?",
+        "session_id": "5128a637-a163-4e61-a5ba-38cf28f03978",
+        "sent_at": "2026-01-31T17:37:55.063390"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q041",
+      "question": "Show me zone temperatures and cooling performance",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac",
+        "trend"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "kpi",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me zone temperatures and cooling performance",
+        "session_id": "f48de06a-37fe-4f7a-afdc-358c3a406c27",
+        "sent_at": "2026-01-31T17:37:55.063740"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q042",
+      "question": "How is AHU 1 performing against its setpoint?",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi",
+        "comparison"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "How is AHU 1 performing against its setpoint?",
+        "session_id": "82a44553-62bd-4ec4-b8d1-bb0a7859ad91",
+        "sent_at": "2026-01-31T17:37:55.064080"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q043",
+      "question": "What is the UPS battery status?",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the UPS battery status?",
+        "session_id": "c52cffd9-61f1-4d8a-b049-ca64ce6af279",
+        "sent_at": "2026-01-31T17:37:55.064412"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q044",
+      "question": "Show DG runtime and diesel generator health",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show DG runtime and diesel generator health",
+        "session_id": "083e0a50-0484-4637-8abd-66b7b94c3ece",
+        "sent_at": "2026-01-31T17:37:55.064884"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q045",
+      "question": "Is the AMF panel ready for transfer?",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Is the AMF panel ready for transfer?",
+        "session_id": "1577258c-3f2b-4f25-8fdd-460b8e5cbd09",
+        "sent_at": "2026-01-31T17:37:55.065770"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q046",
+      "question": "Which equipment consumes the most energy?",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Which equipment consumes the most energy?",
+        "session_id": "32d38e28-9b11-4de8-b45a-7037ac9270da",
+        "sent_at": "2026-01-31T17:37:55.066669"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q047",
+      "question": "Show me the top 5 biggest loads in the facility",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the top 5 biggest loads in the facility",
+        "session_id": "960fe481-6685-489e-8a9d-86add520dd2e",
+        "sent_at": "2026-01-31T17:37:55.067424"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q048",
+      "question": "Who are the worst performing machines this month?",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Who are the worst performing machines this month?",
+        "session_id": "ea98a2bc-e998-46b9-bc95-7352e65f7f90",
+        "sent_at": "2026-01-31T17:37:55.068038"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q049",
+      "question": "Show me everything about the electrical system including alerts and maintenance",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "health",
+        "maintenance",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts",
+        "eventlogstream",
+        "trend"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "Show me everything about the electrical system including alerts and maintenance",
+        "session_id": "30506812-3bb7-4962-840f-207e6f80d159",
+        "sent_at": "2026-01-31T17:37:55.068659"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q050",
+      "question": "I need a full overview of pump 1 with trends, alerts, and work orders",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "health",
+        "trend",
+        "maintenance",
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "alerts",
+        "eventlogstream"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "I need a full overview of pump 1 with trends, alerts, and work orders",
+        "session_id": "51e0e378-0aab-4bc0-abb7-0de755f98b9f",
+        "sent_at": "2026-01-31T17:37:55.069479"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q051",
+      "question": "What is going on with the HVAC system? Show energy, alerts, and maintenance",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "hvac",
+        "energy",
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "alerts",
+        "eventlogstream"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "What is going on with the HVAC system? Show energy, alerts, and maintenance",
+        "session_id": "5ce7677f-4748-4994-9131-64e229a8701e",
+        "sent_at": "2026-01-31T17:37:55.069993"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    }
+  ]
+}

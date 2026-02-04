@@ -1,0 +1,49 @@
+{
+  "run_id": "run_2026-01-31_223102",
+  "tag": "v2_layout_fix",
+  "timing": {
+    "avg_ms": 38824,
+    "p50_ms": 38824,
+    "p95_ms": 38824,
+    "min_ms": 38824,
+    "max_ms": 38824
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "alerts",
+      "category-bar",
+      "edgedevicepanel",
+      "kpi",
+      "timeline",
+      "trend"
+    ],
+    "fixtures_used": [
+      "banner-energy-peak-threshold-exceeded",
+      "default-render",
+      "efficiency-deviation",
+      "kpi_live-standard",
+      "linear-incident-timeline",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "ups_dg": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 38824,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

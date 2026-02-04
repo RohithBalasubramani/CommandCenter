@@ -69,3 +69,20 @@ class RAGResult(models.Model):
     def __str__(self):
         status = "error" if self.error else "success"
         return f"Result ({status}): {self.query.pipeline.domain} in {self.execution_time_ms}ms"
+
+
+class UserMemory(models.Model):
+    """Fixed-size ring buffer of user interactions for context-aware widget selection."""
+    user_id = models.CharField(max_length=100, db_index=True, default="default_user")
+    query = models.CharField(max_length=500)
+    primary_characteristic = models.CharField(max_length=50, blank=True, default="")
+    domains = models.JSONField(default=list)
+    entities_mentioned = models.JSONField(default=list)
+    scenarios_used = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Memory({self.user_id}): {self.query[:50]}"

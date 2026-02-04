@@ -1,0 +1,3743 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_222702",
+    "tag": "v2_layout_fix",
+    "started_at": "2026-01-31T22:27:02.462788",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 51,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:29:19.988645",
+    "successful": 3,
+    "failed": 48
+  },
+  "results": [
+    {
+      "question_id": "q001",
+      "question": "Compare transformer 1 versus transformer 2",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare transformer 1 versus transformer 2",
+        "session_id": "9171cd93-c150-4f10-ae67-5401c505ff6f",
+        "sent_at": "2026-01-31T22:27:02.462809"
+      },
+      "response": {
+        "voice_response": "Transformer 1, or TR-MAIN-01, is currently operating at 50.5% load, while Transformer 2, or TR-MAIN-02, is at 82.0% load. The \"Transformer Comparison\" dashboard shows their performance difference, with a trend analysis over the last week and proportional energy distribution between the two. This data indicates that Transformer 2 is running closer to its 1500 kVA capacity than Transformer 1 is to its 1000 kVA capacity.",
+        "layout_json": {
+          "heading": "Transformer Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Compares the current energy output of transformer 1 and transformer 2, highlighting their performance difference.",
+              "data_override": {
+                "demoData": {
+                  "label": "Energy Output",
+                  "unit": "%",
+                  "labelA": "Main Transformer 1",
+                  "valueA": 100,
+                  "labelB": "Dry Type Transformer 2",
+                  "valueB": 95,
+                  "delta": 5.0,
+                  "deltaPct": 5.3
+                }
+              },
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium",
+              "description": "Compares the current energy output of transformer 1 and transformer 2, highlighting their performance difference."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Shows the energy output trend of transformer 1 and transformer 2 over the last week, allowing for correlation analysis.",
+              "data_override": {
+                "demoData": {
+                  "label": "Energy Output",
+                  "unit": "units",
+                  "series": [
+                    {
+                      "name": "Main Transformer 1",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:57:33.643405",
+                          "value": 93.43
+                        },
+                        {
+                          "time": "2026-01-30T17:27:33.643405",
+                          "value": 107.09
+                        },
+                        {
+                          "time": "2026-01-30T17:57:33.643405",
+                          "value": 94.77
+                        },
+                        {
+                          "time": "2026-01-30T18:27:33.643405",
+                          "value": 100.3
+                        },
+                        {
+                          "time": "2026-01-30T18:57:33.643405",
+                          "value": 105.63
+                        },
+                        {
+                          "time": "2026-01-30T19:27:33.643405",
+                          "value": 97.38
+                        },
+                        {
+                          "time": "2026-01-30T19:57:33.643405",
+                          "value": 92.29
+                        },
+                        {
+                          "time": "2026-01-30T20:27:33.643405",
+                          "value": 106.95
+                        },
+                        {
+                          "time": "2026-01-30T20:57:33.643405",
+                          "value": 97.72
+                        },
+                        {
+                          "time": "2026-01-30T21:27:33.643405",
+                          "value": 97.54
+                        },
+                        {
+                          "time": "2026-01-30T21:57:33.643405",
+                          "value": 105.16
+                        },
+                        {
+                          "time": "2026-01-30T22:27:33.643405",
+                          "value": 97.64
+                        },
+                        {
+                          "time": "2026-01-30T22:57:33.643405",
+                          "value": 100.82
+                        },
+                        {
+                          "time": "2026-01-30T23:27:33.643405",
+                          "value": 98.22
+                        },
+                        {
+                          "time": "2026-01-30T23:57:33.643405",
+                          "value": 94.73
+                        },
+                        {
+                          "time": "2026-01-31T00:27:33.643405",
+                          "value": 107.27
+                        },
+                        {
+                          "time": "2026-01-31T00:57:33.643405",
+                          "value": 107.91
+                        },
+                        {
+                          "time": "2026-01-31T01:27:33.643405",
+                          "value": 92.2
+                        },
+                        {
+                          "time": "2026-01-31T01:57:33.643405",
+                          "value": 100.61
+                        },
+                        {
+                          "time": "2026-01-31T02:27:33.643405",
+                          "value": 100.38
+                        },
+                        {
+                          "time": "2026-01-31T02:57:33.643405",
+                          "value": 97.2
+                        },
+                        {
+                          "time": "2026-01-31T03:27:33.643405",
+                          "value": 95.29
+                        },
+                        {
+                          "time": "2026-01-31T03:57:33.643405",
+                          "value": 106.47
+                        },
+                        {
+                          "time": "2026-01-31T04:27:33.643405",
+                          "value": 106.23
+                        },
+                        {
+                          "time": "2026-01-31T04:57:33.643405",
+                          "value": 107.53
+                        },
+                        {
+                          "time": "2026-01-31T05:27:33.643405",
+                          "value": 99.04
+                        },
+                        {
+                          "time": "2026-01-31T05:57:33.643405",
+                          "value": 103.89
+                        },
+                        {
+                          "time": "2026-01-31T06:27:33.643405",
+                          "value": 99.73
+                        },
+                        {
+                          "time": "2026-01-31T06:57:33.643405",
+                          "value": 94.11
+                        },
+                        {
+                          "time": "2026-01-31T07:27:33.643405",
+                          "value": 97.33
+                        },
+                        {
+                          "time": "2026-01-31T07:57:33.643405",
+                          "value": 95.29
+                        },
+                        {
+                          "time": "2026-01-31T08:27:33.643405",
+                          "value": 96.42
+                        },
+                        {
+                          "time": "2026-01-31T08:57:33.643405",
+                          "value": 92.6
+                        },
+                        {
+                          "time": "2026-01-31T09:27:33.643405",
+                          "value": 92.04
+                        },
+                        {
+                          "time": "2026-01-31T09:57:33.643405",
+                          "value": 104.78
+                        },
+                        {
+                          "time": "2026-01-31T10:27:33.643405",
+                          "value": 92.24
+                        },
+                        {
+                          "time": "2026-01-31T10:57:33.643405",
+                          "value": 100.33
+                        },
+                        {
+                          "time": "2026-01-31T11:27:33.643405",
+                          "value": 95.83
+                        },
+                        {
+                          "time": "2026-01-31T11:57:33.643405",
+                          "value": 105.31
+                        },
+                        {
+                          "time": "2026-01-31T12:27:33.643405",
+                          "value": 103.3
+                        },
+                        {
+                          "time": "2026-01-31T12:57:33.643405",
+                          "value": 97.5
+                        },
+                        {
+                          "time": "2026-01-31T13:27:33.643405",
+                          "value": 102.39
+                        },
+                        {
+                          "time": "2026-01-31T13:57:33.643405",
+                          "value": 93.64
+                        },
+                        {
+                          "time": "2026-01-31T14:27:33.643405",
+                          "value": 99.56
+                        },
+                        {
+                          "time": "2026-01-31T14:57:33.643405",
+                          "value": 107.56
+                        },
+                        {
+                          "time": "2026-01-31T15:27:33.643405",
+                          "value": 103.45
+                        },
+                        {
+                          "time": "2026-01-31T15:57:33.643405",
+                          "value": 99.75
+                        },
+                        {
+                          "time": "2026-01-31T16:27:33.643405",
+                          "value": 104.03
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Dry Type Transformer 2",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:57:33.660304",
+                          "value": 102.21
+                        },
+                        {
+                          "time": "2026-01-30T17:27:33.660304",
+                          "value": 90.27
+                        },
+                        {
+                          "time": "2026-01-30T17:57:33.660304",
+                          "value": 94.09
+                        },
+                        {
+                          "time": "2026-01-30T18:27:33.660304",
+                          "value": 90.3
+                        },
+                        {
+                          "time": "2026-01-30T18:57:33.660304",
+                          "value": 88.84
+                        },
+                        {
+                          "time": "2026-01-30T19:27:33.660304",
+                          "value": 99.15
+                        },
+                        {
+                          "time": "2026-01-30T19:57:33.660304",
+                          "value": 87.44
+                        },
+                        {
+                          "time": "2026-01-30T20:27:33.660304",
+                          "value": 87.78
+                        },
+                        {
+                          "time": "2026-01-30T20:57:33.660304",
+                          "value": 87.61
+                        },
+                        {
+                          "time": "2026-01-30T21:27:33.660304",
+                          "value": 97.19
+                        },
+                        {
+                          "time": "2026-01-30T21:57:33.660304",
+                          "value": 93.56
+                        },
+                        {
+                          "time": "2026-01-30T22:27:33.660304",
+                          "value": 95.69
+                        },
+                        {
+                          "time": "2026-01-30T22:57:33.660304",
+                          "value": 95.21
+                        },
+                        {
+                          "time": "2026-01-30T23:27:33.660304",
+                          "value": 102.32
+                        },
+                        {
+                          "time": "2026-01-30T23:57:33.660304",
+                          "value": 97.84
+                        },
+                        {
+                          "time": "2026-01-31T00:27:33.660304",
+                          "value": 91.87
+                        },
+                        {
+                          "time": "2026-01-31T00:57:33.660304",
+                          "value": 90.73
+                        },
+                        {
+                          "time": "2026-01-31T01:27:33.660304",
+                          "value": 102.01
+                        },
+                        {
+                          "time": "2026-01-31T01:57:33.660304",
+                          "value": 94.08
+                        },
+                        {
+                          "time": "2026-01-31T02:27:33.660304",
+                          "value": 91.98
+                        },
+                        {
+                          "time": "2026-01-31T02:57:33.660304",
+                          "value": 97.57
+                        },
+                        {
+                          "time": "2026-01-31T03:27:33.660304",
+                          "value": 101.03
+                        },
+                        {
+                          "time": "2026-01-31T03:57:33.660304",
+                          "value": 89.12
+                        },
+                        {
+                          "time": "2026-01-31T04:27:33.660304",
+                          "value": 94.03
+                        },
+                        {
+                          "time": "2026-01-31T04:57:33.660304",
+                          "value": 96.35
+                        },
+                        {
+                          "time": "2026-01-31T05:27:33.660304",
+                          "value": 91.99
+                        },
+                        {
+                          "time": "2026-01-31T05:57:33.660304",
+                          "value": 99.69
+                        },
+                        {
+                          "time": "2026-01-31T06:27:33.660304",
+                          "value": 96.15
+                        },
+                        {
+                          "time": "2026-01-31T06:57:33.660304",
+                          "value": 98.55
+                        },
+                        {
+                          "time": "2026-01-31T07:27:33.660304",
+                          "value": 87.42
+                        },
+                        {
+                          "time": "2026-01-31T07:57:33.660304",
+                          "value": 94.84
+                        },
+                        {
+                          "time": "2026-01-31T08:27:33.660304",
+                          "value": 102.27
+                        },
+                        {
+                          "time": "2026-01-31T08:57:33.660304",
+                          "value": 90.55
+                        },
+                        {
+                          "time": "2026-01-31T09:27:33.660304",
+                          "value": 89.31
+                        },
+                        {
+                          "time": "2026-01-31T09:57:33.660304",
+                          "value": 101.75
+                        },
+                        {
+                          "time": "2026-01-31T10:27:33.660304",
+                          "value": 92.64
+                        },
+                        {
+                          "time": "2026-01-31T10:57:33.660304",
+                          "value": 101.86
+                        },
+                        {
+                          "time": "2026-01-31T11:27:33.660304",
+                          "value": 88.47
+                        },
+                        {
+                          "time": "2026-01-31T11:57:33.660304",
+                          "value": 87.61
+                        },
+                        {
+                          "time": "2026-01-31T12:27:33.660304",
+                          "value": 88.39
+                        },
+                        {
+                          "time": "2026-01-31T12:57:33.660304",
+                          "value": 92.64
+                        },
+                        {
+                          "time": "2026-01-31T13:27:33.660304",
+                          "value": 92.31
+                        },
+                        {
+                          "time": "2026-01-31T13:57:33.660304",
+                          "value": 100.86
+                        },
+                        {
+                          "time": "2026-01-31T14:27:33.660304",
+                          "value": 91.06
+                        },
+                        {
+                          "time": "2026-01-31T14:57:33.660304",
+                          "value": 98.44
+                        },
+                        {
+                          "time": "2026-01-31T15:27:33.660304",
+                          "value": 95.19
+                        },
+                        {
+                          "time": "2026-01-31T15:57:33.660304",
+                          "value": 97.58
+                        },
+                        {
+                          "time": "2026-01-31T16:27:33.660304",
+                          "value": 88.23
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "fixture": "energy-demand",
+              "heightHint": "tall",
+              "description": "Shows the energy output trend of transformer 1 and transformer 2 over the last week, allowing for correlation analysis."
+            },
+            {
+              "scenario": "distribution",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their proportional contribution.",
+              "data_override": {
+                "demoData": {
+                  "total": 190.2,
+                  "unit": "%",
+                  "series": [
+                    {
+                      "label": "Energy Meter",
+                      "value": 100.0
+                    },
+                    {
+                      "label": "Transformer",
+                      "value": 90.2
+                    }
+                  ]
+                }
+              },
+              "fixture": "dist_downtime_top_contributors-pareto-bar",
+              "heightHint": "tall",
+              "description": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their proportional contribution."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 1, providing a key performance indicator.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 1",
+                  "value": "100",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 1, providing a key performance indicator."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 2, providing a key performance indicator.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 2",
+                  "value": "85",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 2, providing a key performance indicator."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.2,
+              "why": "Shows the maintenance history of transformer 1 and transformer 2, highlighting past events and scheduled maintenance.",
+              "data_override": {
+                "demoData": {
+                  "title": "Event Log",
+                  "events": [
+                    {
+                      "timestamp": "2026-01-31T06:57:33.665832",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T07:57:33.665832",
+                      "type": "preventive",
+                      "message": "Maintenance: Annual transformer maintenance | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: preventive | Work Done: Checked oil level, silica ",
+                      "source": "Dry Type Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T08:57:33.665832",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T09:57:33.665832",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T10:57:33.665832",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T11:57:33.665832",
+                      "type": "emergency",
+                      "message": "Work Order WO-00230 | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: emergency | Priority: normal | Status: open | Description: Emergency repair f",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T12:57:33.665832",
+                      "type": "preventive",
+                      "message": "Work Order WO-00514 | Equipment: Main Transformer 1 (TR-MAIN-01) | Type: preventive | Priority: emergency | Status: cancelled | Description: Scheduled",
+                      "source": "Main Transformer 1"
+                    },
+                    {
+                      "timestamp": "2026-01-31T13:57:33.665832",
+                      "type": "corrective",
+                      "message": "Work Order WO-00329 | Equipment: Dry Type Transformer 1 (TR-DRY-01) | Type: corrective | Priority: normal | Status: completed | Description: Correctiv",
+                      "source": "Dry Type Transformer 1"
+                    },
+                    {
+                      "timestamp": "2026-01-31T14:57:33.665832",
+                      "type": "corrective",
+                      "message": "Work Order WO-00773 | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: corrective | Priority: normal | Status: in_progress | Description: Correct",
+                      "source": "Dry Type Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T15:57:33.665832",
+                      "type": "predictive",
+                      "message": "Work Order WO-00629 | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: predictive | Priority: urgent | Status: in_progress | Description: Predict",
+                      "source": "Dry Type Transformer 2"
+                    }
+                  ]
+                }
+              },
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Shows the maintenance history of transformer 1 and transformer 2, highlighting past events and scheduled maintenance."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial"
+          ],
+          "entities": {
+            "devices": [
+              "transformer 1",
+              "transformer 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 36818
+      },
+      "analysis": {
+        "total_time_ms": 36821,
+        "network_overhead_ms": 3,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "distribution",
+          "kpi",
+          "kpi",
+          "timeline"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "energy-demand",
+          "dist_downtime_top_contributors-pareto-bar",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "linear-incident-timeline"
+        ],
+        "heading": "Transformer Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "timeline",
+            "distribution"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q002",
+      "question": "What is the difference between chiller 1 and chiller 2 performance?",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the difference between chiller 1 and chiller 2 performance?",
+        "session_id": "52991c34-6deb-473d-abe3-1a14f8f9fe41",
+        "sent_at": "2026-01-31T22:27:39.284889"
+      },
+      "response": {
+        "voice_response": "Chiller 1 and Chiller 2 have a performance difference, with Chiller 1 running at 55.2% load and consuming 94.7 kW of power, while Chiller 2 is running at 57.0% load and consuming 130.2 kW of power. The \"Chiller Performance Comparison\" dashboard shows this comparison, highlighting their efficiency and effectiveness. Chiller 1 has a health score of 94%, while Chiller 2 has a health score of 85%.",
+        "layout_json": {
+          "heading": "Chiller Performance Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Compares the performance of chiller 1 and chiller 2, highlighting the difference in their efficiency and effectiveness.",
+              "data_override": {
+                "demoData": {
+                  "label": "Performance",
+                  "unit": "%",
+                  "labelA": "Chiller 1",
+                  "valueA": 94,
+                  "labelB": "Chiller 2",
+                  "valueB": 85,
+                  "delta": 9.0,
+                  "deltaPct": 10.6
+                }
+              },
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium",
+              "description": "Compares the performance of chiller 1 and chiller 2, highlighting the difference in their efficiency and effectiveness."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Shows the performance trends of chiller 1 and chiller 2 over time, allowing for correlation analysis and identification of patterns.",
+              "data_override": {
+                "demoData": {
+                  "label": "Performance",
+                  "unit": "units",
+                  "series": [
+                    {
+                      "name": "Chiller 1",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:58:12.701832",
+                          "value": 94.15
+                        },
+                        {
+                          "time": "2026-01-30T17:28:12.701832",
+                          "value": 86.84
+                        },
+                        {
+                          "time": "2026-01-30T17:58:12.701832",
+                          "value": 88.31
+                        },
+                        {
+                          "time": "2026-01-30T18:28:12.701832",
+                          "value": 100.2
+                        },
+                        {
+                          "time": "2026-01-30T18:58:12.701832",
+                          "value": 101.24
+                        },
+                        {
+                          "time": "2026-01-30T19:28:12.701832",
+                          "value": 99.55
+                        },
+                        {
+                          "time": "2026-01-30T19:58:12.701832",
+                          "value": 99.99
+                        },
+                        {
+                          "time": "2026-01-30T20:28:12.701832",
+                          "value": 91.14
+                        },
+                        {
+                          "time": "2026-01-30T20:58:12.701832",
+                          "value": 89.63
+                        },
+                        {
+                          "time": "2026-01-30T21:28:12.701832",
+                          "value": 100.61
+                        },
+                        {
+                          "time": "2026-01-30T21:58:12.701832",
+                          "value": 95.25
+                        },
+                        {
+                          "time": "2026-01-30T22:28:12.701832",
+                          "value": 89.51
+                        },
+                        {
+                          "time": "2026-01-30T22:58:12.701832",
+                          "value": 96.04
+                        },
+                        {
+                          "time": "2026-01-30T23:28:12.701832",
+                          "value": 87.4
+                        },
+                        {
+                          "time": "2026-01-30T23:58:12.701832",
+                          "value": 90.95
+                        },
+                        {
+                          "time": "2026-01-31T00:28:12.701832",
+                          "value": 94.09
+                        },
+                        {
+                          "time": "2026-01-31T00:58:12.701832",
+                          "value": 90.32
+                        },
+                        {
+                          "time": "2026-01-31T01:28:12.701832",
+                          "value": 96.46
+                        },
+                        {
+                          "time": "2026-01-31T01:58:12.701832",
+                          "value": 90.54
+                        },
+                        {
+                          "time": "2026-01-31T02:28:12.701832",
+                          "value": 88.13
+                        },
+                        {
+                          "time": "2026-01-31T02:58:12.701832",
+                          "value": 99.28
+                        },
+                        {
+                          "time": "2026-01-31T03:28:12.701832",
+                          "value": 89.53
+                        },
+                        {
+                          "time": "2026-01-31T03:58:12.701832",
+                          "value": 91.43
+                        },
+                        {
+                          "time": "2026-01-31T04:28:12.701832",
+                          "value": 94.7
+                        },
+                        {
+                          "time": "2026-01-31T04:58:12.701832",
+                          "value": 91.04
+                        },
+                        {
+                          "time": "2026-01-31T05:28:12.701832",
+                          "value": 96.7
+                        },
+                        {
+                          "time": "2026-01-31T05:58:12.701832",
+                          "value": 90.51
+                        },
+                        {
+                          "time": "2026-01-31T06:28:12.701832",
+                          "value": 91.28
+                        },
+                        {
+                          "time": "2026-01-31T06:58:12.701832",
+                          "value": 93.62
+                        },
+                        {
+                          "time": "2026-01-31T07:28:12.701832",
+                          "value": 91.39
+                        },
+                        {
+                          "time": "2026-01-31T07:58:12.701832",
+                          "value": 89.46
+                        },
+                        {
+                          "time": "2026-01-31T08:28:12.701832",
+                          "value": 89.33
+                        },
+                        {
+                          "time": "2026-01-31T08:58:12.701832",
+                          "value": 93.7
+                        },
+                        {
+                          "time": "2026-01-31T09:28:12.701832",
+                          "value": 92.36
+                        },
+                        {
+                          "time": "2026-01-31T09:58:12.701832",
+                          "value": 91.44
+                        },
+                        {
+                          "time": "2026-01-31T10:28:12.701832",
+                          "value": 98.85
+                        },
+                        {
+                          "time": "2026-01-31T10:58:12.701832",
+                          "value": 98.92
+                        },
+                        {
+                          "time": "2026-01-31T11:28:12.701832",
+                          "value": 96.86
+                        },
+                        {
+                          "time": "2026-01-31T11:58:12.701832",
+                          "value": 95.06
+                        },
+                        {
+                          "time": "2026-01-31T12:28:12.701832",
+                          "value": 100.87
+                        },
+                        {
+                          "time": "2026-01-31T12:58:12.701832",
+                          "value": 87.13
+                        },
+                        {
+                          "time": "2026-01-31T13:28:12.701832",
+                          "value": 92.88
+                        },
+                        {
+                          "time": "2026-01-31T13:58:12.701832",
+                          "value": 86.61
+                        },
+                        {
+                          "time": "2026-01-31T14:28:12.701832",
+                          "value": 99.45
+                        },
+                        {
+                          "time": "2026-01-31T14:58:12.701832",
+                          "value": 100.93
+                        },
+                        {
+                          "time": "2026-01-31T15:28:12.701832",
+                          "value": 98.49
+                        },
+                        {
+                          "time": "2026-01-31T15:58:12.701832",
+                          "value": 94.44
+                        },
+                        {
+                          "time": "2026-01-31T16:28:12.701832",
+                          "value": 96.28
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Chiller 2",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:58:12.709883",
+                          "value": 82.68
+                        },
+                        {
+                          "time": "2026-01-30T17:28:12.709883",
+                          "value": 90.86
+                        },
+                        {
+                          "time": "2026-01-30T17:58:12.709883",
+                          "value": 84.28
+                        },
+                        {
+                          "time": "2026-01-30T18:28:12.709883",
+                          "value": 90.43
+                        },
+                        {
+                          "time": "2026-01-30T18:58:12.709883",
+                          "value": 81.13
+                        },
+                        {
+                          "time": "2026-01-30T19:28:12.709883",
+                          "value": 90.4
+                        },
+                        {
+                          "time": "2026-01-30T19:58:12.709883",
+                          "value": 85.58
+                        },
+                        {
+                          "time": "2026-01-30T20:28:12.709883",
+                          "value": 83.27
+                        },
+                        {
+                          "time": "2026-01-30T20:58:12.709883",
+                          "value": 84.98
+                        },
+                        {
+                          "time": "2026-01-30T21:28:12.709883",
+                          "value": 84.1
+                        },
+                        {
+                          "time": "2026-01-30T21:58:12.709883",
+                          "value": 81.73
+                        },
+                        {
+                          "time": "2026-01-30T22:28:12.709883",
+                          "value": 91.48
+                        },
+                        {
+                          "time": "2026-01-30T22:58:12.709883",
+                          "value": 85.36
+                        },
+                        {
+                          "time": "2026-01-30T23:28:12.709883",
+                          "value": 90.58
+                        },
+                        {
+                          "time": "2026-01-30T23:58:12.709883",
+                          "value": 82.58
+                        },
+                        {
+                          "time": "2026-01-31T00:28:12.709883",
+                          "value": 85.39
+                        },
+                        {
+                          "time": "2026-01-31T00:58:12.709883",
+                          "value": 91.2
+                        },
+                        {
+                          "time": "2026-01-31T01:28:12.709883",
+                          "value": 91.25
+                        },
+                        {
+                          "time": "2026-01-31T01:58:12.709883",
+                          "value": 89.74
+                        },
+                        {
+                          "time": "2026-01-31T02:28:12.709883",
+                          "value": 84.56
+                        },
+                        {
+                          "time": "2026-01-31T02:58:12.709883",
+                          "value": 79.68
+                        },
+                        {
+                          "time": "2026-01-31T03:28:12.709883",
+                          "value": 82.7
+                        },
+                        {
+                          "time": "2026-01-31T03:58:12.709883",
+                          "value": 79.12
+                        },
+                        {
+                          "time": "2026-01-31T04:28:12.709883",
+                          "value": 90.58
+                        },
+                        {
+                          "time": "2026-01-31T04:58:12.709883",
+                          "value": 84.53
+                        },
+                        {
+                          "time": "2026-01-31T05:28:12.709883",
+                          "value": 86.3
+                        },
+                        {
+                          "time": "2026-01-31T05:58:12.709883",
+                          "value": 83.76
+                        },
+                        {
+                          "time": "2026-01-31T06:28:12.709883",
+                          "value": 90.95
+                        },
+                        {
+                          "time": "2026-01-31T06:58:12.709883",
+                          "value": 84.72
+                        },
+                        {
+                          "time": "2026-01-31T07:28:12.709883",
+                          "value": 91.02
+                        },
+                        {
+                          "time": "2026-01-31T07:58:12.709883",
+                          "value": 83.04
+                        },
+                        {
+                          "time": "2026-01-31T08:28:12.709883",
+                          "value": 85.74
+                        },
+                        {
+                          "time": "2026-01-31T08:58:12.709883",
+                          "value": 91.32
+                        },
+                        {
+                          "time": "2026-01-31T09:28:12.709883",
+                          "value": 85.32
+                        },
+                        {
+                          "time": "2026-01-31T09:58:12.709883",
+                          "value": 82.42
+                        },
+                        {
+                          "time": "2026-01-31T10:28:12.709883",
+                          "value": 85.91
+                        },
+                        {
+                          "time": "2026-01-31T10:58:12.709883",
+                          "value": 85.64
+                        },
+                        {
+                          "time": "2026-01-31T11:28:12.709883",
+                          "value": 86.38
+                        },
+                        {
+                          "time": "2026-01-31T11:58:12.709883",
+                          "value": 83.19
+                        },
+                        {
+                          "time": "2026-01-31T12:28:12.709883",
+                          "value": 88.86
+                        },
+                        {
+                          "time": "2026-01-31T12:58:12.709883",
+                          "value": 84.99
+                        },
+                        {
+                          "time": "2026-01-31T13:28:12.709883",
+                          "value": 83.48
+                        },
+                        {
+                          "time": "2026-01-31T13:58:12.709883",
+                          "value": 91.52
+                        },
+                        {
+                          "time": "2026-01-31T14:28:12.709883",
+                          "value": 83.79
+                        },
+                        {
+                          "time": "2026-01-31T14:58:12.709883",
+                          "value": 86.6
+                        },
+                        {
+                          "time": "2026-01-31T15:28:12.709883",
+                          "value": 78.96
+                        },
+                        {
+                          "time": "2026-01-31T15:58:12.709883",
+                          "value": 85.82
+                        },
+                        {
+                          "time": "2026-01-31T16:28:12.709883",
+                          "value": 80.69
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "fixture": "energy-demand",
+              "heightHint": "tall",
+              "description": "Shows the performance trends of chiller 1 and chiller 2 over time, allowing for correlation analysis and identification of patterns."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.6,
+              "why": "Displays the current performance metric of chiller 1, providing a quick glance at its health status.",
+              "data_override": {
+                "demoData": {
+                  "label": "Chiller 1",
+                  "value": "94",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current performance metric of chiller 1, providing a quick glance at its health status."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.6,
+              "why": "Displays the current performance metric of chiller 2, providing a quick glance at its health status.",
+              "data_override": {
+                "demoData": {
+                  "label": "Chiller 2",
+                  "value": "85",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Displays the current performance metric of chiller 2, providing a quick glance at its health status."
+            },
+            {
+              "scenario": "matrix-heatmap",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Shows the performance of chiller 1 and chiller 2 across different parameters, allowing for identification of patterns and correlations.",
+              "data_override": {
+                "demoData": {
+                  "label": "Equipment Health Matrix",
+                  "rows": [
+                    "Chiller",
+                    "Pump",
+                    "Cooling Tower"
+                  ],
+                  "cols": [
+                    "Unit 1",
+                    "Unit 2",
+                    "Unit 3",
+                    "Unit 4",
+                    "Unit 5",
+                    "Unit 6"
+                  ],
+                  "dataset": [
+                    [
+                      0.85,
+                      0.94,
+                      0.95,
+                      0.9,
+                      0.89,
+                      0.98
+                    ],
+                    [
+                      0.9,
+                      0.91,
+                      0.95,
+                      0.92,
+                      0.63,
+                      0.97
+                    ],
+                    [
+                      0.72,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  ]
+                }
+              },
+              "fixture": "value-heatmap",
+              "heightHint": "x-tall",
+              "description": "Shows the performance of chiller 1 and chiller 2 across different parameters, allowing for identification of patterns and correlations."
+            },
+            {
+              "scenario": "alerts",
+              "size": "expanded",
+              "relevance": 0.2,
+              "why": "Displays any active alerts or warnings related to chiller 1 and chiller 2, providing real-time notification of potential issues.",
+              "data_override": {
+                "demoData": [
+                  {
+                    "id": "CH-02",
+                    "title": "",
+                    "message": "Compressor tripped on high discharge temperature",
+                    "severity": "critical",
+                    "category": "Equipment",
+                    "source": "Chiller 2",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "up"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "CH-03",
+                    "title": "chilled_water_supply_temp",
+                    "message": "Chilled water supply temperature above setpoint",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "Chiller 3",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "chilled_water_supply_temp",
+                      "value": "11.8",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "8.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "CH-PKG-11",
+                    "title": "",
+                    "message": "Refrigerant leak test due",
+                    "severity": "low",
+                    "category": "Equipment",
+                    "source": "Package Chiller 11",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "stable"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "APFC-2",
+                    "title": "",
+                    "message": "Capacitor bank inspection due",
+                    "severity": "low",
+                    "category": "Equipment",
+                    "source": "Auto Power Factor Panel 2",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "stable"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "CH-02",
+                    "title": "approach_temp",
+                    "message": "Condenser approach temperature high \u2014 fouling suspected",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "Chiller 2",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "approach_temp",
+                      "value": "8.9",
+                      "unit": "\u00b0C",
+                      "trend": "stable"
+                    },
+                    "threshold": "4.0 \u00b0C",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium",
+              "description": "Displays any active alerts or warnings related to chiller 1 and chiller 2, providing real-time notification of potential issues."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "chiller 1",
+              "chiller 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 39299
+      },
+      "analysis": {
+        "total_time_ms": 39303,
+        "network_overhead_ms": 4,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "kpi",
+          "kpi",
+          "matrix-heatmap",
+          "alerts"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "energy-demand",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "value-heatmap",
+          "banner-energy-peak-threshold-exceeded"
+        ],
+        "heading": "Chiller Performance Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi",
+            "trend"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [
+            "trend"
+          ],
+          "unexpected": [
+            "trend-multi-line",
+            "matrix-heatmap",
+            "alerts"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q003",
+      "question": "Show me DG 1 vs DG 2 health and runtime",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison",
+        "ups_dg",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me DG 1 vs DG 2 health and runtime",
+        "session_id": "779667a3-b5c6-47fb-ba4a-8fb1d01a8ec6",
+        "sent_at": "2026-01-31T22:28:18.588094"
+      },
+      "response": {
+        "voice_response": "The \"DG 1 vs DG 2 Health and Runtime\" dashboard shows a comparison of the two diesel generators, with DG 1 currently running at a health score of 91% and DG 2 in maintenance mode with a health score of 93%. The trend lines indicate DG 1 has been running for 240 hours, while DG 2's cumulative runtime is 420 hours. This data provides insight into their performance and operating time.",
+        "layout_json": {
+          "heading": "DG 1 vs DG 2 Health and Runtime",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Compares the health status of DG 1 and DG 2, showing which device is performing better.",
+              "data_override": {
+                "demoData": {
+                  "label": "Health Status",
+                  "unit": "%",
+                  "labelA": "DG Set 1",
+                  "valueA": 91,
+                  "labelB": "Dg Meter 92 - Admin Building",
+                  "valueB": 91,
+                  "delta": 0.0,
+                  "deltaPct": 0.0
+                }
+              },
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium",
+              "description": "Compares the health status of DG 1 and DG 2, showing which device is performing better."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Displays the runtime trends of DG 1 and DG 2 over time, highlighting any correlation or anomalies.",
+              "data_override": {
+                "demoData": {
+                  "label": "Runtime",
+                  "unit": "units",
+                  "series": [
+                    {
+                      "name": "DG Set 1",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:58:59.069897",
+                          "value": 83.97
+                        },
+                        {
+                          "time": "2026-01-30T17:28:59.069897",
+                          "value": 91.58
+                        },
+                        {
+                          "time": "2026-01-30T17:58:59.069897",
+                          "value": 95.31
+                        },
+                        {
+                          "time": "2026-01-30T18:28:59.069897",
+                          "value": 89.85
+                        },
+                        {
+                          "time": "2026-01-30T18:58:59.069897",
+                          "value": 94.61
+                        },
+                        {
+                          "time": "2026-01-30T19:28:59.069897",
+                          "value": 86.63
+                        },
+                        {
+                          "time": "2026-01-30T19:58:59.069897",
+                          "value": 93.73
+                        },
+                        {
+                          "time": "2026-01-30T20:28:59.069897",
+                          "value": 90.85
+                        },
+                        {
+                          "time": "2026-01-30T20:58:59.069897",
+                          "value": 85.07
+                        },
+                        {
+                          "time": "2026-01-30T21:28:59.069897",
+                          "value": 96.24
+                        },
+                        {
+                          "time": "2026-01-30T21:58:59.069897",
+                          "value": 90.54
+                        },
+                        {
+                          "time": "2026-01-30T22:28:59.069897",
+                          "value": 89.51
+                        },
+                        {
+                          "time": "2026-01-30T22:58:59.069897",
+                          "value": 92.07
+                        },
+                        {
+                          "time": "2026-01-30T23:28:59.069897",
+                          "value": 86.95
+                        },
+                        {
+                          "time": "2026-01-30T23:58:59.069897",
+                          "value": 94.89
+                        },
+                        {
+                          "time": "2026-01-31T00:28:59.069897",
+                          "value": 85.4
+                        },
+                        {
+                          "time": "2026-01-31T00:58:59.069897",
+                          "value": 87.87
+                        },
+                        {
+                          "time": "2026-01-31T01:28:59.069897",
+                          "value": 98.26
+                        },
+                        {
+                          "time": "2026-01-31T01:58:59.069897",
+                          "value": 84.61
+                        },
+                        {
+                          "time": "2026-01-31T02:28:59.069897",
+                          "value": 96.9
+                        },
+                        {
+                          "time": "2026-01-31T02:58:59.069897",
+                          "value": 86.87
+                        },
+                        {
+                          "time": "2026-01-31T03:28:59.069897",
+                          "value": 90.62
+                        },
+                        {
+                          "time": "2026-01-31T03:58:59.069897",
+                          "value": 88.2
+                        },
+                        {
+                          "time": "2026-01-31T04:28:59.069897",
+                          "value": 85.91
+                        },
+                        {
+                          "time": "2026-01-31T04:58:59.069897",
+                          "value": 95.28
+                        },
+                        {
+                          "time": "2026-01-31T05:28:59.069897",
+                          "value": 92.07
+                        },
+                        {
+                          "time": "2026-01-31T05:58:59.069897",
+                          "value": 91.6
+                        },
+                        {
+                          "time": "2026-01-31T06:28:59.069897",
+                          "value": 87.22
+                        },
+                        {
+                          "time": "2026-01-31T06:58:59.069897",
+                          "value": 85.03
+                        },
+                        {
+                          "time": "2026-01-31T07:28:59.069897",
+                          "value": 89.69
+                        },
+                        {
+                          "time": "2026-01-31T07:58:59.069897",
+                          "value": 90.82
+                        },
+                        {
+                          "time": "2026-01-31T08:28:59.069897",
+                          "value": 90.01
+                        },
+                        {
+                          "time": "2026-01-31T08:58:59.069897",
+                          "value": 86.02
+                        },
+                        {
+                          "time": "2026-01-31T09:28:59.069897",
+                          "value": 93.02
+                        },
+                        {
+                          "time": "2026-01-31T09:58:59.069897",
+                          "value": 89.22
+                        },
+                        {
+                          "time": "2026-01-31T10:28:59.069897",
+                          "value": 84.51
+                        },
+                        {
+                          "time": "2026-01-31T10:58:59.069897",
+                          "value": 84.09
+                        },
+                        {
+                          "time": "2026-01-31T11:28:59.069897",
+                          "value": 90.54
+                        },
+                        {
+                          "time": "2026-01-31T11:58:59.069897",
+                          "value": 86.73
+                        },
+                        {
+                          "time": "2026-01-31T12:28:59.069897",
+                          "value": 92.78
+                        },
+                        {
+                          "time": "2026-01-31T12:58:59.069897",
+                          "value": 89.37
+                        },
+                        {
+                          "time": "2026-01-31T13:28:59.069897",
+                          "value": 88.95
+                        },
+                        {
+                          "time": "2026-01-31T13:58:59.069897",
+                          "value": 96.55
+                        },
+                        {
+                          "time": "2026-01-31T14:28:59.069897",
+                          "value": 97.53
+                        },
+                        {
+                          "time": "2026-01-31T14:58:59.069897",
+                          "value": 89.85
+                        },
+                        {
+                          "time": "2026-01-31T15:28:59.069897",
+                          "value": 87.76
+                        },
+                        {
+                          "time": "2026-01-31T15:58:59.069897",
+                          "value": 95.77
+                        },
+                        {
+                          "time": "2026-01-31T16:28:59.069897",
+                          "value": 85.24
+                        }
+                      ]
+                    },
+                    {
+                      "name": "DG Set 2",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T16:58:59.097952",
+                          "value": 89.16
+                        },
+                        {
+                          "time": "2026-01-30T17:28:59.097952",
+                          "value": 85.62
+                        },
+                        {
+                          "time": "2026-01-30T17:58:59.097952",
+                          "value": 98.64
+                        },
+                        {
+                          "time": "2026-01-30T18:28:59.097952",
+                          "value": 97.89
+                        },
+                        {
+                          "time": "2026-01-30T18:58:59.097952",
+                          "value": 89.12
+                        },
+                        {
+                          "time": "2026-01-30T19:28:59.097952",
+                          "value": 86.34
+                        },
+                        {
+                          "time": "2026-01-30T19:58:59.097952",
+                          "value": 90.91
+                        },
+                        {
+                          "time": "2026-01-30T20:28:59.097952",
+                          "value": 86.35
+                        },
+                        {
+                          "time": "2026-01-30T20:58:59.097952",
+                          "value": 91.52
+                        },
+                        {
+                          "time": "2026-01-30T21:28:59.097952",
+                          "value": 88.24
+                        },
+                        {
+                          "time": "2026-01-30T21:58:59.097952",
+                          "value": 88.36
+                        },
+                        {
+                          "time": "2026-01-30T22:28:59.097952",
+                          "value": 97.37
+                        },
+                        {
+                          "time": "2026-01-30T22:58:59.097952",
+                          "value": 95.18
+                        },
+                        {
+                          "time": "2026-01-30T23:28:59.097952",
+                          "value": 86.99
+                        },
+                        {
+                          "time": "2026-01-30T23:58:59.097952",
+                          "value": 95.13
+                        },
+                        {
+                          "time": "2026-01-31T00:28:59.097952",
+                          "value": 87.62
+                        },
+                        {
+                          "time": "2026-01-31T00:58:59.097952",
+                          "value": 89.98
+                        },
+                        {
+                          "time": "2026-01-31T01:28:59.097952",
+                          "value": 87.77
+                        },
+                        {
+                          "time": "2026-01-31T01:58:59.097952",
+                          "value": 98.07
+                        },
+                        {
+                          "time": "2026-01-31T02:28:59.097952",
+                          "value": 93.05
+                        },
+                        {
+                          "time": "2026-01-31T02:58:59.097952",
+                          "value": 86.69
+                        },
+                        {
+                          "time": "2026-01-31T03:28:59.097952",
+                          "value": 88.5
+                        },
+                        {
+                          "time": "2026-01-31T03:58:59.097952",
+                          "value": 90.53
+                        },
+                        {
+                          "time": "2026-01-31T04:28:59.097952",
+                          "value": 91.64
+                        },
+                        {
+                          "time": "2026-01-31T04:58:59.097952",
+                          "value": 89.62
+                        },
+                        {
+                          "time": "2026-01-31T05:28:59.097952",
+                          "value": 95.9
+                        },
+                        {
+                          "time": "2026-01-31T05:58:59.097952",
+                          "value": 94.27
+                        },
+                        {
+                          "time": "2026-01-31T06:28:59.097952",
+                          "value": 96.85
+                        },
+                        {
+                          "time": "2026-01-31T06:58:59.097952",
+                          "value": 94.17
+                        },
+                        {
+                          "time": "2026-01-31T07:28:59.097952",
+                          "value": 99.19
+                        },
+                        {
+                          "time": "2026-01-31T07:58:59.097952",
+                          "value": 90.97
+                        },
+                        {
+                          "time": "2026-01-31T08:28:59.097952",
+                          "value": 97.24
+                        },
+                        {
+                          "time": "2026-01-31T08:58:59.097952",
+                          "value": 91.6
+                        },
+                        {
+                          "time": "2026-01-31T09:28:59.097952",
+                          "value": 93.43
+                        },
+                        {
+                          "time": "2026-01-31T09:58:59.097952",
+                          "value": 98.74
+                        },
+                        {
+                          "time": "2026-01-31T10:28:59.097952",
+                          "value": 95.56
+                        },
+                        {
+                          "time": "2026-01-31T10:58:59.097952",
+                          "value": 88.8
+                        },
+                        {
+                          "time": "2026-01-31T11:28:59.097952",
+                          "value": 96.49
+                        },
+                        {
+                          "time": "2026-01-31T11:58:59.097952",
+                          "value": 97.96
+                        },
+                        {
+                          "time": "2026-01-31T12:28:59.097952",
+                          "value": 89.98
+                        },
+                        {
+                          "time": "2026-01-31T12:58:59.097952",
+                          "value": 100.16
+                        },
+                        {
+                          "time": "2026-01-31T13:28:59.097952",
+                          "value": 88.33
+                        },
+                        {
+                          "time": "2026-01-31T13:58:59.097952",
+                          "value": 95.24
+                        },
+                        {
+                          "time": "2026-01-31T14:28:59.097952",
+                          "value": 91.61
+                        },
+                        {
+                          "time": "2026-01-31T14:58:59.097952",
+                          "value": 96.52
+                        },
+                        {
+                          "time": "2026-01-31T15:28:59.097952",
+                          "value": 89.01
+                        },
+                        {
+                          "time": "2026-01-31T15:58:59.097952",
+                          "value": 93.61
+                        },
+                        {
+                          "time": "2026-01-31T16:28:59.097952",
+                          "value": 92.18
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "fixture": "energy-demand",
+              "heightHint": "tall",
+              "description": "Displays the runtime trends of DG 1 and DG 2 over time, highlighting any correlation or anomalies."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.7,
+              "why": "Shows the current health score of DG 1, indicating its overall performance.",
+              "data_override": {
+                "demoData": {
+                  "label": "DG Set 1",
+                  "value": "91",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Shows the current health score of DG 1, indicating its overall performance."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.7,
+              "why": "Shows the current health score of DG 2, indicating its overall performance.",
+              "data_override": {
+                "demoData": {
+                  "label": "Dg Meter 92 - Admin Building",
+                  "value": "91",
+                  "unit": "%",
+                  "state": "normal"
+                }
+              },
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Shows the current health score of DG 2, indicating its overall performance."
+            },
+            {
+              "scenario": "trends-cumulative",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Displays the cumulative runtime of DG 1 and DG 2, showing their total operating time.",
+              "data_override": {
+                "demoData": {
+                  "label": "DG Set 1",
+                  "unit": "%",
+                  "timeSeries": [
+                    {
+                      "time": "2026-01-30T16:58:59.075291",
+                      "value": 90.54
+                    },
+                    {
+                      "time": "2026-01-30T17:28:59.075291",
+                      "value": 95.76
+                    },
+                    {
+                      "time": "2026-01-30T17:58:59.075291",
+                      "value": 87.32
+                    },
+                    {
+                      "time": "2026-01-30T18:28:59.075291",
+                      "value": 94.77
+                    },
+                    {
+                      "time": "2026-01-30T18:58:59.075291",
+                      "value": 94.52
+                    },
+                    {
+                      "time": "2026-01-30T19:28:59.075291",
+                      "value": 89.52
+                    },
+                    {
+                      "time": "2026-01-30T19:58:59.075291",
+                      "value": 94.31
+                    },
+                    {
+                      "time": "2026-01-30T20:28:59.075291",
+                      "value": 95.36
+                    },
+                    {
+                      "time": "2026-01-30T20:58:59.075291",
+                      "value": 86.76
+                    },
+                    {
+                      "time": "2026-01-30T21:28:59.075291",
+                      "value": 96.32
+                    },
+                    {
+                      "time": "2026-01-30T21:58:59.075291",
+                      "value": 86.82
+                    },
+                    {
+                      "time": "2026-01-30T22:28:59.075291",
+                      "value": 84.2
+                    },
+                    {
+                      "time": "2026-01-30T22:58:59.075291",
+                      "value": 88.69
+                    },
+                    {
+                      "time": "2026-01-30T23:28:59.075291",
+                      "value": 85.47
+                    },
+                    {
+                      "time": "2026-01-30T23:58:59.075291",
+                      "value": 89.64
+                    },
+                    {
+                      "time": "2026-01-31T00:28:59.075291",
+                      "value": 88.2
+                    },
+                    {
+                      "time": "2026-01-31T00:58:59.075291",
+                      "value": 94.7
+                    },
+                    {
+                      "time": "2026-01-31T01:28:59.075291",
+                      "value": 91.74
+                    },
+                    {
+                      "time": "2026-01-31T01:58:59.075291",
+                      "value": 98.03
+                    },
+                    {
+                      "time": "2026-01-31T02:28:59.075291",
+                      "value": 86.65
+                    },
+                    {
+                      "time": "2026-01-31T02:58:59.075291",
+                      "value": 91.26
+                    },
+                    {
+                      "time": "2026-01-31T03:28:59.075291",
+                      "value": 97.59
+                    },
+                    {
+                      "time": "2026-01-31T03:58:59.075291",
+                      "value": 95.43
+                    },
+                    {
+                      "time": "2026-01-31T04:28:59.075291",
+                      "value": 97.78
+                    },
+                    {
+                      "time": "2026-01-31T04:58:59.075291",
+                      "value": 98.05
+                    },
+                    {
+                      "time": "2026-01-31T05:28:59.075291",
+                      "value": 92.58
+                    },
+                    {
+                      "time": "2026-01-31T05:58:59.075291",
+                      "value": 88.47
+                    },
+                    {
+                      "time": "2026-01-31T06:28:59.075291",
+                      "value": 86.71
+                    },
+                    {
+                      "time": "2026-01-31T06:58:59.075291",
+                      "value": 87.15
+                    },
+                    {
+                      "time": "2026-01-31T07:28:59.075291",
+                      "value": 91.46
+                    },
+                    {
+                      "time": "2026-01-31T07:58:59.075291",
+                      "value": 83.82
+                    },
+                    {
+                      "time": "2026-01-31T08:28:59.075291",
+                      "value": 92.33
+                    },
+                    {
+                      "time": "2026-01-31T08:58:59.075291",
+                      "value": 84.89
+                    },
+                    {
+                      "time": "2026-01-31T09:28:59.075291",
+                      "value": 94.55
+                    },
+                    {
+                      "time": "2026-01-31T09:58:59.075291",
+                      "value": 89.9
+                    },
+                    {
+                      "time": "2026-01-31T10:28:59.075291",
+                      "value": 90.16
+                    },
+                    {
+                      "time": "2026-01-31T10:58:59.075291",
+                      "value": 84.06
+                    },
+                    {
+                      "time": "2026-01-31T11:28:59.075291",
+                      "value": 85.79
+                    },
+                    {
+                      "time": "2026-01-31T11:58:59.075291",
+                      "value": 83.84
+                    },
+                    {
+                      "time": "2026-01-31T12:28:59.075291",
+                      "value": 84.12
+                    },
+                    {
+                      "time": "2026-01-31T12:58:59.075291",
+                      "value": 88.68
+                    },
+                    {
+                      "time": "2026-01-31T13:28:59.075291",
+                      "value": 92.07
+                    },
+                    {
+                      "time": "2026-01-31T13:58:59.075291",
+                      "value": 88.89
+                    },
+                    {
+                      "time": "2026-01-31T14:28:59.075291",
+                      "value": 85.24
+                    },
+                    {
+                      "time": "2026-01-31T14:58:59.075291",
+                      "value": 84.01
+                    },
+                    {
+                      "time": "2026-01-31T15:28:59.075291",
+                      "value": 84.5
+                    },
+                    {
+                      "time": "2026-01-31T15:58:59.075291",
+                      "value": 86.76
+                    },
+                    {
+                      "time": "2026-01-31T16:28:59.075291",
+                      "value": 97.75
+                    }
+                  ],
+                  "timeRange": "last_24h"
+                }
+              },
+              "fixture": "energy-consumption",
+              "heightHint": "tall",
+              "description": "Displays the cumulative runtime of DG 1 and DG 2, showing their total operating time."
+            },
+            {
+              "scenario": "alerts",
+              "size": "expanded",
+              "relevance": 0.5,
+              "why": "Lists any active alerts or warnings related to DG 1 and DG 2, ensuring prompt attention to potential issues.",
+              "data_override": {
+                "demoData": [
+                  {
+                    "id": "DG-02",
+                    "title": "",
+                    "message": "AMF panel communication failure",
+                    "severity": "high",
+                    "category": "Equipment",
+                    "source": "DG Set 2",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "up"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "DG-15",
+                    "title": "",
+                    "message": "Engine failed to start on auto command",
+                    "severity": "critical",
+                    "category": "Equipment",
+                    "source": "DG Set 15 - Critical Load",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "up"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "EM-DG_-047",
+                    "title": "",
+                    "message": "Meter calibration due",
+                    "severity": "low",
+                    "category": "Equipment",
+                    "source": "Dg Meter 47 - Block A",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "stable"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "DG-10",
+                    "title": "",
+                    "message": "Air filter replacement due",
+                    "severity": "low",
+                    "category": "Equipment",
+                    "source": "DG Set 10 - IT Block",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "stable"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "AHU-MA-S12",
+                    "title": "",
+                    "message": "DDC controller offline",
+                    "severity": "medium",
+                    "category": "Equipment",
+                    "source": "AHU 12 - Main Plant Second Floor",
+                    "state": "acknowledged",
+                    "evidence": {
+                      "label": "",
+                      "value": "None",
+                      "unit": "",
+                      "trend": "stable"
+                    },
+                    "threshold": "None",
+                    "actions": [
+                      {
+                        "label": "Acknowledge",
+                        "intent": "ack",
+                        "type": "primary"
+                      },
+                      {
+                        "label": "View Details",
+                        "intent": "open",
+                        "type": "secondary"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "fixture": "banner-energy-peak-threshold-exceeded",
+              "heightHint": "medium",
+              "description": "Lists any active alerts or warnings related to DG 1 and DG 2, ensuring prompt attention to potential issues."
+            },
+            {
+              "scenario": "edgedevicepanel",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Provides a detailed overview of DG 1's parameters, readings, and status, allowing for in-depth analysis.",
+              "data_override": {
+                "demoData": {
+                  "device": {
+                    "name": "DG Set 1",
+                    "id": "DG-01",
+                    "type": "diesel_generator",
+                    "status": "running",
+                    "health": 91,
+                    "location": "DG Yard",
+                    "criticality": "critical"
+                  },
+                  "readings": [
+                    {
+                      "parameter": "Health Score",
+                      "value": 91,
+                      "unit": "%"
+                    }
+                  ],
+                  "alerts": [
+                    {
+                      "message": "Alert: Fuel level below 30% | Equipment: DG Set 15 - Critical Load (DG-15) | Severity: medium | Type",
+                      "severity": "medium"
+                    },
+                    {
+                      "message": "Alert: Coolant temperature high | Equipment: DG Set 2 (DG-02) | Severity: high | Type: threshold | P",
+                      "severity": "high"
+                    },
+                    {
+                      "message": "Alert: Exhaust temperature abnormally high \u2014 check turbocharger | Equipment: DG Set 15 - Critical Lo",
+                      "severity": "critical"
+                    }
+                  ],
+                  "maintenance": [
+                    {
+                      "description": "Maintenance: Annual DG comprehensive service | Equipment: DG Set 1 (DG-01) | Type: preventive | Work",
+                      "type": "preventive"
+                    },
+                    {
+                      "description": "Maintenance: Annual DG comprehensive service | Equipment: DG Set 1 (DG-01) | Type: preventive | Work",
+                      "type": "preventive"
+                    },
+                    {
+                      "description": "Maintenance: Monthly DG readiness test | Equipment: DG Set 1 (DG-01) | Type: inspection | Work Done:",
+                      "type": "inspection"
+                    }
+                  ]
+                }
+              },
+              "fixture": "default-render",
+              "heightHint": "x-tall",
+              "description": "Provides a detailed overview of DG 1's parameters, readings, and status, allowing for in-depth analysis."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "alerts"
+          ],
+          "entities": {
+            "devices": [
+              "DG 1",
+              "DG 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 45613
+      },
+      "analysis": {
+        "total_time_ms": 45615,
+        "network_overhead_ms": 2,
+        "widget_count": 7,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "kpi",
+          "kpi",
+          "trends-cumulative",
+          "alerts",
+          "edgedevicepanel"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "energy-demand",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "energy-consumption",
+          "banner-energy-peak-threshold-exceeded",
+          "default-render"
+        ],
+        "heading": "DG 1 vs DG 2 Health and Runtime",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "alerts"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "alerts",
+            "trends-cumulative",
+            "edgedevicepanel"
+          ]
+        },
+        "error": null
+      }
+    },
+    {
+      "question_id": "q004",
+      "question": "Show me the power trend over the last 24 hours",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the power trend over the last 24 hours",
+        "session_id": "a84fdb36-a586-4c3a-a139-aeff62047aca",
+        "sent_at": "2026-01-31T22:29:04.204190"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 15766
+      }
+    },
+    {
+      "question_id": "q005",
+      "question": "What is the temperature history for AHU 1?",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the temperature history for AHU 1?",
+        "session_id": "47582026-e8cf-4f48-bdf6-fa86521dc01f",
+        "sent_at": "2026-01-31T22:29:19.971242"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 1
+      }
+    },
+    {
+      "question_id": "q006",
+      "question": "Graph the voltage trend for the past 7 days",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "trend-multi-line"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Graph the voltage trend for the past 7 days",
+        "session_id": "5b1a6250-d743-4bd8-b72d-198446f0bafb",
+        "sent_at": "2026-01-31T22:29:19.972331"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q007",
+      "question": "Show historical energy consumption over time",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "trends-cumulative"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show historical energy consumption over time",
+        "session_id": "412cbc98-4410-47cd-b346-f5795276d815",
+        "sent_at": "2026-01-31T22:29:19.972816"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q008",
+      "question": "Show me the breakdown of equipment by status",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the breakdown of equipment by status",
+        "session_id": "83d153bf-2a28-4490-8f86-7fdc2ccf6111",
+        "sent_at": "2026-01-31T22:29:19.973284"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q009",
+      "question": "What is the energy source share distribution?",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "composition"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the energy source share distribution?",
+        "session_id": "3f8d6fe0-5fbc-4147-80f0-bddbc9d9f4fa",
+        "sent_at": "2026-01-31T22:29:19.973786"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q010",
+      "question": "Show the composition split of load by asset type",
+      "category": "distribution",
+      "expected_characteristics": [
+        "distribution"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "distribution",
+        "composition",
+        "category-bar"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show the composition split of load by asset type",
+        "session_id": "cbad5bca-fc03-43d3-bfde-b7bcdc0ef461",
+        "sent_at": "2026-01-31T22:29:19.974151"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q011",
+      "question": "What maintenance records do we have for pump 1?",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What maintenance records do we have for pump 1?",
+        "session_id": "a8dd75d7-43b5-4509-a9ba-dc951647d833",
+        "sent_at": "2026-01-31T22:29:19.974484"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q012",
+      "question": "Show me all pending repair tasks",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance",
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me all pending repair tasks",
+        "session_id": "605c2bfe-2bc1-44d6-b896-b5c8140fc710",
+        "sent_at": "2026-01-31T22:29:19.974825"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q013",
+      "question": "When was the last service inspection on transformer 2?",
+      "category": "maintenance",
+      "expected_characteristics": [
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "When was the last service inspection on transformer 2?",
+        "session_id": "431e4d7a-dc99-47d8-9986-9881b2a3e26d",
+        "sent_at": "2026-01-31T22:29:19.975164"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q014",
+      "question": "What happened during the last night shift?",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What happened during the last night shift?",
+        "session_id": "d79a0236-4bb6-4925-8964-838e223c8035",
+        "sent_at": "2026-01-31T22:29:19.975496"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q015",
+      "question": "Show me the morning shift handover notes",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the morning shift handover notes",
+        "session_id": "e8509cb5-0892-40c2-bcfa-84cf534cdad2",
+        "sent_at": "2026-01-31T22:29:19.975944"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q016",
+      "question": "What did the evening supervisor report?",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What did the evening supervisor report?",
+        "session_id": "cfaaf6f6-c459-4ef1-8c22-60e0af1f3c06",
+        "sent_at": "2026-01-31T22:29:19.976263"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q017",
+      "question": "Show me all open work orders",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me all open work orders",
+        "session_id": "9fdfdadf-71fb-46df-9fcd-f5c6bc749acb",
+        "sent_at": "2026-01-31T22:29:19.976579"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q018",
+      "question": "Which tasks are overdue this week?",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Which tasks are overdue this week?",
+        "session_id": "c3c66b25-8e43-4864-b1ba-3120d66dc8d1",
+        "sent_at": "2026-01-31T22:29:19.976896"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q019",
+      "question": "What pending work orders are assigned to the electrical team?",
+      "category": "work_orders",
+      "expected_characteristics": [
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What pending work orders are assigned to the electrical team?",
+        "session_id": "ec52cc99-0fed-4cd6-9001-5da1fd660f69",
+        "sent_at": "2026-01-31T22:29:19.977208"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q020",
+      "question": "What is the current power consumption?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the current power consumption?",
+        "session_id": "67f9a3c9-4f00-45b0-a294-8e1d081e7225",
+        "sent_at": "2026-01-31T22:29:19.977529"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q021",
+      "question": "Show me the total energy usage for today",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy",
+        "cumulative"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trends-cumulative"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the total energy usage for today",
+        "session_id": "df9b70ce-e72e-4f4c-b504-47712263c804",
+        "sent_at": "2026-01-31T22:29:19.977973"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q022",
+      "question": "How much load is on the main panel?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "How much load is on the main panel?",
+        "session_id": "2739a89c-a686-4b7a-bd10-f8e118dc3e37",
+        "sent_at": "2026-01-31T22:29:19.978287"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q023",
+      "question": "What is the current voltage and current reading across all meters?",
+      "category": "energy",
+      "expected_characteristics": [
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend-multi-line",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the current voltage and current reading across all meters?",
+        "session_id": "c588d070-e351-488c-9719-130c72e84585",
+        "sent_at": "2026-01-31T22:29:19.978596"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q024",
+      "question": "Give me a health overview of all equipment",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Give me a health overview of all equipment",
+        "session_id": "d47a20b6-6efd-46bb-9f07-2744dfbe32fe",
+        "sent_at": "2026-01-31T22:29:19.978909"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q025",
+      "question": "Show me the equipment dashboard summary",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the equipment dashboard summary",
+        "session_id": "d311b637-331f-4949-b5ed-1e1999d6ea89",
+        "sent_at": "2026-01-31T22:29:19.979219"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q026",
+      "question": "What is the overall condition of the plant?",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the overall condition of the plant?",
+        "session_id": "ddece595-5dd1-4a15-b9e4-eff5e806a50c",
+        "sent_at": "2026-01-31T22:29:19.979533"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q027",
+      "question": "Monitor all equipment status right now",
+      "category": "health_status",
+      "expected_characteristics": [
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Monitor all equipment status right now",
+        "session_id": "eb3a51ae-d6e7-4939-96d5-6a959403bd01",
+        "sent_at": "2026-01-31T22:29:19.979967"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q028",
+      "question": "Where does the energy go from the main panel?",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey",
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Where does the energy go from the main panel?",
+        "session_id": "b8c18e62-61cb-41d6-9d4d-c3398b8c88ae",
+        "sent_at": "2026-01-31T22:29:19.980276"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q029",
+      "question": "Show me the energy balance with losses",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me the energy balance with losses",
+        "session_id": "36a4672e-85e3-43bb-b751-1b65a302444f",
+        "sent_at": "2026-01-31T22:29:19.980586"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q030",
+      "question": "What feeds into the production lines from which sources?",
+      "category": "flow_sankey",
+      "expected_characteristics": [
+        "flow"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "flow-sankey"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What feeds into the production lines from which sources?",
+        "session_id": "cb9e8931-860b-4ccf-a990-ac861be6f354",
+        "sent_at": "2026-01-31T22:29:19.980894"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q031",
+      "question": "How much energy have we consumed so far today?",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "How much energy have we consumed so far today?",
+        "session_id": "fc25b946-08b7-442c-b67c-7ee98e22e075",
+        "sent_at": "2026-01-31T22:29:19.981202"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q032",
+      "question": "Show me the accumulated daily total for power",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the accumulated daily total for power",
+        "session_id": "213c25d8-d02f-437a-9a86-a364692c463f",
+        "sent_at": "2026-01-31T22:29:19.982048"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q033",
+      "question": "What is the running total of consumption this month?",
+      "category": "cumulative",
+      "expected_characteristics": [
+        "cumulative",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trends-cumulative",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the running total of consumption this month?",
+        "session_id": "d23ae716-ffaf-44f4-809a-3d7ddc5c8792",
+        "sent_at": "2026-01-31T22:29:19.982384"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q034",
+      "question": "Compare EB vs DG vs solar power sources",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "comparison",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "distribution",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare EB vs DG vs solar power sources",
+        "session_id": "8cb4ff73-d998-4f2a-93b5-7f91ac972323",
+        "sent_at": "2026-01-31T22:29:19.982710"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q035",
+      "question": "Show me energy by source for all meters",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "distribution",
+        "category-bar"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me energy by source for all meters",
+        "session_id": "a615774b-ec18-4847-8e40-70e04fe0e953",
+        "sent_at": "2026-01-31T22:29:19.983020"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q036",
+      "question": "What is the phase-wise current for the main LT panel?",
+      "category": "multi_source",
+      "expected_characteristics": [
+        "multi_source",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "kpi"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "What is the phase-wise current for the main LT panel?",
+        "session_id": "f7c4b815-d50a-485e-9efd-7bb19e3eba01",
+        "sent_at": "2026-01-31T22:29:19.983322"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q037",
+      "question": "What is the current power factor across all panels?",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap",
+        "trend"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the current power factor across all panels?",
+        "session_id": "6c4ac9ac-6391-425a-a149-2013ebe78dc8",
+        "sent_at": "2026-01-31T22:29:19.983623"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q038",
+      "question": "Are there any harmonic issues or THD violations?",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "alerts",
+        "kpi",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Are there any harmonic issues or THD violations?",
+        "session_id": "91467913-1336-4507-ba93-6bbd4d914905",
+        "sent_at": "2026-01-31T22:29:19.984040"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q039",
+      "question": "Show me voltage dip and sag events this week",
+      "category": "power_quality",
+      "expected_characteristics": [
+        "pq",
+        "trend"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "timeline",
+        "alerts",
+        "trend"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me voltage dip and sag events this week",
+        "session_id": "b546ab0a-460f-4099-b1c8-53f2a9642f02",
+        "sent_at": "2026-01-31T22:29:19.984355"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q040",
+      "question": "What is the status of all chillers and AHUs?",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "matrix-heatmap"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the status of all chillers and AHUs?",
+        "session_id": "47499e39-9f51-47d6-91be-dce2e57e4b01",
+        "sent_at": "2026-01-31T22:29:19.984659"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q041",
+      "question": "Show me zone temperatures and cooling performance",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac",
+        "trend"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend-multi-line",
+        "kpi",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Show me zone temperatures and cooling performance",
+        "session_id": "b1e86e2c-3fa4-46cb-81ab-75e256a1c5de",
+        "sent_at": "2026-01-31T22:29:19.984968"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q042",
+      "question": "How is AHU 1 performing against its setpoint?",
+      "category": "hvac",
+      "expected_characteristics": [
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi",
+        "comparison"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "How is AHU 1 performing against its setpoint?",
+        "session_id": "ff6e7d6c-28ab-4410-b14d-4e7c41b4e586",
+        "sent_at": "2026-01-31T22:29:19.985271"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q043",
+      "question": "What is the UPS battery status?",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the UPS battery status?",
+        "session_id": "0ade741e-f642-47f3-beb7-c3f70788444b",
+        "sent_at": "2026-01-31T22:29:19.985587"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q044",
+      "question": "Show DG runtime and diesel generator health",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg",
+        "health"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show DG runtime and diesel generator health",
+        "session_id": "2c328c63-189c-484c-9b83-886859f2d6a6",
+        "sent_at": "2026-01-31T22:29:19.986030"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q045",
+      "question": "Is the AMF panel ready for transfer?",
+      "category": "ups_dg",
+      "expected_characteristics": [
+        "ups_dg"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Is the AMF panel ready for transfer?",
+        "session_id": "88b75df3-599e-4263-8f87-43db92165f1b",
+        "sent_at": "2026-01-31T22:29:19.986342"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q046",
+      "question": "Which equipment consumes the most energy?",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "kpi",
+        "distribution"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Which equipment consumes the most energy?",
+        "session_id": "c5251152-1ca2-4a9f-b522-ce1ba5d499ed",
+        "sent_at": "2026-01-31T22:29:19.986651"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q047",
+      "question": "Show me the top 5 biggest loads in the facility",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the top 5 biggest loads in the facility",
+        "session_id": "b8849ea3-0200-4e01-ab13-5d64f9b16f40",
+        "sent_at": "2026-01-31T22:29:19.986963"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q048",
+      "question": "Who are the worst performing machines this month?",
+      "category": "top_consumers",
+      "expected_characteristics": [
+        "top_consumers"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "category-bar",
+        "matrix-heatmap"
+      ],
+      "difficulty": "medium",
+      "request": {
+        "transcript": "Who are the worst performing machines this month?",
+        "session_id": "4e2564f3-f948-49dd-83a6-4051a06aface",
+        "sent_at": "2026-01-31T22:29:19.987269"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q049",
+      "question": "Show me everything about the electrical system including alerts and maintenance",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "health",
+        "maintenance",
+        "energy"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "alerts",
+        "eventlogstream",
+        "trend"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "Show me everything about the electrical system including alerts and maintenance",
+        "session_id": "87e8a346-e027-47f8-9bfe-6ba6067b4df0",
+        "sent_at": "2026-01-31T22:29:19.987579"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q050",
+      "question": "I need a full overview of pump 1 with trends, alerts, and work orders",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "health",
+        "trend",
+        "maintenance",
+        "work_order"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "alerts",
+        "eventlogstream"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "I need a full overview of pump 1 with trends, alerts, and work orders",
+        "session_id": "7de9aace-fe67-4242-85b8-212679cfc6ce",
+        "sent_at": "2026-01-31T22:29:19.988028"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    },
+    {
+      "question_id": "q051",
+      "question": "What is going on with the HVAC system? Show energy, alerts, and maintenance",
+      "category": "cross_domain",
+      "expected_characteristics": [
+        "hvac",
+        "energy",
+        "maintenance"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "kpi",
+        "trend",
+        "alerts",
+        "eventlogstream"
+      ],
+      "difficulty": "complex",
+      "request": {
+        "transcript": "What is going on with the HVAC system? Show energy, alerts, and maintenance",
+        "session_id": "de936daf-f407-4ae8-b4d8-16b53c8a3d88",
+        "sent_at": "2026-01-31T22:29:19.988335"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 0
+      }
+    }
+  ]
+}

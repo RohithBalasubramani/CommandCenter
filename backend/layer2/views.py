@@ -141,6 +141,7 @@ def orchestrate(request):
     transcript = request.data.get("transcript", "")
     session_id = request.data.get("session_id")
     context = request.data.get("context", {})
+    user_id = request.data.get("user_id", "default_user")
 
     if not transcript:
         return Response(
@@ -150,10 +151,11 @@ def orchestrate(request):
 
     # Get orchestrator and process
     orchestrator = get_orchestrator()
-    result = orchestrator.process_transcript(transcript, context)
+    result = orchestrator.process_transcript(transcript, context, user_id)
 
     # Convert dataclasses to dicts for JSON serialization
     response_data = {
+        "query_id": result.query_id,  # For RL feedback tracking
         "voice_response": result.voice_response,
         "filler_text": result.filler_text,
         "layout_json": result.layout_json,
@@ -233,3 +235,99 @@ def proactive_trigger(request):
         "has_trigger": trigger is not None,
         "trigger_text": trigger,
     })
+
+
+@api_view(["POST"])
+def submit_feedback(request):
+    """
+    Submit feedback for continuous RL.
+
+    Called by frontend when user provides explicit feedback.
+
+    POST /api/layer2/feedback/
+    Body: {
+        "query_id": "uuid-from-response",
+        "rating": "up" | "down",
+        "interactions": [
+            {"widget_index": 0, "action": "expand", "duration_ms": 5000},
+            ...
+        ],
+        "correction": "I meant pump-002"  # Optional correction text
+    }
+    """
+    query_id = request.data.get("query_id")
+    rating = request.data.get("rating")
+    interactions = request.data.get("interactions", [])
+    correction = request.data.get("correction")
+
+    if not query_id:
+        return Response(
+            {"error": "query_id is required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        from rl.continuous import get_rl_system
+
+        rl = get_rl_system()
+        success = rl.update_feedback(
+            query_id=query_id,
+            rating=rating,
+            interactions=interactions,
+            correction=correction,
+        )
+
+        if success:
+            # Also persist to WidgetRating for durability
+            try:
+                from django.utils import timezone
+                from feedback.models import WidgetRating
+
+                WidgetRating.objects.create(
+                    entry_id=query_id,
+                    rating=rating or "up",
+                    tags=[],
+                    notes=correction or "",
+                    rated_at=timezone.now(),
+                )
+            except Exception as e:
+                # Non-critical - RL buffer already updated
+                pass
+
+            return Response({"status": "ok", "updated": True})
+        else:
+            return Response(
+                {"status": "not_found", "updated": False},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    except ImportError:
+        return Response(
+            {"error": "RL module not available"},
+            status=status.HTTP_501_NOT_IMPLEMENTED,
+        )
+    except Exception as e:
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+@api_view(["GET"])
+def rl_status(request):
+    """
+    Get status of the continuous RL system.
+
+    GET /api/layer2/rl-status/
+    """
+    try:
+        from rl.continuous import get_rl_system
+
+        rl = get_rl_system()
+        return Response(rl.get_status())
+
+    except ImportError:
+        return Response({
+            "running": False,
+            "error": "RL module not available",
+        })

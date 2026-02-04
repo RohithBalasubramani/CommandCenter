@@ -55,3 +55,19 @@ personaplex/.venv/
 /layer1/
 /backend/.next/
 /personaplex/client/
+certs/
+
+# Reports (generated)
+*_report_*.json
+performance_envelope_*.json
+e2e-results.json
+
+# Large directories
+backend/tts/
+backend/chroma_db/
+*.sqlite3
+
+# Test artifacts
+playwright-report/
+e2e-artifacts/
+mega-validation-evidence/

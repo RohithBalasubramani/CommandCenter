@@ -13,6 +13,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { config } from "@/lib/config";
 
 // Types for pipeline status
 interface PipelineStatus {
@@ -98,7 +99,7 @@ export function DebugPanel({ personaplexStatus = "disconnected", onClose }: Debu
   const fetchStatus = useCallback(async () => {
     try {
       // Check backend health
-      const backendRes = await fetch("http://localhost:8100/api/layer2/rag/industrial/health/", {
+      const backendRes = await fetch(`${config.api.baseUrl}/api/layer2/rag/industrial/health/`, {
         method: "GET",
       }).catch(() => null);
 
@@ -115,7 +116,7 @@ export function DebugPanel({ personaplexStatus = "disconnected", onClose }: Debu
       let ragIndex = { equipment: 0, alerts: 0, maintenance: 0 };
       if (backendOnline) {
         try {
-          const statsRes = await fetch("http://localhost:8100/api/layer2/rag/industrial/health/");
+          const statsRes = await fetch(`${config.api.baseUrl}/api/layer2/rag/industrial/health/`);
           if (statsRes.ok) {
             const data = await statsRes.json();
             ragIndex = {
@@ -163,7 +164,7 @@ export function DebugPanel({ personaplexStatus = "disconnected", onClose }: Debu
     const startTime = Date.now();
 
     try {
-      const res = await fetch("http://localhost:8100/api/layer2/orchestrate/", {
+      const res = await fetch(`${config.api.baseUrl}/api/layer2/orchestrate/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

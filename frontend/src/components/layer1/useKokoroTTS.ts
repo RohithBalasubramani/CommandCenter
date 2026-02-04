@@ -19,8 +19,11 @@ interface SpeakOptions {
 
 export interface TTSStats {
   lastLatencyMs: number | null;
+  ttfbMs: number | null;  // Time to first byte
+  timeToFirstAudioMs: number | null;  // Time until audio starts playing
   requestCount: number;
   errorCount: number;
+  streamingEnabled: boolean;
 }
 
 interface UseKokoroTTSReturn {
@@ -54,9 +57,16 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
   // Stats
   const [stats, setStats] = useState<TTSStats>({
     lastLatencyMs: null,
+    ttfbMs: null,
+    timeToFirstAudioMs: null,
     requestCount: 0,
     errorCount: 0,
+    streamingEnabled: true,
   });
+
+  // Audio context for streaming playback
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -112,6 +122,19 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
 
     return () => {
       synthRef.current?.cancel();
+      // Cleanup streaming audio
+      if (currentSourceRef.current) {
+        try {
+          currentSourceRef.current.stop();
+        } catch {
+          // Ignore
+        }
+        currentSourceRef.current = null;
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+        audioContextRef.current.close().catch(() => {});
+        audioContextRef.current = null;
+      }
     };
   }, [ttsUrl]);
 
@@ -148,15 +171,179 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
   );
 
   // ------------------------------------------------------------------
-  // Server TTS (Kokoro / Piper)
+  // Streaming Server TTS (Kokoro / Piper) with Web Audio API
   // ------------------------------------------------------------------
-  const speakServer = useCallback(
+  const speakServerStreaming = useCallback(
     async (text: string, options: SpeakOptions = {}) => {
-      console.info(`[TTS] speakServer: "${text.slice(0, 60)}..." engine=${activeEngine}`);
+      console.info(`[TTS] speakServerStreaming: "${text.slice(0, 60)}..." engine=${activeEngine}`);
 
       // Cancel any in-flight request
       if (abortRef.current) {
         abortRef.current.abort();
+      }
+      // Stop any current audio source
+      if (currentSourceRef.current) {
+        try {
+          currentSourceRef.current.stop();
+        } catch {
+          // Ignore - already stopped
+        }
+        currentSourceRef.current = null;
+      }
+      // Detach old audio element's handlers
+      if (audioRef.current) {
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+        audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current = null;
+      }
+      synthRef.current?.cancel();
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+      setIsSpeaking(true);
+
+      try {
+        const t0 = performance.now();
+
+        // Fetch with streaming
+        const res = await fetch(`${ttsUrl}/v1/audio/speech`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: activeEngine === "piper" ? "piper" : "kokoro",
+            input: text,
+            voice: options.voice || "af_heart",
+            speed: options.rate ?? 1.0,
+            response_format: "mp3",
+          }),
+          signal: controller.signal,
+        });
+
+        const ttfb = Math.round(performance.now() - t0);
+        console.info(`[TTS] TTFB: ${ttfb}ms`);
+
+        if (!res.ok) {
+          const errBody = await res.text().catch(() => "");
+          throw new Error(`TTS server returned ${res.status}: ${errBody.slice(0, 200)}`);
+        }
+
+        if (!res.body) {
+          throw new Error("Response body is null - streaming not supported");
+        }
+
+        // Initialize AudioContext if needed
+        if (!audioContextRef.current || audioContextRef.current.state === "closed") {
+          audioContextRef.current = new AudioContext();
+        }
+        const audioContext = audioContextRef.current;
+
+        // Resume AudioContext if suspended (browser autoplay policy)
+        if (audioContext.state === "suspended") {
+          await audioContext.resume();
+        }
+
+        // Collect chunks from the stream
+        const reader = res.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let totalSize = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (controller.signal.aborted) {
+            reader.cancel();
+            return;
+          }
+          chunks.push(value);
+          totalSize += value.length;
+        }
+
+        const totalFetchTime = Math.round(performance.now() - t0);
+        console.info(`[TTS] Streamed ${totalSize} bytes in ${totalFetchTime}ms`);
+
+        // Combine chunks into a single ArrayBuffer
+        const combined = new Uint8Array(totalSize);
+        let offset = 0;
+        for (const chunk of chunks) {
+          combined.set(chunk, offset);
+          offset += chunk.length;
+        }
+
+        // Decode audio data
+        const audioBuffer = await audioContext.decodeAudioData(combined.buffer.slice(0));
+
+        const timeToFirstAudio = Math.round(performance.now() - t0);
+        console.info(`[TTS] Decoded and ready to play in ${timeToFirstAudio}ms`);
+
+        // Update stats
+        setStats(prev => ({
+          lastLatencyMs: totalFetchTime,
+          ttfbMs: ttfb,
+          timeToFirstAudioMs: timeToFirstAudio,
+          requestCount: prev.requestCount + 1,
+          errorCount: prev.errorCount,
+          streamingEnabled: true,
+        }));
+
+        // Create and play audio source
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+
+        // Apply volume via gain node
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = options.volume ?? 1.0;
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        currentSourceRef.current = source;
+
+        source.onended = () => {
+          console.info("[TTS] Streaming playback ended");
+          setIsSpeaking(false);
+          currentSourceRef.current = null;
+          options.onEnd?.();
+        };
+
+        source.start();
+        console.info("[TTS] Streaming playback started");
+
+      } catch (e: any) {
+        if (e.name === "AbortError") return;
+        console.error("[TTS] Streaming speak failed:", e);
+        setIsSpeaking(false);
+        setStats(prev => ({
+          ...prev,
+          requestCount: prev.requestCount + 1,
+          errorCount: prev.errorCount + 1,
+          streamingEnabled: prev.streamingEnabled,
+        }));
+        options.onError?.(e.message || "Streaming TTS failed");
+      }
+    },
+    [ttsUrl, activeEngine]
+  );
+
+  // ------------------------------------------------------------------
+  // Non-streaming Server TTS fallback (Kokoro / Piper)
+  // ------------------------------------------------------------------
+  const speakServer = useCallback(
+    async (text: string, options: SpeakOptions = {}) => {
+      console.info(`[TTS] speakServer (non-streaming): "${text.slice(0, 60)}..." engine=${activeEngine}`);
+
+      // Cancel any in-flight request
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+      // Stop streaming audio if any
+      if (currentSourceRef.current) {
+        try {
+          currentSourceRef.current.stop();
+        } catch {
+          // Ignore
+        }
+        currentSourceRef.current = null;
       }
       // Detach old audio element's handlers BEFORE clearing src,
       // otherwise setting src="" fires onerror which triggers browser fallback
@@ -197,13 +384,17 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
         }
 
         const blob = await res.blob();
+        const timeToFirstAudio = Math.round(performance.now() - t0);
         console.info(`[TTS] Got audio blob: ${blob.size} bytes, type=${blob.type} (${fetchElapsed}ms)`);
 
         // Update stats
         setStats(prev => ({
           lastLatencyMs: fetchElapsed,
+          ttfbMs: fetchElapsed, // For non-streaming, TTFB ~ full fetch time
+          timeToFirstAudioMs: timeToFirstAudio,
           requestCount: prev.requestCount + 1,
           errorCount: prev.errorCount,
+          streamingEnabled: false,
         }));
 
         const url = URL.createObjectURL(blob);
@@ -233,13 +424,25 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
           options.onError?.(errorDetail);
         };
 
-        await audio.play();
-        console.info("[TTS] Audio play() started");
+        // AUDIT FIX: Wrap play() to revoke Object URL if it throws (e.g., autoplay policy)
+        try {
+          await audio.play();
+          console.info("[TTS] Audio play() started");
+        } catch (playError: any) {
+          // Revoke URL immediately to prevent memory leak
+          URL.revokeObjectURL(url);
+          throw playError; // Re-throw to be caught by outer catch
+        }
       } catch (e: any) {
         if (e.name === "AbortError") return; // Intentional cancel
         console.error("[TTS] Server speak failed:", e);
         setIsSpeaking(false);
-        setStats(prev => ({ ...prev, requestCount: prev.requestCount + 1, errorCount: prev.errorCount + 1 }));
+        setStats(prev => ({
+          ...prev,
+          requestCount: prev.requestCount + 1,
+          errorCount: prev.errorCount + 1,
+          streamingEnabled: prev.streamingEnabled,
+        }));
         options.onError?.(e.message || "Server TTS failed");
       }
     },
@@ -256,18 +459,41 @@ export function useKokoroTTS(): UseKokoroTTSReturn {
       if (activeEngine === "browser" || !isServerAvailable) {
         speakBrowser(text, options);
       } else {
-        speakServer(text, options);
+        // Use streaming by default for faster time-to-audio
+        // Falls back to non-streaming if streaming fails
+        speakServerStreaming(text, {
+          ...options,
+          onError: (err) => {
+            console.warn("[TTS] Streaming failed, trying non-streaming fallback:", err);
+            speakServer(text, options);
+          },
+        }).catch(() => {
+          // If streaming throws before we can set up error handler, fall back
+          speakServer(text, options);
+        });
       }
     },
-    [activeEngine, isServerAvailable, speakBrowser, speakServer]
+    [activeEngine, isServerAvailable, speakBrowser, speakServer, speakServerStreaming]
   );
 
   const stop = useCallback(() => {
-    // Stop server audio
+    // Stop server audio (abort any in-flight fetch)
     if (abortRef.current) {
       abortRef.current.abort();
       abortRef.current = null;
     }
+
+    // Stop streaming audio source (Web Audio API)
+    if (currentSourceRef.current) {
+      try {
+        currentSourceRef.current.stop();
+      } catch {
+        // Ignore - already stopped
+      }
+      currentSourceRef.current = null;
+    }
+
+    // Stop non-streaming audio element
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = "";

@@ -1,0 +1,17 @@
+# Command Center Backend - Requirements
+# Django Framework
+Django>=5.0
+djangorestframework>=3.14
+django-cors-headers>=4.3
+
+# RAG Pipeline - Vector Store
+chromadb>=0.4.22
+
+# RAG Pipeline - Embeddings
+sentence-transformers>=2.2.0
+
+# HTTP Client (for Ollama LLM)
+requests>=2.31
+
+# Development
+python-dotenv>=1.0

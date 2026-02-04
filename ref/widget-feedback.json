@@ -1,0 +1,160 @@
+{
+  "widgets": [
+    {
+      "scenario": "category-bar",
+      "variant": "shift-comparison",
+      "rating": 0,
+      "tags": [],
+      "notes": "The compact one is uh too small in all the states and uh you know uh shift it uh normal should be compact, uh expanded should be normal and uh you know actual uh expanded should be bigger uh so give me one more size",
+      "timestamp": 1769831943539,
+      "id": "1769831943539-shift-comparison"
+    },
+    {
+      "scenario": "agentsview",
+      "variant": "default-render",
+      "rating": 0,
+      "tags": [],
+      "notes": "Remove this component, uh this is irrelevant, uh this will never be used, this will just cause hallucination.",
+      "timestamp": 1769832007835,
+      "id": "1769832007835-default-render"
+    },
+    {
+      "scenario": "vaultview",
+      "variant": "default-render",
+      "rating": 0,
+      "tags": [],
+      "notes": "Oh, this also this is also, you know, a pointless widget. It will just cause hallucination.",
+      "timestamp": 1769832055384,
+      "id": "1769832055384-default-render"
+    },
+    {
+      "scenario": "edgedevicepanel",
+      "variant": "default-render",
+      "rating": 0,
+      "tags": [],
+      "notes": "Widget shows some mirror. Uh look at this wi uh widget and fix it.",
+      "timestamp": 1769832091008,
+      "id": "1769832091008-default-render"
+    },
+    {
+      "scenario": "supplychainglobe",
+      "variant": "default-render",
+      "rating": 0,
+      "tags": [],
+      "notes": "Widget shows some mirror. Uh look at this wi uh widget and fix it.",
+      "timestamp": 1769832114933,
+      "id": "1769832114933-default-render"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "side_by_side_visual-plain-values",
+      "rating": 0,
+      "tags": [],
+      "notes": "Reduce uh um let me put that both by eight by delta bar visual deviant and uh side by side visual pain values to uh height uh reduce both of them to um eighteen for normal and in that same proportion for everything else.",
+      "timestamp": 1769851783452,
+      "id": "1769851783453-u6daew"
+    },
+    {
+      "scenario": "distribution",
+      "variant": "dist_energy_source_share-donut",
+      "rating": 0,
+      "tags": [],
+      "notes": "The width of uh you know the pair and dev is also way too much. Uh'cause it's a pie chart uh you can reduce all the gaps. Uh reduce it um you know keep it very close to the chart. Make a pair and dev very you know uh less wide.",
+      "timestamp": 1769851853482,
+      "id": "1769851853483-nngq8u"
+    },
+    {
+      "scenario": "distribution",
+      "variant": "dist_energy_source_share-100-stacked-bar",
+      "rating": 0,
+      "tags": [],
+      "notes": "Height is still way too much, it's just one bar of a vertical set. I don't know why this is uh this long. Reduce height for just this specific uh component.",
+      "timestamp": 1769851870186,
+      "id": "1769851870187-9e6435"
+    },
+    {
+      "scenario": "timeline",
+      "variant": "linear-incident-timeline",
+      "rating": 0,
+      "tags": [],
+      "notes": "Height for this thing is way too much. It need not be specifically for this variant.",
+      "timestamp": 1769852118366,
+      "id": "1769852118366-5osr31"
+    },
+    {
+      "scenario": "timeline",
+      "variant": "machine-state-timeline",
+      "rating": 0,
+      "tags": [],
+      "notes": "Height for this thing is way too much. It need not be specifically for this variant.",
+      "timestamp": 1769852123943,
+      "id": "1769852123943-o0k37v"
+    },
+    {
+      "scenario": "timeline",
+      "variant": "multi-lane-shift-schedule",
+      "rating": 0,
+      "tags": [],
+      "notes": "Height also can be reduced, this is too tall. Uh when you are reducing all the heights, make sure that you are doing it for both parent and small uh components. And uh you know uh each of them can have uh different uh compact normal and um you know the hero uh which is expanded uh variants it doesn't mean that um you know all of them should be same size just for different variants or in some cases you need not give as many variants also some in which you feel like uh you know these many variants aren't needed suggest those also for each variant.\n",
+      "timestamp": 1769852263152,
+      "id": "1769852263152-snvtzo"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "correlation-matrix",
+      "rating": 0,
+      "tags": [],
+      "notes": "The matrix doesn't fit into the parent depth. Make the matrix fit into the parent depth. Uh this is way to you know expand it.",
+      "timestamp": 1769852306393,
+      "id": "1769852306393-r67qux"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "calendar-heatmap",
+      "rating": 0,
+      "tags": [],
+      "notes": "The matrix doesn't fit into the parent depth. Make the matrix fit into the parent depth. Uh this is way to you know expand it.This variation also.",
+      "timestamp": 1769852316500,
+      "id": "1769852316500-ja351u"
+    }
+  ],
+  "dashboards": [
+    {
+      "dashboardId": "sim:q004",
+      "rating": 0,
+      "notes": "It's exceeding more than 100 VH, which shouldn't be the case. Also the question is something, the data that it's giving is something, it's all M ten, M120, I don't know what that means also. Hydraulic press car, I don't know why maximum PSI is given. Wherever there are you know KPIs and something's given, beside that there should be a summary written of why those KPIs are given. Uh how is it relevant to the question? Uh few of them seem to be relevant to the question actually. So that's not bad. And uh yeah, uh our trend sh but technically the power trend graph, the cumulative consumption versus whatever the trend prediction graph or whatever graph should have been the uh you know predominantly uh forefront one, but that isn't. That exactly is the issue here. Fix that.",
+      "timestamp": 1769853291759,
+      "id": "1769853291759-fe3m80"
+    },
+    {
+      "dashboardId": "sim:q049",
+      "rating": 0,
+      "notes": "And maintenance there is only uh one you know alerts and maintenance card but that shouldn't be the case. In case of alerts and maintenance there should be a lot lots and lots of uh you know uh you know what kinds of alerts were there, there should be like a pie chart to declare what there should be comparison. This exactly is there it falls under more than one category. Always a question falls under more than one category. Split it into multiple questions, uh split it into like top five questions and you know then send the most relevant ones for each like questions dashboard, uh you know different kinds of questions and for comparison one whatever categories it falls under in one graph. Uh for example like uh this question everything about electrical system including electron maintenance should have been split into multiple questions. Like show me uh uh like what are all the it should have thought what are all that and what is its division, uh what is its distribution, what's its cumulative uh you know uh stuff and you know what's the KPI, uh what's the trend of this uh what two things can be compared here, like uh the major uh things, all that shit it could have analyzed and most relevant shit it should have fit in that specific uh whatever hundred BH into hundred BW dashboard is there.",
+      "timestamp": 1769853498653,
+      "id": "1769853498653-y7078s"
+    },
+    {
+      "dashboardId": "sim:q031",
+      "rating": 0,
+      "notes": "The order is you know very weird and you know uh stupid. Uh it should be as such that what uh the first graph that he sees should answer his question and uh the more and more he comes there should be more and more information presented only regarding his question and uh you know uh whatever is there. There should be no empty spaces. There should be a really good alignment uh thing that should you know uh be fixed basically. What is the way to do that? Tell me what to make that responsive ...",
+      "timestamp": 1769853575134,
+      "id": "1769853575134-c7498g"
+    },
+    {
+      "dashboardId": "sim:q010",
+      "rating": 3,
+      "notes": "The uh the place below the KPI is empty. I don't want it like that. The whole height is not 100 VH. We'll have to fix that.",
+      "timestamp": 1769944093926,
+      "id": "1769944093926-2xuk14"
+    }
+  ],
+  "pages": [
+    {
+      "pageId": "scenario:flow-sankey",
+      "notes": "This page is all wrong. Uh basically uh I don't know why this is all this huge. Uh except Sankey, all of the other uh components should be smaller. Uh this is way too huge. Uh it uh these many variations per other than the first uh flow Sankey which is classical, all the others uh should be way shorter. Not just shorter, way uh you know um less width also.",
+      "timestamp": 1769852077401,
+      "id": "1769852077401-tp6vk2"
+    }
+  ],
+  "exportedAt": "2026-02-01T11:08:13.926Z"
+}

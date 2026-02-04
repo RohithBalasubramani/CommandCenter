@@ -1,0 +1,170 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_223203",
+    "tag": "v2_layout_fix",
+    "started_at": "2026-01-31T22:32:03.400274",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:32:44.062063",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q001",
+      "question": "Compare transformer 1 versus transformer 2",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare transformer 1 versus transformer 2",
+        "session_id": "44bf758b-0466-4508-8ee0-ac2ebaadb5c7",
+        "sent_at": "2026-01-31T22:32:03.400291"
+      },
+      "response": {
+        "voice_response": "Here's what I found for Transformer Comparison. I've prepared a dashboard with 6 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "Transformer Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Compares the current energy output of transformer 1 and transformer 2, highlighting any differences in performance.",
+              "data_override": {},
+              "fixture": "side_by_side_visual-plain-values",
+              "heightHint": "medium",
+              "description": "Compares the current energy output of transformer 1 and transformer 2, highlighting any differences in performance."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Shows the energy output trend of transformer 1 and transformer 2 over the last week, allowing for comparison of their performance over time.",
+              "data_override": {},
+              "fixture": "energy-demand",
+              "heightHint": "tall",
+              "description": "Shows the energy output trend of transformer 1 and transformer 2 over the last week, allowing for comparison of their performance over time."
+            },
+            {
+              "scenario": "distribution",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their relative contributions to the overall energy output.",
+              "data_override": {},
+              "fixture": "dist_downtime_top_contributors-pareto-bar",
+              "heightHint": "tall",
+              "description": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their relative contributions to the overall energy output."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 1, providing a key performance indicator for its operation.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 1, providing a key performance indicator for its operation."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 2, providing a key performance indicator for its operation.",
+              "data_override": {},
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 2, providing a key performance indicator for its operation."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.2,
+              "why": "Shows the maintenance schedule for transformer 1 and transformer 2, allowing for planning and comparison of their maintenance histories.",
+              "data_override": {},
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Shows the maintenance schedule for transformer 1 and transformer 2, allowing for planning and comparison of their maintenance histories."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial"
+          ],
+          "entities": {
+            "devices": [
+              "transformer 1",
+              "transformer 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 40659
+      },
+      "analysis": {
+        "total_time_ms": 40661,
+        "network_overhead_ms": 2,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "distribution",
+          "kpi",
+          "kpi",
+          "timeline"
+        ],
+        "fixtures_used": [
+          "side_by_side_visual-plain-values",
+          "energy-demand",
+          "dist_downtime_top_contributors-pareto-bar",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "linear-incident-timeline"
+        ],
+        "heading": "Transformer Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trend-multi-line",
+            "timeline",
+            "distribution"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

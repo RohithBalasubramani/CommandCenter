@@ -1,0 +1,164 @@
+{
+  "run_id": "run_2026-01-31_170323",
+  "tag": "v2_phi4_full",
+  "timing": {
+    "avg_ms": 13092,
+    "p50_ms": 12877,
+    "p95_ms": 16481,
+    "min_ms": 8589,
+    "max_ms": 24106
+  },
+  "counts": {
+    "total": 51,
+    "successful": 51,
+    "failed": 0,
+    "with_layout": 51
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "alerts",
+      "category-bar",
+      "comparison",
+      "composition",
+      "distribution",
+      "eventlogstream",
+      "flow-sankey",
+      "helpview",
+      "kpi",
+      "peopleview",
+      "pulseview",
+      "timeline",
+      "trend",
+      "trend-multi-line",
+      "trends-cumulative"
+    ],
+    "fixtures_used": [
+      "banner-energy-peak-threshold-exceeded",
+      "chronological-timeline",
+      "default-render",
+      "dist_downtime_top_contributors-pareto-bar",
+      "efficiency-deviation",
+      "energy-consumption",
+      "energy-demand",
+      "flow_sankey_standard-classic-left-to-right-sankey",
+      "hvac-performance",
+      "kpi_accumulated-daily-total",
+      "kpi_alert-critical-state",
+      "kpi_alert-warning-state",
+      "kpi_lifecycle-dark-mode-gauge",
+      "kpi_lifecycle-progress-bar",
+      "kpi_live-high-contrast",
+      "kpi_live-standard",
+      "linear-incident-timeline",
+      "main-lt-phases-current",
+      "side_by_side_visual-plain-values",
+      "stacked_bar",
+      "trend_alert_context-line-threshold",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 5.6
+  },
+  "by_category": {
+    "comparison": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 17462,
+      "avg_widgets": 7.0
+    },
+    "trend": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 15265,
+      "avg_widgets": 5.8
+    },
+    "distribution": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 13841,
+      "avg_widgets": 5.3
+    },
+    "maintenance": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 10380,
+      "avg_widgets": 5.7
+    },
+    "shift": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 14034,
+      "avg_widgets": 6.0
+    },
+    "work_orders": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 11129,
+      "avg_widgets": 5.3
+    },
+    "energy": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 11207,
+      "avg_widgets": 5.5
+    },
+    "health_status": {
+      "count": 4,
+      "successful": 4,
+      "avg_time_ms": 12847,
+      "avg_widgets": 5.0
+    },
+    "flow_sankey": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 15281,
+      "avg_widgets": 5.0
+    },
+    "cumulative": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 11256,
+      "avg_widgets": 5.3
+    },
+    "multi_source": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 13218,
+      "avg_widgets": 6.0
+    },
+    "power_quality": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 12281,
+      "avg_widgets": 6.0
+    },
+    "hvac": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 12449,
+      "avg_widgets": 6.7
+    },
+    "ups_dg": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 11422,
+      "avg_widgets": 5.3
+    },
+    "top_consumers": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 12222,
+      "avg_widgets": 5.0
+    },
+    "cross_domain": {
+      "count": 3,
+      "successful": 3,
+      "avg_time_ms": 15165,
+      "avg_widgets": 5.0
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=CommandCenter STT Server (Parakeet/Whisper)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/rohith/desktop/CommandCenter/backend/stt
+Environment="PATH=/home/rohith/desktop/CommandCenter/backend/venv/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/home/rohith/desktop/CommandCenter/backend/venv/bin/python server.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/rohith/desktop/CommandCenter/logs/stt.log
+StandardError=append:/home/rohith/desktop/CommandCenter/logs/stt.log
+
+[Install]
+WantedBy=default.target

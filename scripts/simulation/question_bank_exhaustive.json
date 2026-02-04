@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "q001",
+    "question": "Compare transformer 1 versus transformer 2",
+    "category": "comparison",
+    "expected_characteristics": ["comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "kpi"],
+    "force_scenarios": ["comparison"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q002",
+    "question": "What is the difference between chiller 1 and chiller 2 performance?",
+    "category": "comparison",
+    "expected_characteristics": ["comparison", "hvac"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "kpi", "trend"],
+    "force_scenarios": ["comparison", "trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q003",
+    "question": "Show me DG 1 vs DG 2 health and runtime",
+    "category": "comparison",
+    "expected_characteristics": ["comparison", "ups_dg", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "kpi"],
+    "force_scenarios": ["comparison"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q004",
+    "question": "Compare pump 1 and pump 2 vibration levels",
+    "category": "comparison",
+    "expected_characteristics": ["comparison", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "kpi", "trend"],
+    "force_scenarios": ["comparison", "trend"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q005",
+    "question": "Side by side comparison of AHU 1 vs AHU 2 cooling output",
+    "category": "comparison",
+    "expected_characteristics": ["comparison", "hvac"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "trend-multi-line"],
+    "force_scenarios": ["comparison", "trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q006",
+    "question": "Which panel has higher load — main LT or cell LT?",
+    "category": "comparison",
+    "expected_characteristics": ["comparison", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "kpi"],
+    "force_scenarios": ["comparison"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q007",
+    "question": "Show me the power trend over the last 24 hours",
+    "category": "trend",
+    "expected_characteristics": ["trend", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi"],
+    "force_scenarios": ["trend"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q008",
+    "question": "What is the temperature history for AHU 1?",
+    "category": "trend",
+    "expected_characteristics": ["trend", "hvac"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi"],
+    "force_scenarios": ["trend"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q009",
+    "question": "Graph the voltage trend for the past 7 days",
+    "category": "trend",
+    "expected_characteristics": ["trend", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "trend-multi-line"],
+    "force_scenarios": ["trend", "trend-multi-line"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q010",
+    "question": "Show historical energy consumption over time",
+    "category": "trend",
+    "expected_characteristics": ["trend", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "trends-cumulative"],
+    "force_scenarios": ["trend", "trends-cumulative"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q011",
+    "question": "Plot motor temperature over the past 48 hours",
+    "category": "trend",
+    "expected_characteristics": ["trend", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi", "alerts"],
+    "force_scenarios": ["trend"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q012",
+    "question": "Show me the real-time power factor trend",
+    "category": "trend",
+    "expected_characteristics": ["trend", "pq"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi"],
+    "force_scenarios": ["trend"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q013",
+    "question": "Show me the breakdown of equipment by status",
+    "category": "distribution",
+    "expected_characteristics": ["distribution", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "kpi"],
+    "force_scenarios": ["distribution"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q014",
+    "question": "What is the energy source share distribution?",
+    "category": "distribution",
+    "expected_characteristics": ["distribution", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "composition"],
+    "force_scenarios": ["distribution", "composition"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q015",
+    "question": "Show the composition split of load by asset type",
+    "category": "distribution",
+    "expected_characteristics": ["distribution"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "composition", "category-bar"],
+    "force_scenarios": ["distribution", "composition"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q016",
+    "question": "What percentage of power comes from solar vs grid vs DG?",
+    "category": "distribution",
+    "expected_characteristics": ["distribution", "energy", "multi_source"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "composition"],
+    "force_scenarios": ["distribution"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q017",
+    "question": "Show me the downtime distribution by equipment type",
+    "category": "distribution",
+    "expected_characteristics": ["distribution", "maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "category-bar"],
+    "force_scenarios": ["distribution", "category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q018",
+    "question": "Give me a pie chart of energy consumption by department",
+    "category": "distribution",
+    "expected_characteristics": ["distribution", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "composition"],
+    "force_scenarios": ["distribution"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q019",
+    "question": "What maintenance records do we have for pump 1?",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi", "timeline"],
+    "force_scenarios": ["eventlogstream", "timeline"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q020",
+    "question": "Show me all pending repair tasks",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance", "work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q021",
+    "question": "When was the last service inspection on transformer 2?",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "timeline", "kpi"],
+    "force_scenarios": ["timeline", "eventlogstream"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q022",
+    "question": "Show me planned vs unplanned maintenance breakdown this quarter",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "eventlogstream", "distribution"],
+    "force_scenarios": ["category-bar", "timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q023",
+    "question": "What is the mean time between failures for all pumps?",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "category-bar", "timeline"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q024",
+    "question": "Show me a maintenance calendar for the next 30 days",
+    "category": "maintenance",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["timeline", "eventlogstream"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q025",
+    "question": "What happened during the last night shift?",
+    "category": "shift",
+    "expected_characteristics": ["shift"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "timeline", "kpi"],
+    "force_scenarios": ["timeline", "eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q026",
+    "question": "Show me the morning shift handover notes",
+    "category": "shift",
+    "expected_characteristics": ["shift"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "timeline"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q027",
+    "question": "What did the evening supervisor report?",
+    "category": "shift",
+    "expected_characteristics": ["shift"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q028",
+    "question": "Compare morning vs evening shift production output",
+    "category": "shift",
+    "expected_characteristics": ["shift", "comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "comparison"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q029",
+    "question": "Show me energy usage per shift for this week",
+    "category": "shift",
+    "expected_characteristics": ["shift", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "distribution"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q030",
+    "question": "Show me all open work orders",
+    "category": "work_orders",
+    "expected_characteristics": ["work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi", "category-bar"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q031",
+    "question": "Which tasks are overdue this week?",
+    "category": "work_orders",
+    "expected_characteristics": ["work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi", "alerts"],
+    "force_scenarios": ["eventlogstream", "alerts"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q032",
+    "question": "What pending work orders are assigned to the electrical team?",
+    "category": "work_orders",
+    "expected_characteristics": ["work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q033",
+    "question": "Show me work order completion rate by category",
+    "category": "work_orders",
+    "expected_characteristics": ["work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q034",
+    "question": "How many work orders were created vs completed this month?",
+    "category": "work_orders",
+    "expected_characteristics": ["work_order", "comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q035",
+    "question": "What is the current power consumption?",
+    "category": "energy",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend"],
+    "force_scenarios": ["kpi"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q036",
+    "question": "Show me the total energy usage for today",
+    "category": "energy",
+    "expected_characteristics": ["energy", "cumulative"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trends-cumulative"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q037",
+    "question": "How much load is on the main panel?",
+    "category": "energy",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "distribution"],
+    "force_scenarios": ["distribution"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q038",
+    "question": "What is the current voltage and current reading across all meters?",
+    "category": "energy",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend-multi-line", "matrix-heatmap"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q039",
+    "question": "Show me energy cost breakdown by tariff slab",
+    "category": "energy",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["distribution", "trends-cumulative", "kpi"],
+    "force_scenarios": ["distribution", "trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q040",
+    "question": "What is the peak demand and when did it occur?",
+    "category": "energy",
+    "expected_characteristics": ["energy", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend", "alerts"],
+    "force_scenarios": ["trend"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q041",
+    "question": "Show me the energy flow from sources to loads",
+    "category": "energy",
+    "expected_characteristics": ["energy", "flow"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "kpi", "distribution"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q042",
+    "question": "How much energy did we save compared to last month?",
+    "category": "energy",
+    "expected_characteristics": ["energy", "comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "trends-cumulative", "kpi"],
+    "force_scenarios": ["comparison", "trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q043",
+    "question": "Give me a health overview of all equipment",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "category-bar"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q044",
+    "question": "Show me the equipment dashboard summary",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "alerts"],
+    "force_scenarios": ["matrix-heatmap", "alerts"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q045",
+    "question": "What is the overall condition of the plant?",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "distribution"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q046",
+    "question": "Monitor all equipment status right now",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "alerts"],
+    "force_scenarios": ["matrix-heatmap", "edgedevicepanel"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q047",
+    "question": "Which machines need immediate attention?",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "kpi", "matrix-heatmap"],
+    "force_scenarios": ["alerts", "matrix-heatmap"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q048",
+    "question": "Show me equipment health scores ranked from worst to best",
+    "category": "health_status",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "matrix-heatmap", "kpi"],
+    "force_scenarios": ["category-bar", "matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q049",
+    "question": "What is the health trend for transformer 1 this week?",
+    "category": "health_status",
+    "expected_characteristics": ["health", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi", "alerts"],
+    "force_scenarios": ["trend"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q050",
+    "question": "Where does the energy go from the main panel?",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "kpi", "distribution"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q051",
+    "question": "Show me the energy balance with losses",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "kpi"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q052",
+    "question": "What feeds into the production lines from which sources?",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q053",
+    "question": "Show me the power distribution hierarchy from HT to LT to feeders",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "distribution"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q054",
+    "question": "Trace the energy path from solar panels to end consumers",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow", "energy", "multi_source"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "kpi"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q055",
+    "question": "Show me the water flow from treatment to production areas",
+    "category": "flow_sankey",
+    "expected_characteristics": ["flow"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q056",
+    "question": "How much energy have we consumed so far today?",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "kpi"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q057",
+    "question": "Show me the accumulated daily total for power",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "kpi"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q058",
+    "question": "What is the running total of consumption this month?",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "kpi"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q059",
+    "question": "Show cumulative production output vs target today",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "comparison", "kpi"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q060",
+    "question": "Track the running cost of electricity against budget",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "kpi"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q061",
+    "question": "Show cumulative solar generation vs grid import this week",
+    "category": "cumulative",
+    "expected_characteristics": ["cumulative", "energy", "multi_source"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trends-cumulative", "comparison"],
+    "force_scenarios": ["trends-cumulative"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q062",
+    "question": "Compare EB vs DG vs solar power sources",
+    "category": "multi_source",
+    "expected_characteristics": ["multi_source", "comparison", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "distribution", "kpi"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q063",
+    "question": "Show me energy by source for all meters",
+    "category": "multi_source",
+    "expected_characteristics": ["multi_source", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "distribution", "category-bar"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q064",
+    "question": "What is the phase-wise current for the main LT panel?",
+    "category": "multi_source",
+    "expected_characteristics": ["multi_source", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "kpi"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q065",
+    "question": "Show me all power source contributions over 24 hours stacked",
+    "category": "multi_source",
+    "expected_characteristics": ["multi_source", "energy", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "composition"],
+    "force_scenarios": ["trend-multi-line", "composition"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q066",
+    "question": "Compare UPS input vs output vs battery voltage trends",
+    "category": "multi_source",
+    "expected_characteristics": ["multi_source", "ups_dg", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "kpi"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q067",
+    "question": "What is the current power factor across all panels?",
+    "category": "power_quality",
+    "expected_characteristics": ["pq", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "trend"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q068",
+    "question": "Are there any harmonic issues or THD violations?",
+    "category": "power_quality",
+    "expected_characteristics": ["pq"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "kpi", "trend"],
+    "force_scenarios": ["alerts"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q069",
+    "question": "Show me voltage dip and sag events this week",
+    "category": "power_quality",
+    "expected_characteristics": ["pq", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["timeline", "alerts", "trend"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q070",
+    "question": "Show power quality parameters for all feeders as a heatmap",
+    "category": "power_quality",
+    "expected_characteristics": ["pq"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["matrix-heatmap", "kpi"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q071",
+    "question": "What is the trend of THD across all panels this month?",
+    "category": "power_quality",
+    "expected_characteristics": ["pq", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "matrix-heatmap"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q072",
+    "question": "What is the status of all chillers and AHUs?",
+    "category": "hvac",
+    "expected_characteristics": ["hvac", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q073",
+    "question": "Show me zone temperatures and cooling performance",
+    "category": "hvac",
+    "expected_characteristics": ["hvac", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "kpi", "matrix-heatmap"],
+    "force_scenarios": ["trend-multi-line", "matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q074",
+    "question": "How is AHU 1 performing against its setpoint?",
+    "category": "hvac",
+    "expected_characteristics": ["hvac"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi", "comparison"],
+    "force_scenarios": ["trend", "comparison"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q075",
+    "question": "Show me chiller COP trends and cooling tower outlet temperatures",
+    "category": "hvac",
+    "expected_characteristics": ["hvac", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend-multi-line", "kpi"],
+    "force_scenarios": ["trend-multi-line"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q076",
+    "question": "Is any HVAC equipment in alarm state right now?",
+    "category": "hvac",
+    "expected_characteristics": ["hvac", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "kpi"],
+    "force_scenarios": ["alerts"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q077",
+    "question": "Compare cooling capacity vs actual load for all chillers",
+    "category": "hvac",
+    "expected_characteristics": ["hvac", "comparison"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["comparison", "category-bar"],
+    "force_scenarios": ["comparison", "category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q078",
+    "question": "What is the UPS battery status?",
+    "category": "ups_dg",
+    "expected_characteristics": ["ups_dg"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "alerts"],
+    "force_scenarios": ["kpi"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q079",
+    "question": "Show DG runtime and diesel generator health",
+    "category": "ups_dg",
+    "expected_characteristics": ["ups_dg", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend", "timeline"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q080",
+    "question": "Is the AMF panel ready for transfer?",
+    "category": "ups_dg",
+    "expected_characteristics": ["ups_dg"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "alerts"],
+    "force_scenarios": ["kpi", "alerts"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q081",
+    "question": "Show me DG fuel consumption and efficiency over the past week",
+    "category": "ups_dg",
+    "expected_characteristics": ["ups_dg", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["trend", "kpi"],
+    "force_scenarios": ["trend"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q082",
+    "question": "How many times did the UPS switch to battery this month?",
+    "category": "ups_dg",
+    "expected_characteristics": ["ups_dg"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "timeline", "eventlogstream"],
+    "force_scenarios": ["timeline", "eventlogstream"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q083",
+    "question": "Which equipment consumes the most energy?",
+    "category": "top_consumers",
+    "expected_characteristics": ["top_consumers", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi", "distribution"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q084",
+    "question": "Show me the top 5 biggest loads in the facility",
+    "category": "top_consumers",
+    "expected_characteristics": ["top_consumers", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q085",
+    "question": "Who are the worst performing machines this month?",
+    "category": "top_consumers",
+    "expected_characteristics": ["top_consumers"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "matrix-heatmap"],
+    "force_scenarios": ["category-bar", "matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q086",
+    "question": "Rank all transformers by utilization percentage",
+    "category": "top_consumers",
+    "expected_characteristics": ["top_consumers", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q087",
+    "question": "Show me the top energy wasters and their trends",
+    "category": "top_consumers",
+    "expected_characteristics": ["top_consumers", "energy", "trend"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "trend", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q088",
+    "question": "Show me everything about the electrical system including alerts and maintenance",
+    "category": "cross_domain",
+    "expected_characteristics": ["health", "maintenance", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "alerts", "eventlogstream", "trend"],
+    "force_scenarios": ["alerts", "eventlogstream"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q089",
+    "question": "I need a full overview of pump 1 with trends, alerts, and work orders",
+    "category": "cross_domain",
+    "expected_characteristics": ["health", "trend", "maintenance", "work_order"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend", "alerts", "eventlogstream"],
+    "force_scenarios": ["trend", "alerts", "eventlogstream"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q090",
+    "question": "What is going on with the HVAC system? Show energy, alerts, and maintenance",
+    "category": "cross_domain",
+    "expected_characteristics": ["hvac", "energy", "maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend", "alerts", "eventlogstream"],
+    "force_scenarios": ["alerts", "trend"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q091",
+    "question": "Give me a complete plant overview — health, energy, alerts, and trends",
+    "category": "cross_domain",
+    "expected_characteristics": ["health", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "matrix-heatmap", "trend", "alerts", "flow-sankey"],
+    "force_scenarios": ["matrix-heatmap", "flow-sankey"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q092",
+    "question": "Show me transformer 1 deep dive — health, load, temperature, maintenance history",
+    "category": "cross_domain",
+    "expected_characteristics": ["health", "trend", "maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["kpi", "trend", "timeline", "alerts"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q093",
+    "question": "There is a critical alert on the UPS — show me what is happening",
+    "category": "alerts_focused",
+    "expected_characteristics": ["ups_dg", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "kpi", "trend"],
+    "force_scenarios": ["alerts"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q094",
+    "question": "Show me all active alarms across the plant sorted by severity",
+    "category": "alerts_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "kpi"],
+    "force_scenarios": ["alerts"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q095",
+    "question": "What warnings have been triggered in the last 24 hours?",
+    "category": "alerts_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "timeline", "kpi"],
+    "force_scenarios": ["alerts", "timeline"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q096",
+    "question": "Power factor dropped below threshold — show me the alert details",
+    "category": "alerts_focused",
+    "expected_characteristics": ["pq", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "trend", "kpi"],
+    "force_scenarios": ["alerts"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q097",
+    "question": "Show me the alert history and resolution timeline for this week",
+    "category": "alerts_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["alerts", "timeline", "category-bar"],
+    "force_scenarios": ["alerts", "timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q098",
+    "question": "Show me the edge device status panel for all field controllers",
+    "category": "device_panel",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["edgedevicepanel", "kpi", "matrix-heatmap"],
+    "force_scenarios": ["edgedevicepanel"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q099",
+    "question": "What PLCs and RTUs are online right now?",
+    "category": "device_panel",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["edgedevicepanel", "kpi"],
+    "force_scenarios": ["edgedevicepanel"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q100",
+    "question": "Show me the SCADA gateway connectivity status",
+    "category": "device_panel",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["edgedevicepanel", "kpi", "alerts"],
+    "force_scenarios": ["edgedevicepanel", "alerts"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q101",
+    "question": "How many edge devices are offline or disconnected?",
+    "category": "device_panel",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["edgedevicepanel", "kpi"],
+    "force_scenarios": ["edgedevicepanel"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q102",
+    "question": "Show me the energy flow through the plant as a sankey with time animation",
+    "category": "sankey_specific",
+    "expected_characteristics": ["flow", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q103",
+    "question": "Break down the power loss at each stage from generation to consumption",
+    "category": "sankey_specific",
+    "expected_characteristics": ["flow", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey", "kpi"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q104",
+    "question": "Show me how compressed air flows from compressors to production lines",
+    "category": "sankey_specific",
+    "expected_characteristics": ["flow"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["flow-sankey"],
+    "force_scenarios": ["flow-sankey"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q105",
+    "question": "Show me equipment parameters as a correlation heatmap",
+    "category": "heatmap_specific",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["matrix-heatmap"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q106",
+    "question": "Show me the daily energy pattern as a calendar heatmap",
+    "category": "heatmap_specific",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["matrix-heatmap"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q107",
+    "question": "Create a status grid showing online/offline for all equipment",
+    "category": "heatmap_specific",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["matrix-heatmap", "kpi"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q108",
+    "question": "Show me temperature readings across all zones as a heatmap",
+    "category": "heatmap_specific",
+    "expected_characteristics": ["hvac"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["matrix-heatmap"],
+    "force_scenarios": ["matrix-heatmap"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q109",
+    "question": "Show me OEE by machine for the production line",
+    "category": "category_bar_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q110",
+    "question": "What is the downtime ranking for all equipment this week?",
+    "category": "category_bar_focused",
+    "expected_characteristics": ["maintenance", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "kpi"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q111",
+    "question": "Show me running vs idle vs stopped state for all machines",
+    "category": "category_bar_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["category-bar", "matrix-heatmap"],
+    "force_scenarios": ["category-bar"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q112",
+    "question": "Show me a timeline of all incidents and machine state changes today",
+    "category": "timeline_focused",
+    "expected_characteristics": ["maintenance", "health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["timeline", "eventlogstream"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q113",
+    "question": "Plot the shift schedule and crew assignments for this week",
+    "category": "timeline_focused",
+    "expected_characteristics": ["shift"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["timeline"],
+    "force_scenarios": ["timeline"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q114",
+    "question": "Show me a forensic timeline of the power outage event",
+    "category": "timeline_focused",
+    "expected_characteristics": ["health", "energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["timeline", "alerts", "eventlogstream"],
+    "force_scenarios": ["timeline", "alerts"],
+    "difficulty": "complex"
+  },
+  {
+    "id": "q115",
+    "question": "What is the stacked composition of energy sources over time?",
+    "category": "composition_focused",
+    "expected_characteristics": ["energy", "multi_source"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["composition", "distribution"],
+    "force_scenarios": ["composition"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q116",
+    "question": "Show me a treemap of equipment grouped by type and criticality",
+    "category": "composition_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["composition", "matrix-heatmap"],
+    "force_scenarios": ["composition"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q117",
+    "question": "Break down the total load into HVAC, lighting, production, and utilities",
+    "category": "composition_focused",
+    "expected_characteristics": ["energy"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["composition", "distribution"],
+    "force_scenarios": ["composition", "distribution"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q118",
+    "question": "Show me event logs grouped by equipment for this week",
+    "category": "eventlog_focused",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  },
+  {
+    "id": "q119",
+    "question": "Show me correlated events — which alerts happened together?",
+    "category": "eventlog_focused",
+    "expected_characteristics": ["health"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "alerts"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "q120",
+    "question": "Give me a tabular view of all maintenance work done this month",
+    "category": "eventlog_focused",
+    "expected_characteristics": ["maintenance"],
+    "expected_domains": ["industrial"],
+    "expected_scenarios": ["eventlogstream", "kpi"],
+    "force_scenarios": ["eventlogstream"],
+    "difficulty": "basic"
+  }
+]

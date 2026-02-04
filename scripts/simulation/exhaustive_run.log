@@ -1,0 +1,153 @@
+Exhaustive Simulation: 120 question(s)
+Mode: natural + forced
+Backend: http://localhost:8100
+  Status: ok, Equipment: 439
+
+Running with 2 parallel workers...
+  [1/120] q001 → 83 entries
+  [2/120] q002 → 74 entries
+  [3/120] q003 → 74 entries
+  [4/120] q004 → 74 entries
+  [5/120] q006 → 74 entries
+  [6/120] q005 → 74 entries
+  [7/120] q007 → 84 entries
+  [8/120] q008 → 74 entries
+  [9/120] q009 → 74 entries
+  [10/120] q011 → 74 entries
+  [11/120] q010 → 74 entries
+  [12/120] q012 → 75 entries
+  [13/120] q013 → 83 entries
+  [14/120] q014 → 74 entries
+  [15/120] q016 → 74 entries
+  [16/120] q015 → 74 entries
+  [17/120] q017 → 74 entries
+  [18/120] q018 → 83 entries
+  [19/120] q019 → 83 entries
+  [20/120] q021 → 84 entries
+  [21/120] q020 → 74 entries
+  [22/120] q022 → 74 entries
+  [23/120] q023 → 74 entries
+  [24/120] q024 → 74 entries
+  [25/120] q026 → 74 entries
+  [26/120] q025 → 74 entries
+  [27/120] q027 → 74 entries
+  [28/120] q028 → 83 entries
+  [29/120] q029 → 74 entries
+  [30/120] q031 → 74 entries
+  [31/120] q030 → 74 entries
+  [32/120] q032 → 75 entries
+  [33/120] q033 → 79 entries
+  [34/120] q034 → 74 entries
+  [35/120] q036 → 75 entries
+  [36/120] q035 → 74 entries
+  [37/120] q037 → 83 entries
+  [38/120] q038 → 83 entries
+  [39/120] q039 → 74 entries
+  [40/120] q041 → 83 entries
+  [41/120] q040 → 80 entries
+  [42/120] q042 → 74 entries
+  [43/120] q043 → 84 entries
+  [44/120] q044 → 84 entries
+  [45/120] q046 → 85 entries
+  [46/120] q045 → 74 entries
+  [47/120] q047 → 74 entries
+  [48/120] q048 → 83 entries
+  [49/120] q049 → 74 entries
+  [50/120] q051 → 79 entries
+  [51/120] q050 → 74 entries
+  [52/120] q052 → 74 entries
+  [53/120] q053 → 83 entries
+  [54/120] q054 → 74 entries
+  [55/120] q056 → 74 entries
+  [56/120] q055 → 74 entries
+  [57/120] q057 → 83 entries
+  [58/120] q058 → 83 entries
+  [59/120] q059 → 75 entries
+  [60/120] q061 → 74 entries
+  [61/120] q060 → 74 entries
+  [62/120] q062 → 74 entries
+  [63/120] q063 → 74 entries
+  [64/120] q064 → 74 entries
+  [65/120] q066 → 74 entries
+  [66/120] q065 → 75 entries
+  [67/120] q067 → 83 entries
+  [68/120] q068 → 83 entries
+  [69/120] q069 → 74 entries
+  [70/120] q071 → 83 entries
+  [71/120] q070 → 74 entries
+  [72/120] q072 → 83 entries
+  [73/120] q073 → 83 entries
+  [74/120] q074 → 74 entries
+  [75/120] q075 → 74 entries
+  [76/120] q076 → 84 entries
+  [77/120] q078 → 74 entries
+  [78/120] q077 → 74 entries
+  [79/120] q079 → 90 entries
+  [80/120] q080 → 83 entries
+  [81/120] q081 → 80 entries
+  [82/120] q082 → 84 entries
+  [83/120] q083 → 83 entries
+  [84/120] q085 → 83 entries
+  [85/120] q084 → 74 entries
+  [86/120] q086 → 74 entries
+  [87/120] q087 → 74 entries
+  [88/120] q088 → 74 entries
+  [89/120] q089 → 75 entries
+  [90/120] q090 → 74 entries
+  [91/120] q091 → 74 entries
+  [92/120] q092 → 84 entries
+  [93/120] q093 → 75 entries
+  [94/120] q094 → 75 entries
+  [95/120] q096 → 84 entries
+  [96/120] q095 → 75 entries
+  [97/120] q097 → 74 entries
+  [98/120] q098 → 75 entries
+  [99/120] q099 → 84 entries
+  [100/120] q101 → 84 entries
+  [101/120] q100 → 84 entries
+  [102/120] q102 → 75 entries
+  [103/120] q103 → 74 entries
+  [104/120] q104 → 74 entries
+  [105/120] q105 → 74 entries
+  [106/120] q106 → 83 entries
+  [107/120] q108 → 74 entries
+  [108/120] q107 → 83 entries
+  [109/120] q109 → 74 entries
+  [110/120] q110 → 74 entries
+  [111/120] q111 → 74 entries
+  [112/120] q112 → 74 entries
+  [113/120] q113 → 83 entries
+  [114/120] q115 → 74 entries
+  [115/120] q114 → 74 entries
+  [116/120] q116 → 74 entries
+  [117/120] q117 → 74 entries
+  [118/120] q118 → 74 entries
+  [119/120] q120 → 83 entries
+  [120/120] q119 → 74 entries
+
+Frontend copy: /home/rohith/desktop/CommandCenter/frontend/public/simulation/exhaustive_data.json
+
+============================================================
+Run: exhaustive_2026-02-01_124747
+Total entries: 9266 (natural: 4702, forced: 4564)
+Questions: 120 run, 0 failed
+Scenarios covered: 15
+Elapsed: 2551s
+
+Per scenario:
+  kpi: 1413
+  trend: 738
+  comparison: 720
+  trend-multi-line: 720
+  distribution: 720
+  trends-cumulative: 720
+  alerts: 605
+  category-bar: 605
+  flow-sankey: 600
+  composition: 600
+  eventlogstream: 600
+  matrix-heatmap: 600
+  timeline: 600
+  edgedevicepanel: 24
+  peopleview: 1
+============================================================

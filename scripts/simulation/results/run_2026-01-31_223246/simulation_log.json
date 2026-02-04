@@ -1,0 +1,176 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_223246",
+    "tag": "v2_layout_fix",
+    "started_at": "2026-01-31T22:32:46.140528",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:33:27.406051",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q005",
+      "question": "What is the temperature history for AHU 1?",
+      "category": "trend",
+      "expected_characteristics": [
+        "trend",
+        "hvac"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "trend",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "What is the temperature history for AHU 1?",
+        "session_id": "b1d8e612-ba60-45a5-b07a-f317e018d94a",
+        "sent_at": "2026-01-31T22:32:46.140557"
+      },
+      "response": {
+        "voice_response": "Here's what I found for AHU 1 Temperature History. I've prepared a dashboard with 6 widgets showing the relevant data.",
+        "layout_json": {
+          "heading": "AHU 1 Temperature History",
+          "widgets": [
+            {
+              "scenario": "trend",
+              "size": "hero",
+              "relevance": 0.9,
+              "why": "Shows the temperature history for AHU 1 over time, highlighting any deviations from normal operating conditions.",
+              "data_override": {},
+              "fixture": "trend_live-line",
+              "heightHint": "tall",
+              "description": "Shows the temperature history for AHU 1 over time, highlighting any deviations from normal operating conditions."
+            },
+            {
+              "scenario": "kpi",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Displays the current temperature of AHU 1, providing a quick glance at its health status.",
+              "data_override": {},
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current temperature of AHU 1, providing a quick glance at its health status."
+            },
+            {
+              "scenario": "distribution",
+              "size": "expanded",
+              "relevance": 0.7,
+              "why": "Shows the distribution of temperature readings for AHU 1 over the last month, helping to identify any patterns or anomalies.",
+              "data_override": {},
+              "fixture": "dist_downtime_top_contributors-pareto-bar",
+              "heightHint": "tall",
+              "description": "Shows the distribution of temperature readings for AHU 1 over the last month, helping to identify any patterns or anomalies."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Provides a chronological view of maintenance events and temperature readings for AHU 1, allowing for correlation analysis.",
+              "data_override": {},
+              "fixture": "linear-incident-timeline",
+              "heightHint": "tall",
+              "description": "Provides a chronological view of maintenance events and temperature readings for AHU 1, allowing for correlation analysis."
+            },
+            {
+              "scenario": "trends-cumulative",
+              "size": "expanded",
+              "relevance": 0.5,
+              "why": "Displays the cumulative temperature readings for AHU 1 over time, helping to identify trends and patterns.",
+              "data_override": {},
+              "fixture": "energy-consumption",
+              "heightHint": "tall",
+              "description": "Displays the cumulative temperature readings for AHU 1 over time, helping to identify trends and patterns."
+            },
+            {
+              "scenario": "edgedevicepanel",
+              "size": "expanded",
+              "relevance": 0.4,
+              "why": "Provides a detailed view of AHU 1's parameters, readings, and status, allowing for in-depth analysis.",
+              "data_override": {},
+              "fixture": "default-render",
+              "heightHint": "x-tall",
+              "description": "Provides a detailed view of AHU 1's parameters, readings, and status, allowing for in-depth analysis."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial",
+            "tasks"
+          ],
+          "entities": {
+            "devices": [
+              "AHU 1"
+            ],
+            "time": [
+              "history"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 41262
+      },
+      "analysis": {
+        "total_time_ms": 41265,
+        "network_overhead_ms": 3,
+        "widget_count": 6,
+        "scenarios_used": [
+          "trend",
+          "kpi",
+          "distribution",
+          "timeline",
+          "trends-cumulative",
+          "edgedevicepanel"
+        ],
+        "fixtures_used": [
+          "trend_live-line",
+          "kpi_live-standard",
+          "dist_downtime_top_contributors-pareto-bar",
+          "linear-incident-timeline",
+          "energy-consumption",
+          "default-render"
+        ],
+        "heading": "AHU 1 Temperature History",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial",
+            "tasks"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "trend",
+            "kpi"
+          ],
+          "present": [
+            "kpi",
+            "trend"
+          ],
+          "missing": [],
+          "unexpected": [
+            "trends-cumulative",
+            "edgedevicepanel",
+            "timeline",
+            "distribution"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

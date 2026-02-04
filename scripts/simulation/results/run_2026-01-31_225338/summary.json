@@ -1,0 +1,49 @@
+{
+  "run_id": "run_2026-01-31_225338",
+  "tag": "v2_fixtures_fix",
+  "timing": {
+    "avg_ms": 32956,
+    "p50_ms": 32956,
+    "p95_ms": 32956,
+    "min_ms": 32956,
+    "max_ms": 32956
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "category-bar",
+      "composition",
+      "distribution",
+      "kpi",
+      "timeline",
+      "trend"
+    ],
+    "fixtures_used": [
+      "dist_energy_source_share-100-stacked-bar",
+      "efficiency-deviation",
+      "kpi_lifecycle-dark-mode-gauge",
+      "multi-lane-shift-schedule",
+      "stacked_bar",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "distribution": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 32956,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

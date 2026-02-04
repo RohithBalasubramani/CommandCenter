@@ -33,19 +33,22 @@ export interface Layer2RAGResult {
 }
 
 export interface Layer2WidgetCommand {
-  id: string;
+  scenario: string;
+  fixture: string;
   relevance: number;
   size: "hero" | "expanded" | "normal" | "compact" | "hidden";
-  position: string;
-  data: unknown;
+  position: string | null;
+  data_override: Record<string, unknown> | null;
 }
 
 export interface Layer2LayoutJSON {
+  heading?: string | null;
   widgets: Layer2WidgetCommand[];
   transitions: Record<string, string>;
 }
 
 export interface Layer2Response {
+  query_id: string;  // For RL feedback tracking
   voice_response: string;
   filler_text: string;
   layout_json: Layer2LayoutJSON;
@@ -53,6 +56,20 @@ export interface Layer2Response {
   intent: Layer2Intent | null;
   rag_results: Layer2RAGResult[];
   processing_time_ms: number;
+}
+
+export interface WidgetInteraction {
+  widget_index: number;
+  action: string;  // "expand" | "scroll" | "click" | "dismiss"
+  duration_ms?: number;
+  timestamp: number;
+}
+
+export interface FeedbackPayload {
+  query_id: string;
+  rating?: "up" | "down";
+  interactions?: WidgetInteraction[];
+  correction?: string;
 }
 
 export interface ProactiveTrigger {
@@ -107,6 +124,12 @@ export async function orchestrate(
     rag_results: data.rag_results?.length,
     processing_time_ms: data.processing_time_ms,
   });
+
+  // Track query_id for RL feedback
+  if (data.query_id) {
+    setLastQueryId(data.query_id);
+  }
+
   return data;
 }
 
@@ -168,7 +191,11 @@ export async function checkProactiveTrigger(
     return { has_trigger: false, trigger_text: null };
   }
 
-  return response.json();
+  // AUDIT FIX: Handle malformed JSON gracefully
+  return response.json().catch(() => ({
+    has_trigger: false,
+    trigger_text: null,
+  }));
 }
 
 // ============================================================
@@ -247,13 +274,24 @@ export class Layer2Service {
         this.updateContext(response.context_update);
       }
 
-      // Call callbacks
+      // AUDIT FIX: Wrap callbacks in try-catch to prevent uncaught errors
       if (this.onResponseCallback) {
-        this.onResponseCallback(response);
+        try {
+          this.onResponseCallback(response);
+        } catch (err) {
+          console.error("[Layer2] Response callback threw:", err);
+        }
       }
 
       if (this.onLayoutCallback && response.layout_json) {
-        this.onLayoutCallback(response.layout_json);
+        console.info("[Layer2] Calling onLayoutCallback with", response.layout_json.widgets?.length, "widgets");
+        try {
+          this.onLayoutCallback(response.layout_json);
+        } catch (err) {
+          console.error("[Layer2] Layout callback threw:", err);
+        }
+      } else {
+        console.warn("[Layer2] Skipping layout callback — callback:", !!this.onLayoutCallback, "layout_json:", !!response.layout_json);
       }
 
       return response;
@@ -329,4 +367,120 @@ export function getLayer2Service(): Layer2Service {
     _layer2Service = new Layer2Service();
   }
   return _layer2Service;
+}
+
+// ============================================================
+// RL Feedback Tracking
+// ============================================================
+
+// Store the last query_id for feedback
+let _lastQueryId: string | null = null;
+const _widgetInteractions: WidgetInteraction[] = [];
+
+/**
+ * Store the query_id from the latest response for feedback tracking.
+ * Called automatically by orchestrate().
+ */
+export function setLastQueryId(queryId: string): void {
+  _lastQueryId = queryId;
+  // Also persist to sessionStorage for page reloads
+  if (typeof sessionStorage !== "undefined") {
+    sessionStorage.setItem("cc_last_query_id", queryId);
+  }
+  // Clear interactions for new query
+  _widgetInteractions.length = 0;
+}
+
+/**
+ * Get the last query_id for feedback submission.
+ */
+export function getLastQueryId(): string | null {
+  if (_lastQueryId) return _lastQueryId;
+  if (typeof sessionStorage !== "undefined") {
+    return sessionStorage.getItem("cc_last_query_id");
+  }
+  return null;
+}
+
+/**
+ * Track a widget interaction for implicit feedback.
+ */
+export function trackWidgetInteraction(
+  widgetIndex: number,
+  action: string,
+  durationMs?: number
+): void {
+  _widgetInteractions.push({
+    widget_index: widgetIndex,
+    action,
+    duration_ms: durationMs,
+    timestamp: Date.now(),
+  });
+  console.debug(`[Layer2] Tracked widget interaction: widget=${widgetIndex}, action=${action}`);
+}
+
+/**
+ * Submit feedback for the last query.
+ *
+ * @param rating - "up" for positive, "down" for negative
+ * @param correction - Optional correction text if the response was wrong
+ */
+export async function submitFeedback(
+  rating: "up" | "down",
+  correction?: string
+): Promise<boolean> {
+  const queryId = getLastQueryId();
+  if (!queryId) {
+    console.warn("[Layer2] No query_id available for feedback");
+    return false;
+  }
+
+  const payload: FeedbackPayload = {
+    query_id: queryId,
+    rating,
+    interactions: _widgetInteractions.length > 0 ? [..._widgetInteractions] : undefined,
+    correction,
+  };
+
+  try {
+    const url = `${API_BASE}/api/layer2/feedback/`;
+    console.info(`[Layer2] submitFeedback() → POST ${url}`, payload);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      console.warn(`[Layer2] submitFeedback() failed: ${response.status}`);
+      return false;
+    }
+
+    console.info(`[Layer2] submitFeedback() success: rating=${rating}`);
+
+    // Clear interactions after submission
+    _widgetInteractions.length = 0;
+
+    return true;
+  } catch (error) {
+    console.error("[Layer2] submitFeedback() error:", error);
+    return false;
+  }
+}
+
+/**
+ * Get the current RL system status.
+ */
+export async function getRLStatus(): Promise<Record<string, unknown>> {
+  try {
+    const url = `${API_BASE}/api/layer2/rl-status/`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return { running: false, error: `HTTP ${response.status}` };
+    }
+    return response.json();
+  } catch (error) {
+    return { running: false, error: String(error) };
+  }
 }

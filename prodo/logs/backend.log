@@ -1,0 +1,202 @@
+[2026-01-31 15:35:08 +0530] [326738] [INFO] Starting gunicorn 24.1.1
+[2026-01-31 15:35:08 +0530] [326738] [INFO] Listening at: http://0.0.0.0:9211 (326738)
+[2026-01-31 15:35:08 +0530] [326738] [INFO] Using worker: sync
+[2026-01-31 15:35:08 +0530] [326813] [INFO] Booting worker with pid: 326813
+[2026-01-31 15:35:08 +0530] [326814] [INFO] Booting worker with pid: 326814
+[2026-01-31 15:35:08 +0530] [326819] [INFO] Booting worker with pid: 326819
+Not Found: /
+[2026-02-01 08:55:17 +0530] [1521] [INFO] Starting gunicorn 24.1.1
+[2026-02-01 08:55:17 +0530] [1521] [INFO] Listening at: http://0.0.0.0:9211 (1521)
+[2026-02-01 08:55:17 +0530] [1521] [INFO] Using worker: sync
+[2026-02-01 08:55:17 +0530] [1742] [INFO] Booting worker with pid: 1742
+[2026-02-01 08:55:17 +0530] [1753] [INFO] Booting worker with pid: 1753
+[2026-02-01 08:55:17 +0530] [1756] [INFO] Booting worker with pid: 1756
+Not Found: /
+Not Found: /api/
+Not Found: /
+[2026-02-02 14:50:45 +0530] [1521] [INFO] Handling signal: term
+[2026-02-02 09:20:45 +0000] [1742] [INFO] Worker exiting (pid: 1742)
+[2026-02-02 09:20:45 +0000] [1753] [INFO] Worker exiting (pid: 1753)
+[2026-02-02 09:20:45 +0000] [1756] [INFO] Worker exiting (pid: 1756)
+[2026-02-02 14:50:46 +0530] [1521] [INFO] Shutting down: Master
+[2026-02-02 14:50:52 +0530] [263862] [INFO] Starting gunicorn 24.1.1
+[2026-02-02 14:50:52 +0530] [263862] [INFO] Listening at: https://0.0.0.0:9211 (263862)
+[2026-02-02 14:50:52 +0530] [263862] [INFO] Using worker: sync
+[2026-02-02 14:50:52 +0530] [263935] [INFO] Booting worker with pid: 263935
+[2026-02-02 14:50:52 +0530] [263936] [INFO] Booting worker with pid: 263936
+[2026-02-02 14:50:52 +0530] [263937] [INFO] Booting worker with pid: 263937
+[2026-02-02 14:52:10 +0530] [263862] [INFO] Handling signal: term
+[2026-02-02 09:22:10 +0000] [263935] [INFO] Worker exiting (pid: 263935)
+[2026-02-02 09:22:10 +0000] [263936] [INFO] Worker exiting (pid: 263936)
+[2026-02-02 09:22:10 +0000] [263937] [INFO] Worker exiting (pid: 263937)
+[2026-02-02 14:52:11 +0530] [263862] [INFO] Shutting down: Master
+[2026-02-02 14:52:12 +0530] [265529] [INFO] Starting gunicorn 24.1.1
+[2026-02-02 14:52:12 +0530] [265529] [INFO] Listening at: https://0.0.0.0:9211 (265529)
+[2026-02-02 14:52:12 +0530] [265529] [INFO] Using worker: sync
+[2026-02-02 14:52:12 +0530] [265533] [INFO] Booting worker with pid: 265533
+[2026-02-02 14:52:12 +0530] [265534] [INFO] Booting worker with pid: 265534
+[2026-02-02 14:52:12 +0530] [265535] [INFO] Booting worker with pid: 265535
+Not Found: /api/actions/
+[2026-02-02 09:25:10 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 09:25:30 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 09:25:30 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 09:34:20 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 09:34:27 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:19:13 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:19:31 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:19:45 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:20:02 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:20:11 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:20:11 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:20:29 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:21:13 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:21:20 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:21:23 +0000] [265534] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:21:29 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:43:27 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:43:41 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:44:14 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:44:35 +0000] [265533] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 11:46:02 +0000] [265535] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+Not Found: /api/ratings/
+[2026-02-02 17:16:18 +0530] [265529] [INFO] Handling signal: term
+[2026-02-02 11:46:18 +0000] [265535] [INFO] Worker exiting (pid: 265535)
+[2026-02-02 11:46:18 +0000] [265534] [INFO] Worker exiting (pid: 265534)
+[2026-02-02 11:46:18 +0000] [265533] [INFO] Worker exiting (pid: 265533)
+[2026-02-02 17:16:20 +0530] [265529] [INFO] Shutting down: Master
+[2026-02-02 17:16:20 +0530] [399100] [INFO] Starting gunicorn 24.1.1
+[2026-02-02 17:16:20 +0530] [399100] [INFO] Listening at: https://0.0.0.0:9211 (399100)
+[2026-02-02 17:16:20 +0530] [399100] [INFO] Using worker: sync
+[2026-02-02 17:16:20 +0530] [399105] [INFO] Booting worker with pid: 399105
+[2026-02-02 17:16:20 +0530] [399106] [INFO] Booting worker with pid: 399106
+[2026-02-02 17:16:20 +0530] [399107] [INFO] Booting worker with pid: 399107
+Not Found: /api/ratings/
+[2026-02-02 17:16:59 +0530] [399100] [INFO] Handling signal: term
+[2026-02-02 11:46:59 +0000] [399105] [INFO] Worker exiting (pid: 399105)
+[2026-02-02 11:46:59 +0000] [399107] [INFO] Worker exiting (pid: 399107)
+[2026-02-02 11:46:59 +0000] [399106] [INFO] Worker exiting (pid: 399106)
+[2026-02-02 17:17:00 +0530] [399100] [INFO] Shutting down: Master
+[2026-02-02 17:17:00 +0530] [400755] [INFO] Starting gunicorn 24.1.1
+[2026-02-02 17:17:00 +0530] [400755] [INFO] Listening at: https://0.0.0.0:9211 (400755)
+[2026-02-02 17:17:00 +0530] [400755] [INFO] Using worker: sync
+[2026-02-02 17:17:00 +0530] [400759] [INFO] Booting worker with pid: 400759
+[2026-02-02 17:17:00 +0530] [400760] [INFO] Booting worker with pid: 400760
+[2026-02-02 17:17:00 +0530] [400761] [INFO] Booting worker with pid: 400761
+[2026-02-02 12:11:37 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:11:39 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:11:40 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:12:39 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:12:39 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:12:59 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:14:59 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:15:09 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:15:18 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:21:49 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:21:59 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:24:53 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:25:12 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:25:28 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:53:52 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:53:52 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:56:17 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 12:56:56 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:00:35 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:16:58 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:28:07 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.17: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:38:13 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:38:36 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:39:09 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:39:44 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:40:15 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:40:30 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:40:38 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:40:56 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:41:01 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:41:09 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:41:29 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:41:54 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:42:30 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:42:46 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:09 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:29 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:40 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:41 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:44 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:45 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:43:59 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 13:45:44 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:30 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:30 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:42 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:46 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:48 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:49 +0000] [400760] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:50 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 14:56:51 +0000] [400761] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-02 17:26:54 +0000] [400759] [WARNING] Invalid request from ip=192.168.1.9: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 08:17:59 +0530] [1512] [INFO] Starting gunicorn 24.1.1
+[2026-02-03 08:17:59 +0530] [1512] [INFO] Listening at: https://0.0.0.0:9211 (1512)
+[2026-02-03 08:17:59 +0530] [1512] [INFO] Using worker: sync
+[2026-02-03 08:17:59 +0530] [1726] [INFO] Booting worker with pid: 1726
+[2026-02-03 08:17:59 +0530] [1730] [INFO] Booting worker with pid: 1730
+[2026-02-03 08:17:59 +0530] [1744] [INFO] Booting worker with pid: 1744
+[2026-02-03 05:22:37 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:23:57 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:25:16 +0000] [1730] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:32:49 +0000] [1730] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:32:49 +0000] [1730] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:35:51 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+Bad Request: /api/ratings/
+[2026-02-03 05:39:47 +0000] [1726] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:45:10 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 05:49:23 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:32:47 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:39:45 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:40:16 +0000] [1730] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:40:19 +0000] [1730] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:40:23 +0000] [1726] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 06:40:37 +0000] [1726] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-03 10:08:38 +0000] [1744] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 00:45:31 +0530] [1510] [INFO] Starting gunicorn 24.1.1
+[2026-02-04 00:45:31 +0530] [1510] [INFO] Listening at: https://0.0.0.0:9211 (1510)
+[2026-02-04 00:45:31 +0530] [1510] [INFO] Using worker: sync
+[2026-02-04 00:45:31 +0530] [1740] [INFO] Booting worker with pid: 1740
+[2026-02-04 00:45:31 +0530] [1741] [INFO] Booting worker with pid: 1741
+[2026-02-04 00:45:31 +0530] [1742] [INFO] Booting worker with pid: 1742
+[2026-02-04 09:41:12 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:52 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:52 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:52 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:52 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:53 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:53:54 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:54:11 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:56:28 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 09:57:53 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:08:06 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:08:19 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:08:26 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:08:26 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:10:27 +0000] [1742] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+RAG query failed for domain industrial: Could not connect to tenant default_tenant. Are you sure it exists?
+[2026-02-04 10:10:28 +0000] [1742] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:27:22 +0000] [1742] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:27:22 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:27:25 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:27:26 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:27:38 +0000] [1742] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:29:44 +0000] [1741] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:39:36 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 10:41:28 +0000] [1740] [WARNING] Invalid request from ip=192.168.1.10: [SSL: SSLV3_ALERT_CERTIFICATE_UNKNOWN] ssl/tls alert certificate unknown (_ssl.c:2580)
+[2026-02-04 13:39:31 +0000] [1741] [INFO] Worker exiting (pid: 1741)
+[2026-02-04 13:39:31 +0000] [1742] [INFO] Worker exiting (pid: 1742)
+[2026-02-04 13:39:31 +0000] [1740] [INFO] Worker exiting (pid: 1740)
+[2026-02-04 19:09:31 +0530] [1510] [INFO] Handling signal: term
+[2026-02-04 19:09:33 +0530] [1510] [INFO] Shutting down: Master
+[2026-02-04 19:09:44 +0530] [619813] [INFO] Starting gunicorn 24.1.1
+[2026-02-04 19:09:44 +0530] [619813] [INFO] Listening at: https://0.0.0.0:9211 (619813)
+[2026-02-04 19:09:44 +0530] [619813] [INFO] Using worker: sync
+[2026-02-04 19:09:44 +0530] [619814] [INFO] Booting worker with pid: 619814
+[2026-02-04 19:09:44 +0530] [619815] [INFO] Booting worker with pid: 619815
+[2026-02-04 19:09:44 +0530] [619816] [INFO] Booting worker with pid: 619816
+Not Found: /api/layer2/rl-status/

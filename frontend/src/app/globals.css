@@ -109,3 +109,22 @@ body {
 .waveform-bar {
   animation: waveform-bar 0.6s ease-in-out infinite;
 }
+
+/* Custom scrollbar for widgets */
+.cc-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.cc-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cc-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+.cc-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.cc-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}

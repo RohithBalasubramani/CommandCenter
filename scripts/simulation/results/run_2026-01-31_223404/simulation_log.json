@@ -1,0 +1,41 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_223404",
+    "tag": "v2_layout_fix",
+    "started_at": "2026-01-31T22:34:04.711181",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:34:22.007436",
+    "successful": 0,
+    "failed": 1
+  },
+  "results": [
+    {
+      "question_id": "q015",
+      "question": "Show me the morning shift handover notes",
+      "category": "shift",
+      "expected_characteristics": [
+        "shift"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "eventlogstream",
+        "timeline"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Show me the morning shift handover notes",
+        "session_id": "1a7f03e3-89b5-4cf3-8aa6-1d33a7261c46",
+        "sent_at": "2026-01-31T22:34:04.711207"
+      },
+      "response": null,
+      "analysis": {
+        "error": "Connection refused \u2014 is the backend running?",
+        "total_time_ms": 17296
+      }
+    }
+  ]
+}

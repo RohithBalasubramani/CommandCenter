@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+nemo_toolkit[asr]
+faster-whisper
+soundfile
+numpy
+python-multipart

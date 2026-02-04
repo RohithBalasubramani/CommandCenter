@@ -1,0 +1,685 @@
+{
+  "run_meta": {
+    "run_id": "run_2026-01-31_225228",
+    "tag": "v2_fixtures_fix",
+    "started_at": "2026-01-31T22:52:28.879332",
+    "backend_url": "http://localhost:8100",
+    "total_questions": 1,
+    "parallel_workers": 1,
+    "completed_at": "2026-01-31T22:53:16.528746",
+    "successful": 1,
+    "failed": 0
+  },
+  "results": [
+    {
+      "question_id": "q001",
+      "question": "Compare transformer 1 versus transformer 2",
+      "category": "comparison",
+      "expected_characteristics": [
+        "comparison"
+      ],
+      "expected_domains": [
+        "industrial"
+      ],
+      "expected_scenarios": [
+        "comparison",
+        "kpi"
+      ],
+      "difficulty": "basic",
+      "request": {
+        "transcript": "Compare transformer 1 versus transformer 2",
+        "session_id": "f9f4a469-3f5f-4937-b95f-198466e00b2d",
+        "sent_at": "2026-01-31T22:52:28.879362"
+      },
+      "response": {
+        "voice_response": "Transformer 1 and Transformer 2 are currently running at 50.5% and 82.0% of their capacities, respectively. The \"Transformer Comparison\" dashboard shows their performance differences, with Transformer 1 having a health score of 100% and Transformer 2 at 85%. Transformer 2 is operating closer to its 1500 kVA capacity limit.",
+        "layout_json": {
+          "heading": "Transformer Comparison",
+          "widgets": [
+            {
+              "scenario": "comparison",
+              "size": "hero",
+              "relevance": 1.0,
+              "why": "Compares the performance of transformer 1 and transformer 2, highlighting their differences.",
+              "data_override": {
+                "demoData": {
+                  "label": "Efficiency",
+                  "unit": "%",
+                  "labelA": "Main Transformer 1",
+                  "valueA": 100,
+                  "labelB": "Main Transformer 2",
+                  "valueB": 85,
+                  "delta": 15.0,
+                  "deltaPct": 17.6,
+                  "_query_context": "compare efficiency of transformer 1 and transformer 2 efficiency compares the performance of transformer 1 and transformer 2, highlighting their differences. compare transformer 1 versus transformer 2"
+                }
+              },
+              "fixture": "delta_bar_visual-deviation-bar",
+              "heightHint": "medium",
+              "description": "Compares the performance of transformer 1 and transformer 2, highlighting their differences."
+            },
+            {
+              "scenario": "trend-multi-line",
+              "size": "expanded",
+              "relevance": 0.8,
+              "why": "Shows the temperature and voltage trends of transformer 1 and transformer 2 over time, allowing for correlation analysis.",
+              "data_override": {
+                "demoData": {
+                  "label": "Temperature, Voltage",
+                  "unit": "units",
+                  "series": [
+                    {
+                      "name": "Main Transformer 1",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T17:23:07.763468",
+                          "value": 107.65
+                        },
+                        {
+                          "time": "2026-01-30T17:53:07.763468",
+                          "value": 98.75
+                        },
+                        {
+                          "time": "2026-01-30T18:23:07.763468",
+                          "value": 97.36
+                        },
+                        {
+                          "time": "2026-01-30T18:53:07.763468",
+                          "value": 108.0
+                        },
+                        {
+                          "time": "2026-01-30T19:23:07.763468",
+                          "value": 99.57
+                        },
+                        {
+                          "time": "2026-01-30T19:53:07.763468",
+                          "value": 94.24
+                        },
+                        {
+                          "time": "2026-01-30T20:23:07.763468",
+                          "value": 101.77
+                        },
+                        {
+                          "time": "2026-01-30T20:53:07.763468",
+                          "value": 101.68
+                        },
+                        {
+                          "time": "2026-01-30T21:23:07.763468",
+                          "value": 95.81
+                        },
+                        {
+                          "time": "2026-01-30T21:53:07.763468",
+                          "value": 103.23
+                        },
+                        {
+                          "time": "2026-01-30T22:23:07.763468",
+                          "value": 100.28
+                        },
+                        {
+                          "time": "2026-01-30T22:53:07.763468",
+                          "value": 99.1
+                        },
+                        {
+                          "time": "2026-01-30T23:23:07.763468",
+                          "value": 104.49
+                        },
+                        {
+                          "time": "2026-01-30T23:53:07.763468",
+                          "value": 104.28
+                        },
+                        {
+                          "time": "2026-01-31T00:23:07.763468",
+                          "value": 106.08
+                        },
+                        {
+                          "time": "2026-01-31T00:53:07.763468",
+                          "value": 98.26
+                        },
+                        {
+                          "time": "2026-01-31T01:23:07.763468",
+                          "value": 101.22
+                        },
+                        {
+                          "time": "2026-01-31T01:53:07.763468",
+                          "value": 107.38
+                        },
+                        {
+                          "time": "2026-01-31T02:23:07.763468",
+                          "value": 101.11
+                        },
+                        {
+                          "time": "2026-01-31T02:53:07.763468",
+                          "value": 105.49
+                        },
+                        {
+                          "time": "2026-01-31T03:23:07.763468",
+                          "value": 96.39
+                        },
+                        {
+                          "time": "2026-01-31T03:53:07.763468",
+                          "value": 102.37
+                        },
+                        {
+                          "time": "2026-01-31T04:23:07.763468",
+                          "value": 93.35
+                        },
+                        {
+                          "time": "2026-01-31T04:53:07.763468",
+                          "value": 104.26
+                        },
+                        {
+                          "time": "2026-01-31T05:23:07.763468",
+                          "value": 100.01
+                        },
+                        {
+                          "time": "2026-01-31T05:53:07.763468",
+                          "value": 98.05
+                        },
+                        {
+                          "time": "2026-01-31T06:23:07.763468",
+                          "value": 103.16
+                        },
+                        {
+                          "time": "2026-01-31T06:53:07.763468",
+                          "value": 93.31
+                        },
+                        {
+                          "time": "2026-01-31T07:23:07.763468",
+                          "value": 107.42
+                        },
+                        {
+                          "time": "2026-01-31T07:53:07.763468",
+                          "value": 98.67
+                        },
+                        {
+                          "time": "2026-01-31T08:23:07.763468",
+                          "value": 99.15
+                        },
+                        {
+                          "time": "2026-01-31T08:53:07.763468",
+                          "value": 102.14
+                        },
+                        {
+                          "time": "2026-01-31T09:23:07.763468",
+                          "value": 94.68
+                        },
+                        {
+                          "time": "2026-01-31T09:53:07.763468",
+                          "value": 93.8
+                        },
+                        {
+                          "time": "2026-01-31T10:23:07.763468",
+                          "value": 101.72
+                        },
+                        {
+                          "time": "2026-01-31T10:53:07.763468",
+                          "value": 106.5
+                        },
+                        {
+                          "time": "2026-01-31T11:23:07.763468",
+                          "value": 103.92
+                        },
+                        {
+                          "time": "2026-01-31T11:53:07.763468",
+                          "value": 98.81
+                        },
+                        {
+                          "time": "2026-01-31T12:23:07.763468",
+                          "value": 102.48
+                        },
+                        {
+                          "time": "2026-01-31T12:53:07.763468",
+                          "value": 99.3
+                        },
+                        {
+                          "time": "2026-01-31T13:23:07.763468",
+                          "value": 106.19
+                        },
+                        {
+                          "time": "2026-01-31T13:53:07.763468",
+                          "value": 96.69
+                        },
+                        {
+                          "time": "2026-01-31T14:23:07.763468",
+                          "value": 99.02
+                        },
+                        {
+                          "time": "2026-01-31T14:53:07.763468",
+                          "value": 106.93
+                        },
+                        {
+                          "time": "2026-01-31T15:23:07.763468",
+                          "value": 95.32
+                        },
+                        {
+                          "time": "2026-01-31T15:53:07.763468",
+                          "value": 103.99
+                        },
+                        {
+                          "time": "2026-01-31T16:23:07.763468",
+                          "value": 95.9
+                        },
+                        {
+                          "time": "2026-01-31T16:53:07.763468",
+                          "value": 102.32
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Main Transformer 2",
+                      "timeSeries": [
+                        {
+                          "time": "2026-01-30T17:23:07.796934",
+                          "value": 79.97
+                        },
+                        {
+                          "time": "2026-01-30T17:53:07.796934",
+                          "value": 83.85
+                        },
+                        {
+                          "time": "2026-01-30T18:23:07.796934",
+                          "value": 79.75
+                        },
+                        {
+                          "time": "2026-01-30T18:53:07.796934",
+                          "value": 90.75
+                        },
+                        {
+                          "time": "2026-01-30T19:23:07.796934",
+                          "value": 88.97
+                        },
+                        {
+                          "time": "2026-01-30T19:53:07.796934",
+                          "value": 81.08
+                        },
+                        {
+                          "time": "2026-01-30T20:23:07.796934",
+                          "value": 88.8
+                        },
+                        {
+                          "time": "2026-01-30T20:53:07.796934",
+                          "value": 79.62
+                        },
+                        {
+                          "time": "2026-01-30T21:23:07.796934",
+                          "value": 88.79
+                        },
+                        {
+                          "time": "2026-01-30T21:53:07.796934",
+                          "value": 89.11
+                        },
+                        {
+                          "time": "2026-01-30T22:23:07.796934",
+                          "value": 80.67
+                        },
+                        {
+                          "time": "2026-01-30T22:53:07.796934",
+                          "value": 80.04
+                        },
+                        {
+                          "time": "2026-01-30T23:23:07.796934",
+                          "value": 78.22
+                        },
+                        {
+                          "time": "2026-01-30T23:53:07.796934",
+                          "value": 85.24
+                        },
+                        {
+                          "time": "2026-01-31T00:23:07.796934",
+                          "value": 81.22
+                        },
+                        {
+                          "time": "2026-01-31T00:53:07.796934",
+                          "value": 80.81
+                        },
+                        {
+                          "time": "2026-01-31T01:23:07.796934",
+                          "value": 91.76
+                        },
+                        {
+                          "time": "2026-01-31T01:53:07.796934",
+                          "value": 85.54
+                        },
+                        {
+                          "time": "2026-01-31T02:23:07.796934",
+                          "value": 86.32
+                        },
+                        {
+                          "time": "2026-01-31T02:53:07.796934",
+                          "value": 89.46
+                        },
+                        {
+                          "time": "2026-01-31T03:23:07.796934",
+                          "value": 87.31
+                        },
+                        {
+                          "time": "2026-01-31T03:53:07.796934",
+                          "value": 86.6
+                        },
+                        {
+                          "time": "2026-01-31T04:23:07.796934",
+                          "value": 79.45
+                        },
+                        {
+                          "time": "2026-01-31T04:53:07.796934",
+                          "value": 87.19
+                        },
+                        {
+                          "time": "2026-01-31T05:23:07.796934",
+                          "value": 83.85
+                        },
+                        {
+                          "time": "2026-01-31T05:53:07.796934",
+                          "value": 81.44
+                        },
+                        {
+                          "time": "2026-01-31T06:23:07.796934",
+                          "value": 84.3
+                        },
+                        {
+                          "time": "2026-01-31T06:53:07.796934",
+                          "value": 79.63
+                        },
+                        {
+                          "time": "2026-01-31T07:23:07.796934",
+                          "value": 83.3
+                        },
+                        {
+                          "time": "2026-01-31T07:53:07.796934",
+                          "value": 87.54
+                        },
+                        {
+                          "time": "2026-01-31T08:23:07.796934",
+                          "value": 85.58
+                        },
+                        {
+                          "time": "2026-01-31T08:53:07.796934",
+                          "value": 86.52
+                        },
+                        {
+                          "time": "2026-01-31T09:23:07.796934",
+                          "value": 87.59
+                        },
+                        {
+                          "time": "2026-01-31T09:53:07.796934",
+                          "value": 91.48
+                        },
+                        {
+                          "time": "2026-01-31T10:23:07.796934",
+                          "value": 91.24
+                        },
+                        {
+                          "time": "2026-01-31T10:53:07.796934",
+                          "value": 85.25
+                        },
+                        {
+                          "time": "2026-01-31T11:23:07.796934",
+                          "value": 80.87
+                        },
+                        {
+                          "time": "2026-01-31T11:53:07.796934",
+                          "value": 90.11
+                        },
+                        {
+                          "time": "2026-01-31T12:23:07.796934",
+                          "value": 88.69
+                        },
+                        {
+                          "time": "2026-01-31T12:53:07.796934",
+                          "value": 83.25
+                        },
+                        {
+                          "time": "2026-01-31T13:23:07.796934",
+                          "value": 78.64
+                        },
+                        {
+                          "time": "2026-01-31T13:53:07.796934",
+                          "value": 91.52
+                        },
+                        {
+                          "time": "2026-01-31T14:23:07.796934",
+                          "value": 84.36
+                        },
+                        {
+                          "time": "2026-01-31T14:53:07.796934",
+                          "value": 84.28
+                        },
+                        {
+                          "time": "2026-01-31T15:23:07.796934",
+                          "value": 80.33
+                        },
+                        {
+                          "time": "2026-01-31T15:53:07.796934",
+                          "value": 80.47
+                        },
+                        {
+                          "time": "2026-01-31T16:23:07.796934",
+                          "value": 86.08
+                        },
+                        {
+                          "time": "2026-01-31T16:53:07.796934",
+                          "value": 88.66
+                        }
+                      ]
+                    }
+                  ],
+                  "_query_context": "temperature and voltage trends for transformer 1 and transformer 2 temperature, voltage shows the temperature and voltage trends of transformer 1 and transformer 2 over time, allowing for correlation analysis. compare transformer 1 versus transformer 2"
+                }
+              },
+              "fixture": "hvac-performance",
+              "heightHint": "tall",
+              "description": "Shows the temperature and voltage trends of transformer 1 and transformer 2 over time, allowing for correlation analysis."
+            },
+            {
+              "scenario": "distribution",
+              "size": "expanded",
+              "relevance": 0.6,
+              "why": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their share of the total load.",
+              "data_override": {
+                "demoData": {
+                  "total": 190.2,
+                  "unit": "%",
+                  "series": [
+                    {
+                      "label": "Energy Meter",
+                      "value": 100.0
+                    },
+                    {
+                      "label": "Transformer",
+                      "value": 90.2
+                    }
+                  ],
+                  "_query_context": "energy distribution between transformer 1 and transformer 2 energy_distribution breaks down the energy distribution between transformer 1 and transformer 2, showing their share of the total load. compare transformer 1 versus transformer 2",
+                  "label": "energy_distribution"
+                }
+              },
+              "fixture": "dist_energy_source_share-donut",
+              "heightHint": "tall",
+              "description": "Breaks down the energy distribution between transformer 1 and transformer 2, showing their share of the total load."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 1, providing a quick glance at its performance.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 1",
+                  "value": "100",
+                  "unit": "%",
+                  "state": "normal",
+                  "_query_context": "current efficiency of transformer 1 efficiency displays the current efficiency of transformer 1, providing a quick glance at its performance. compare transformer 1 versus transformer 2"
+                }
+              },
+              "fixture": "kpi_live-standard",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 1, providing a quick glance at its performance."
+            },
+            {
+              "scenario": "kpi",
+              "size": "compact",
+              "relevance": 0.4,
+              "why": "Displays the current efficiency of transformer 2, providing a quick glance at its performance.",
+              "data_override": {
+                "demoData": {
+                  "label": "Main Transformer 2",
+                  "value": "85",
+                  "unit": "%",
+                  "state": "normal",
+                  "_query_context": "current efficiency of transformer 2 efficiency displays the current efficiency of transformer 2, providing a quick glance at its performance. compare transformer 1 versus transformer 2"
+                }
+              },
+              "fixture": "kpi_alert-critical-state",
+              "heightHint": "short",
+              "description": "Displays the current efficiency of transformer 2, providing a quick glance at its performance."
+            },
+            {
+              "scenario": "timeline",
+              "size": "expanded",
+              "relevance": 0.2,
+              "why": "Shows the maintenance history of transformer 1 and transformer 2, highlighting any recent events or scheduled maintenance.",
+              "data_override": {
+                "demoData": {
+                  "title": "Event Log",
+                  "events": [
+                    {
+                      "timestamp": "2026-01-31T07:23:07.822229",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T08:23:07.822229",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T09:23:07.822229",
+                      "type": "preventive",
+                      "message": "Maintenance: Annual transformer maintenance | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: preventive | Work Done: Checked oil level, silica ",
+                      "source": "Dry Type Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T10:23:07.822229",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T11:23:07.822229",
+                      "type": "inspection",
+                      "message": "Maintenance: Thermographic survey | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: inspection | Work Done: Performed IR thermography on all connec",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T12:23:07.822229",
+                      "type": "emergency",
+                      "message": "Work Order WO-00230 | Equipment: Main Transformer 2 (TR-MAIN-02) | Type: emergency | Priority: normal | Status: open | Description: Emergency repair f",
+                      "source": "Main Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T13:23:07.822229",
+                      "type": "preventive",
+                      "message": "Work Order WO-00514 | Equipment: Main Transformer 1 (TR-MAIN-01) | Type: preventive | Priority: emergency | Status: cancelled | Description: Scheduled",
+                      "source": "Main Transformer 1"
+                    },
+                    {
+                      "timestamp": "2026-01-31T14:23:07.822229",
+                      "type": "corrective",
+                      "message": "Work Order WO-00773 | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: corrective | Priority: normal | Status: in_progress | Description: Correct",
+                      "source": "Dry Type Transformer 2"
+                    },
+                    {
+                      "timestamp": "2026-01-31T15:23:07.822229",
+                      "type": "corrective",
+                      "message": "Work Order WO-00329 | Equipment: Dry Type Transformer 1 (TR-DRY-01) | Type: corrective | Priority: normal | Status: completed | Description: Correctiv",
+                      "source": "Dry Type Transformer 1"
+                    },
+                    {
+                      "timestamp": "2026-01-31T16:23:07.822229",
+                      "type": "predictive",
+                      "message": "Work Order WO-00629 | Equipment: Dry Type Transformer 2 (TR-DRY-02) | Type: predictive | Priority: urgent | Status: in_progress | Description: Predict",
+                      "source": "Dry Type Transformer 2"
+                    }
+                  ],
+                  "_query_context": "maintenance history for transformer 1 and transformer 2 maintenance_history shows the maintenance history of transformer 1 and transformer 2, highlighting any recent events or scheduled maintenance. compare transformer 1 versus transformer 2",
+                  "label": "maintenance_history"
+                }
+              },
+              "fixture": "multi-lane-shift-schedule",
+              "heightHint": "tall",
+              "description": "Shows the maintenance history of transformer 1 and transformer 2, highlighting any recent events or scheduled maintenance."
+            }
+          ],
+          "transitions": {}
+        },
+        "intent": {
+          "type": "query",
+          "domains": [
+            "industrial"
+          ],
+          "entities": {
+            "devices": [
+              "transformer 1",
+              "transformer 2"
+            ]
+          },
+          "confidence": 0.9
+        },
+        "rag_results": [],
+        "processing_time_ms": 47647
+      },
+      "analysis": {
+        "total_time_ms": 47649,
+        "network_overhead_ms": 2,
+        "widget_count": 6,
+        "scenarios_used": [
+          "comparison",
+          "trend-multi-line",
+          "distribution",
+          "kpi",
+          "kpi",
+          "timeline"
+        ],
+        "fixtures_used": [
+          "delta_bar_visual-deviation-bar",
+          "hvac-performance",
+          "dist_energy_source_share-donut",
+          "kpi_live-standard",
+          "kpi_alert-critical-state",
+          "multi-lane-shift-schedule"
+        ],
+        "heading": "Transformer Comparison",
+        "has_layout": true,
+        "has_voice_response": true,
+        "domain_match": {
+          "expected": [
+            "industrial"
+          ],
+          "detected": [
+            "industrial"
+          ],
+          "match": true
+        },
+        "scenario_coverage": {
+          "expected": [
+            "comparison",
+            "kpi"
+          ],
+          "present": [
+            "comparison",
+            "kpi"
+          ],
+          "missing": [],
+          "unexpected": [
+            "timeline",
+            "trend-multi-line",
+            "distribution"
+          ]
+        },
+        "error": null
+      }
+    }
+  ]
+}

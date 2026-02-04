@@ -1,0 +1,27 @@
+{
+  "total_entries": 74,
+  "natural_entries": 42,
+  "forced_entries": 32,
+  "questions_run": 1,
+  "questions_failed": 0,
+  "by_scenario": {
+    "kpi": 9,
+    "comparison": 6,
+    "trend": 6,
+    "distribution": 6,
+    "trend-multi-line": 6,
+    "trends-cumulative": 6,
+    "alerts": 5,
+    "category-bar": 5,
+    "matrix-heatmap": 5,
+    "composition": 5,
+    "eventlogstream": 5,
+    "flow-sankey": 5,
+    "timeline": 5
+  },
+  "by_category": {
+    "comparison": 74
+  },
+  "unique_scenarios": 13,
+  "unique_categories": 1
+}

@@ -1,0 +1,48 @@
+{
+  "run_id": "run_2026-01-31_220803",
+  "tag": "v2_quality_fixes",
+  "timing": {
+    "avg_ms": 36636,
+    "p50_ms": 36636,
+    "p95_ms": 36636,
+    "min_ms": 36636,
+    "max_ms": 36636
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "comparison",
+      "distribution",
+      "kpi",
+      "timeline",
+      "trend-multi-line"
+    ],
+    "fixtures_used": [
+      "dist_downtime_top_contributors-pareto-bar",
+      "hvac-performance",
+      "kpi_alert-critical-state",
+      "kpi_live-standard",
+      "linear-incident-timeline",
+      "side_by_side_visual-plain-values"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "comparison": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 36636,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

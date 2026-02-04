@@ -1,0 +1,49 @@
+{
+  "run_id": "run_2026-01-31_220846",
+  "tag": "v2_quality_fixes",
+  "timing": {
+    "avg_ms": 35922,
+    "p50_ms": 35922,
+    "p95_ms": 35922,
+    "min_ms": 35922,
+    "max_ms": 35922
+  },
+  "counts": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0,
+    "with_layout": 1
+  },
+  "accuracy": {
+    "domain_match_pct": 1.0,
+    "layout_generated_pct": 1.0
+  },
+  "widget_coverage": {
+    "scenarios_used": [
+      "alerts",
+      "distribution",
+      "edgedevicepanel",
+      "kpi",
+      "timeline",
+      "trend"
+    ],
+    "fixtures_used": [
+      "banner-energy-peak-threshold-exceeded",
+      "default-render",
+      "dist_downtime_top_contributors-pareto-bar",
+      "kpi_live-standard",
+      "linear-incident-timeline",
+      "trend_live-line"
+    ],
+    "avg_widgets_per_dashboard": 6.0
+  },
+  "by_category": {
+    "trend": {
+      "count": 1,
+      "successful": 1,
+      "avg_time_ms": 35922,
+      "avg_widgets": 6.0
+    }
+  },
+  "errors": []
+}

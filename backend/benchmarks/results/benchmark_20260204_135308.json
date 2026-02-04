@@ -1,0 +1,763 @@
+{
+  "timestamp": "2026-02-04T13:49:45.311461",
+  "system_info": {
+    "platform": "Linux",
+    "python_version": "3.11.9",
+    "processor": "",
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "gpu_memory_gb": 102.0
+  },
+  "stt_summary": {
+    "name": "STT Server",
+    "count": 9,
+    "success_rate": 1.0,
+    "latency_min_ms": 29.56,
+    "latency_max_ms": 45.48,
+    "latency_mean_ms": 35.49,
+    "latency_median_ms": 35.33,
+    "latency_p95_ms": 42.1,
+    "latency_p99_ms": 44.81,
+    "details": null
+  },
+  "rag_summary": {
+    "name": "RAG Pipeline",
+    "count": 15,
+    "success_rate": 0.9333333333333333,
+    "latency_min_ms": 801.25,
+    "latency_max_ms": 6109.19,
+    "latency_mean_ms": 1481.84,
+    "latency_median_ms": 1078.84,
+    "latency_p95_ms": 3249.19,
+    "latency_p99_ms": 5537.19,
+    "details": {
+      "accuracy_rate": 0.9
+    }
+  },
+  "tts_summary": {
+    "name": "TTS Server",
+    "count": 8,
+    "success_rate": 1.0,
+    "latency_min_ms": 48.45,
+    "latency_max_ms": 120.69,
+    "latency_mean_ms": 80.36,
+    "latency_median_ms": 75.81,
+    "latency_p95_ms": 120.3,
+    "latency_p99_ms": 120.62,
+    "details": null
+  },
+  "e2e_summary": {
+    "name": "E2E Pipeline",
+    "count": 17,
+    "success_rate": 1.0,
+    "latency_min_ms": 939.89,
+    "latency_max_ms": 15687.6,
+    "latency_mean_ms": 10481.5,
+    "latency_median_ms": 13238.34,
+    "latency_p95_ms": 14828.84,
+    "latency_p99_ms": 15515.85,
+    "details": null
+  },
+  "raw_results": {
+    "stt": [
+      {
+        "name": "stt_1s",
+        "latency_ms": 45.48447299748659,
+        "success": true,
+        "details": {
+          "duration": "1s",
+          "iteration": 1,
+          "model": "parakeet",
+          "server_ms": 43.8
+        }
+      },
+      {
+        "name": "stt_1s",
+        "latency_ms": 29.560720999143086,
+        "success": true,
+        "details": {
+          "duration": "1s",
+          "iteration": 2,
+          "model": "parakeet",
+          "server_ms": 28.0
+        }
+      },
+      {
+        "name": "stt_1s",
+        "latency_ms": 29.951577002066188,
+        "success": true,
+        "details": {
+          "duration": "1s",
+          "iteration": 3,
+          "model": "parakeet",
+          "server_ms": 28.2
+        }
+      },
+      {
+        "name": "stt_3s",
+        "latency_ms": 35.042553005041555,
+        "success": true,
+        "details": {
+          "duration": "3s",
+          "iteration": 1,
+          "model": "parakeet",
+          "server_ms": 33.5
+        }
+      },
+      {
+        "name": "stt_3s",
+        "latency_ms": 35.334750995389186,
+        "success": true,
+        "details": {
+          "duration": "3s",
+          "iteration": 2,
+          "model": "parakeet",
+          "server_ms": 33.9
+        }
+      },
+      {
+        "name": "stt_3s",
+        "latency_ms": 34.401921002427116,
+        "success": true,
+        "details": {
+          "duration": "3s",
+          "iteration": 3,
+          "model": "parakeet",
+          "server_ms": 33.1
+        }
+      },
+      {
+        "name": "stt_5s",
+        "latency_ms": 37.02630200132262,
+        "success": true,
+        "details": {
+          "duration": "5s",
+          "iteration": 1,
+          "model": "parakeet",
+          "server_ms": 35.5
+        }
+      },
+      {
+        "name": "stt_5s",
+        "latency_ms": 36.397317002411,
+        "success": true,
+        "details": {
+          "duration": "5s",
+          "iteration": 2,
+          "model": "parakeet",
+          "server_ms": 35.0
+        }
+      },
+      {
+        "name": "stt_5s",
+        "latency_ms": 36.25350100628566,
+        "success": true,
+        "details": {
+          "duration": "5s",
+          "iteration": 3,
+          "model": "parakeet",
+          "server_ms": 34.9
+        }
+      }
+    ],
+    "rag": [
+      {
+        "name": "rag_search",
+        "latency_ms": 6109.194030999788,
+        "success": true,
+        "details": {
+          "query": "What's the status of the pumps?",
+          "retrieved_types": [
+            "pump"
+          ],
+          "expected_types": [
+            "pump"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 801.2470109970309,
+        "success": true,
+        "details": {
+          "query": "Show transformer temperatures",
+          "retrieved_types": [
+            "transformer"
+          ],
+          "expected_types": [
+            "transformer"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 1079.893621004885,
+        "success": true,
+        "details": {
+          "query": "What alerts are active?",
+          "retrieved_types": [
+            "energy_meter",
+            "ups"
+          ],
+          "expected_types": [],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 1458.7249369942583,
+        "success": true,
+        "details": {
+          "query": "How are the chillers performing?",
+          "retrieved_types": [
+            "chiller"
+          ],
+          "expected_types": [
+            "chiller"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 922.6962090033339,
+        "success": true,
+        "details": {
+          "query": "What's the energy consumption?",
+          "retrieved_types": [
+            "chiller",
+            "energy_meter"
+          ],
+          "expected_types": [
+            "energy_meter"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 1709.1915990022244,
+        "success": true,
+        "details": {
+          "query": "Status of all motors",
+          "retrieved_types": [
+            "motor"
+          ],
+          "expected_types": [
+            "motor"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 637.9674460040405,
+        "success": false,
+        "details": {
+          "query": "TX-001 status",
+          "retrieved_types": [
+            "electrical_panel",
+            "energy_meter",
+            "motor",
+            "ups"
+          ],
+          "expected_types": [
+            "transformer"
+          ],
+          "type_match": false,
+          "term_match": false,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 929.9060970079154,
+        "success": true,
+        "details": {
+          "query": "Pump 1 temperature",
+          "retrieved_types": [
+            "pump"
+          ],
+          "expected_types": [
+            "pump"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 1077.7832309977384,
+        "success": true,
+        "details": {
+          "query": "Generator load",
+          "retrieved_types": [
+            "diesel_generator",
+            "energy_meter",
+            "ups"
+          ],
+          "expected_types": [
+            "diesel_generator"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_search",
+        "latency_ms": 1250.4046959948028,
+        "success": true,
+        "details": {
+          "query": "AHU status",
+          "retrieved_types": [
+            "ahu"
+          ],
+          "expected_types": [
+            "ahu"
+          ],
+          "type_match": true,
+          "term_match": true,
+          "doc_count": 17
+        }
+      },
+      {
+        "name": "rag_latency",
+        "latency_ms": 1275.668392991065,
+        "success": true,
+        "details": {
+          "iteration": 1
+        }
+      },
+      {
+        "name": "rag_latency",
+        "latency_ms": 931.4299659890821,
+        "success": true,
+        "details": {
+          "iteration": 2
+        }
+      },
+      {
+        "name": "rag_latency",
+        "latency_ms": 1011.9088200008264,
+        "success": true,
+        "details": {
+          "iteration": 3
+        }
+      },
+      {
+        "name": "rag_latency",
+        "latency_ms": 1063.05076899298,
+        "success": true,
+        "details": {
+          "iteration": 4
+        }
+      },
+      {
+        "name": "rag_latency",
+        "latency_ms": 1124.6224899950903,
+        "success": true,
+        "details": {
+          "iteration": 5
+        }
+      }
+    ],
+    "tts": [
+      {
+        "name": "tts_1w",
+        "latency_ms": 50.858913993579336,
+        "success": true,
+        "details": {
+          "word_count": 1,
+          "char_count": 6,
+          "iteration": 1,
+          "audio_bytes": 14636
+        }
+      },
+      {
+        "name": "tts_1w",
+        "latency_ms": 48.44543000217527,
+        "success": true,
+        "details": {
+          "word_count": 1,
+          "char_count": 6,
+          "iteration": 2,
+          "audio_bytes": 14636
+        }
+      },
+      {
+        "name": "tts_5w",
+        "latency_ms": 52.36337400856428,
+        "success": true,
+        "details": {
+          "word_count": 5,
+          "char_count": 29,
+          "iteration": 1,
+          "audio_bytes": 29996
+        }
+      },
+      {
+        "name": "tts_5w",
+        "latency_ms": 53.292108001187444,
+        "success": true,
+        "details": {
+          "word_count": 5,
+          "char_count": 29,
+          "iteration": 2,
+          "audio_bytes": 29996
+        }
+      },
+      {
+        "name": "tts_15w",
+        "latency_ms": 98.33244400215335,
+        "success": true,
+        "details": {
+          "word_count": 15,
+          "char_count": 99,
+          "iteration": 1,
+          "audio_bytes": 120236
+        }
+      },
+      {
+        "name": "tts_15w",
+        "latency_ms": 99.35304700047709,
+        "success": true,
+        "details": {
+          "word_count": 15,
+          "char_count": 99,
+          "iteration": 2,
+          "audio_bytes": 120236
+        }
+      },
+      {
+        "name": "tts_23w",
+        "latency_ms": 120.69486599648371,
+        "success": true,
+        "details": {
+          "word_count": 23,
+          "char_count": 141,
+          "iteration": 1,
+          "audio_bytes": 164012
+        }
+      },
+      {
+        "name": "tts_23w",
+        "latency_ms": 119.57703699590638,
+        "success": true,
+        "details": {
+          "word_count": 23,
+          "char_count": 141,
+          "iteration": 2,
+          "audio_bytes": 164012
+        }
+      }
+    ],
+    "e2e": [
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 15687.602933001472,
+        "success": true,
+        "details": {
+          "transcript": "What's the status of the pumps?",
+          "iteration": 1,
+          "intent_type": "query",
+          "processing_time_ms": 15661,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1258,
+            "data_prefetch_ms": 33,
+            "widget_select_ms": 2904,
+            "data_collect_ms": 45,
+            "fixture_select_ms": 4608,
+            "voice_generate_ms": 6810,
+            "total_ms": 15661
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 13532.462128001498,
+        "success": true,
+        "details": {
+          "transcript": "What's the status of the pumps?",
+          "iteration": 2,
+          "intent_type": "query",
+          "processing_time_ms": 13522,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1264,
+            "data_prefetch_ms": 30,
+            "widget_select_ms": 2847,
+            "data_collect_ms": 43,
+            "fixture_select_ms": 4654,
+            "voice_generate_ms": 4681,
+            "total_ms": 13522
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 13247.083709997241,
+        "success": true,
+        "details": {
+          "transcript": "Show me transformer temperatures",
+          "iteration": 1,
+          "intent_type": "query",
+          "processing_time_ms": 13227,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1324,
+            "data_prefetch_ms": 30,
+            "widget_select_ms": 2797,
+            "data_collect_ms": 70,
+            "fixture_select_ms": 4493,
+            "voice_generate_ms": 4510,
+            "total_ms": 13227
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 12490.21948700829,
+        "success": true,
+        "details": {
+          "transcript": "Show me transformer temperatures",
+          "iteration": 2,
+          "intent_type": "query",
+          "processing_time_ms": 12470,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1444,
+            "data_prefetch_ms": 21,
+            "widget_select_ms": 2900,
+            "data_collect_ms": 70,
+            "fixture_select_ms": 4471,
+            "voice_generate_ms": 3562,
+            "total_ms": 12470
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 12103.304561998812,
+        "success": true,
+        "details": {
+          "transcript": "What alerts are active?",
+          "iteration": 1,
+          "intent_type": "query",
+          "processing_time_ms": 12093,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1265,
+            "data_prefetch_ms": 8,
+            "widget_select_ms": 2671,
+            "data_collect_ms": 64,
+            "fixture_select_ms": 3402,
+            "voice_generate_ms": 4680,
+            "total_ms": 12093
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 11736.620947995107,
+        "success": true,
+        "details": {
+          "transcript": "What alerts are active?",
+          "iteration": 2,
+          "intent_type": "query",
+          "processing_time_ms": 11726,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1306,
+            "data_prefetch_ms": 7,
+            "widget_select_ms": 2873,
+            "data_collect_ms": 64,
+            "fixture_select_ms": 3550,
+            "voice_generate_ms": 3924,
+            "total_ms": 11726
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 13788.212815008592,
+        "success": true,
+        "details": {
+          "transcript": "How are the chillers performing?",
+          "iteration": 1,
+          "intent_type": "query",
+          "processing_time_ms": 13778,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1478,
+            "data_prefetch_ms": 25,
+            "widget_select_ms": 2866,
+            "data_collect_ms": 69,
+            "fixture_select_ms": 3875,
+            "voice_generate_ms": 5462,
+            "total_ms": 13778
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 13528.639397991356,
+        "success": true,
+        "details": {
+          "transcript": "How are the chillers performing?",
+          "iteration": 2,
+          "intent_type": "query",
+          "processing_time_ms": 13501,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1500,
+            "data_prefetch_ms": 19,
+            "widget_select_ms": 2824,
+            "data_collect_ms": 65,
+            "fixture_select_ms": 3883,
+            "voice_generate_ms": 5206,
+            "total_ms": 13501
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 14433.209929004079,
+        "success": true,
+        "details": {
+          "transcript": "Compare pump 1 and pump 2",
+          "iteration": 1,
+          "intent_type": "query",
+          "processing_time_ms": 14423,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1364,
+            "data_prefetch_ms": 52,
+            "widget_select_ms": 2856,
+            "data_collect_ms": 51,
+            "fixture_select_ms": 4194,
+            "voice_generate_ms": 5903,
+            "total_ms": 14423
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 13238.344285011408,
+        "success": true,
+        "details": {
+          "transcript": "Compare pump 1 and pump 2",
+          "iteration": 2,
+          "intent_type": "query",
+          "processing_time_ms": 13214,
+          "widget_count": 8,
+          "timings": {
+            "intent_parse_ms": 1374,
+            "data_prefetch_ms": 36,
+            "widget_select_ms": 2840,
+            "data_collect_ms": 49,
+            "fixture_select_ms": 4250,
+            "voice_generate_ms": 4662,
+            "total_ms": 13214
+          }
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 979.7866720036836,
+        "success": true,
+        "details": {
+          "transcript": "Hello",
+          "iteration": 1,
+          "intent_type": "conversation",
+          "processing_time_ms": 979,
+          "widget_count": 0
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 939.8884569964139,
+        "success": true,
+        "details": {
+          "transcript": "Hello",
+          "iteration": 2,
+          "intent_type": "conversation",
+          "processing_time_ms": 939,
+          "widget_count": 0
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 940.7744780037319,
+        "success": true,
+        "details": {
+          "transcript": "What's the weather like?",
+          "iteration": 1,
+          "intent_type": "conversation",
+          "processing_time_ms": 940,
+          "widget_count": 0
+        }
+      },
+      {
+        "name": "e2e_orchestrator",
+        "latency_ms": 955.3639459918486,
+        "success": true,
+        "details": {
+          "transcript": "What's the weather like?",
+          "iteration": 2,
+          "intent_type": "conversation",
+          "processing_time_ms": 955,
+          "widget_count": 0
+        }
+      },
+      {
+        "name": "e2e_api",
+        "latency_ms": 14614.145036000991,
+        "success": true,
+        "details": {
+          "transcript": "What's the status of the pumps?",
+          "iteration": 1,
+          "processing_time_ms": 14584,
+          "intent_type": "query"
+        }
+      },
+      {
+        "name": "e2e_api",
+        "latency_ms": 13498.71232600708,
+        "success": true,
+        "details": {
+          "transcript": "Show me transformer temperatures",
+          "iteration": 1,
+          "processing_time_ms": 13468,
+          "intent_type": "query"
+        }
+      },
+      {
+        "name": "e2e_api",
+        "latency_ms": 12471.088538994081,
+        "success": true,
+        "details": {
+          "transcript": "What alerts are active?",
+          "iteration": 1,
+          "processing_time_ms": 12429,
+          "intent_type": "query"
+        }
+      }
+    ]
+  }
+}

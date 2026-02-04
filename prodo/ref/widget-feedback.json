@@ -1,0 +1,316 @@
+{
+  "widgets": [
+    {
+      "scenario": "comparison",
+      "variant": "waterfall_visual-loss-analysis",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×48vh",
+      "timestamp": 1769857368287,
+      "id": "1769857368287-0jdpu0"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "side_by_side_visual-plain-values",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×17vh",
+      "timestamp": 1769868696023,
+      "id": "1769868696023-2bqcmn"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "side_by_side_visual-plain-values",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×17vh",
+      "timestamp": 1769868710544,
+      "id": "1769868710544-fucs9w"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "side_by_side_visual-plain-values",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×16vh\nexpanded: 48vw×24vh → 48vw×16vh",
+      "timestamp": 1769868744851,
+      "id": "1769868744851-sve678"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "side_by_side_visual-plain-values",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×16vh\nexpanded: 48vw×24vh → 48vw×16vh\nhero: 65vw×28vh → 65vw×16vh",
+      "timestamp": 1769868756403,
+      "id": "1769868756403-rmyv9m"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "delta_bar_visual-deviation-bar",
+      "rating": 0,
+      "tags": [
+        "colors-wrong"
+      ],
+      "notes": "",
+      "timestamp": 1769868768962,
+      "id": "1769868768962-pr2cd8"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "delta_bar_visual-deviation-bar",
+      "rating": 0,
+      "tags": [],
+      "notes": "color wrong cannot see the data",
+      "timestamp": 1769868780125,
+      "id": "1769868780125-gzhily"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "delta_bar_visual-deviation-bar",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nexpanded: 48vw×24vh → 48vw×18vh\nhero: 65vw×28vh → 65vw×18vh",
+      "timestamp": 1769868799701,
+      "id": "1769868799701-m19vz1"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "grouped_bar_visual-phase-comparison",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×44vh",
+      "timestamp": 1769868824036,
+      "id": "1769868824036-oc6qu0"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "grouped_bar_visual-phase-comparison",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×44vh\nexpanded: 48vw×24vh → 48vw×44vh\nhero: 65vw×28vh → 65vw×31vw",
+      "timestamp": 1769868872496,
+      "id": "1769868872496-x12b28"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "waterfall_visual-loss-analysis",
+      "rating": 0,
+      "tags": [],
+      "notes": "cannot see the color",
+      "timestamp": 1769868902093,
+      "id": "1769868902093-06bjw3"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "waterfall_visual-loss-analysis",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → vw×44vh\nexpanded: 48vw×24vh → 48vw×44vh\nhero: 65vw×28vh → 65vw×044vw",
+      "timestamp": 1769869105985,
+      "id": "1769869105985-vuvq9q"
+    },
+    {
+      "scenario": "comparison",
+      "variant": "composition_split_visual-load-type",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×27vh",
+      "timestamp": 1769869137253,
+      "id": "1769869137253-pt0hce"
+    },
+    {
+      "scenario": "distribution",
+      "variant": "dist_energy_source_share-100-stacked-bar",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×6vw",
+      "timestamp": 1769869286873,
+      "id": "1769869286873-s8i2xx"
+    },
+    {
+      "scenario": "distribution",
+      "variant": "dist_energy_source_share-100-stacked-bar",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×6vw\nexpanded: 48vw×24vh → 48vw×6vh",
+      "timestamp": 1769869296245,
+      "id": "1769869296245-46xnmp"
+    },
+    {
+      "scenario": "distribution",
+      "variant": "dist_energy_source_share-100-stacked-bar",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×18vh → 35vw×6vw\nexpanded: 48vw×24vh → 48vw×6vh\nhero: 65vw×28vh → 65vw×06vw",
+      "timestamp": 1769869310746,
+      "id": "1769869310746-n4nt0g"
+    },
+    {
+      "scenario": "eventlogstream",
+      "variant": "correlation-stack",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 26vw×50vh → 26vw×64vh\nexpanded: 36vw×60vh → 36vw×064vw",
+      "timestamp": 1769869360148,
+      "id": "1769869360148-up7j07"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_standard-classic-left-to-right-sankey",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nexpanded: 55vw×55vh → 55vw×64vh\nhero: 70vw×60vh → 70vw×77vh",
+      "timestamp": 1769869415909,
+      "id": "1769869415909-vvq9uv"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_energy_balance-sankey-with-explicit-loss-branches-dropping-out",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 32vw×35vh → 31vw×44vh\nexpanded: 42vw×40vh → 42vw×52vh\nhero: 55vw×46vh → 55vw×60vh",
+      "timestamp": 1769869453653,
+      "id": "1769869453653-uokzmb"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_multi_source-many-to-one-flow-diagram",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 32vw×35vh → 32vw×56vh\nexpanded: 42vw×40vh → 42vw×58vh\nhero: 55vw×46vh → 55vw×58vh",
+      "timestamp": 1769869488845,
+      "id": "1769869488845-1ojnaa"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_layered-multi-stage-hierarchical-flow",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 32vw×35vh → 32vw×52vh\nexpanded: 42vw×40vh → 42vw×52vh\nhero: 55vw×46vh → 55vw×31vw",
+      "timestamp": 1769869540819,
+      "id": "1769869540819-oxgq4o"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_layered-multi-stage-hierarchical-flow",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 32vw×35vh → 32vw×52vh\nexpanded: 42vw×40vh → 42vw×52vh\nhero: 55vw×46vh → 55vw×30vw",
+      "timestamp": 1769869554038,
+      "id": "1769869554038-lfje69"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_time_sliced-sankey-with-time-scrubberplayer",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 32vw×35vh → 32vw×43vh\nexpanded: 42vw×40vh → 42vw×42vh",
+      "timestamp": 1769869577585,
+      "id": "1769869577585-kx4hlj"
+    },
+    {
+      "scenario": "flow-sankey",
+      "variant": "flow_sankey_layered-multi-stage-hierarchical-flow",
+      "rating": 0,
+      "tags": [],
+      "notes": "Update the widgets- when clicked on the particular assets the widgets should increase in size or scroll down.",
+      "timestamp": 1769869636624,
+      "id": "1769869636624-acil2r"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "value-heatmap",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×40vh → 16vw×36vh\nexpanded: 48vw×48vh → 016vw×36vh\nhero: 65vw×55vh → 016vw×36vh",
+      "timestamp": 1769869688119,
+      "id": "1769869688119-nzb81o"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "value-heatmap",
+      "rating": 0,
+      "tags": [],
+      "notes": "give space above the widget 16 pixel(padding)",
+      "timestamp": 1769869733328,
+      "id": "1769869733328-ldc5a1"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "correlation-matrix",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×35vh → 35vw×66vh\nexpanded: 48vw×46vh → 48vw×87vh\nhero: 60vw×55vh → 60vw×112vh",
+      "timestamp": 1769869790433,
+      "id": "1769869790434-4q2zjs"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "calendar-heatmap",
+      "rating": 0,
+      "tags": [
+        "size-adjustment"
+      ],
+      "notes": "[SIZE ADJUSTMENT]\nnormal: 35vw×35vh → 35vw×42vh\nexpanded: 48vw×46vh → 48vw×42vh\nhero: 60vw×55vh → 60vw×52vh",
+      "timestamp": 1769869836636,
+      "id": "1769869836636-q6fila"
+    },
+    {
+      "scenario": "matrix-heatmap",
+      "variant": "status-matrix",
+      "rating": 0,
+      "tags": [],
+      "notes": "give padding 16 pixels\n",
+      "timestamp": 1769869877852,
+      "id": "1769869877852-78srwu"
+    }
+  ],
+  "dashboards": [],
+  "pages": [],
+  "exportedAt": "2026-01-31T14:31:17.852Z"
+}
