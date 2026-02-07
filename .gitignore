@@ -73,6 +73,10 @@ rl_training_data/
 
 # Logs
 logs/
+prodo/logs/
+
+# Grounding audit logs (runtime generated)
+backend/grounding_audit_logs/
 
 # Test artifacts
 playwright-report/

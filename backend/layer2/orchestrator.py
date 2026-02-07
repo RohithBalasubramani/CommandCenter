@@ -744,10 +744,10 @@ class Layer2Orchestrator:
     def _reconcile_widget_data(self, widgets: list) -> list:
         """Run reconciliation pipeline on each widget's data_override.
 
-        F8 FIX: FAIL-LOUD reconciliation.
-        - If reconciliation refuses data → widget is DROPPED (not silently kept)
-        - If reconciliation errors → widget is DROPPED with logged defect
-        - NO silent normalization, NO "best effort" coercion
+        Widget selection is prompt-driven — every widget the LLM selected
+        stays in the layout.  Reconciliation normalises data but never drops
+        a widget; on failure the widget keeps its current data (which may be
+        a demo_shape placeholder from collect_all).
         """
         if not hasattr(self, "_reconciliation_pipeline"):
             self._reconciliation_pipeline = ReconciliationPipeline(
@@ -770,21 +770,19 @@ class Layer2Orchestrator:
                         logger.debug(
                             f"[reconcile] {scenario}: {len(result.assumptions)} assumptions applied"
                         )
-                    reconciled.append(w)
                 else:
-                    # F8: FAIL-LOUD — DROP widget instead of silently keeping bad data
                     reason = result.refusal.reason if result.refusal else "unknown"
                     logger.warning(
-                        f"[reconcile] {scenario}: DROPPED — refusal ({reason}). "
-                        f"F8: fail-loud reconciliation, no silent fallback."
+                        f"[reconcile] {scenario}: keeping with original data — refusal ({reason})"
                     )
-                    # Widget is NOT added to reconciled list
+                    # Keep widget with its current data_override (may be placeholder)
             except Exception as e:
-                # F8: FAIL-LOUD — DROP widget on error, no silent pass-through
                 logger.warning(
-                    f"[reconcile] {scenario}: DROPPED — error ({e}). "
-                    f"F8: fail-loud reconciliation, no silent fallback."
+                    f"[reconcile] {scenario}: keeping with original data — error ({e})"
                 )
+                # Keep widget with its current data_override
+
+            reconciled.append(w)
 
         return reconciled
 
@@ -909,6 +907,7 @@ Response:"""
                 system_prompt=system_prompt,
                 temperature=0.7,
                 max_tokens=384,
+                cache_key=f"voice:{transcript}:{layout.get('heading', '')}",
             )
 
             if response and not response.startswith("[LLM"):

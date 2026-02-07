@@ -11,6 +11,7 @@ from .views import (
     submit_feedback,
     approve_lora_training,
     rl_status,
+    rl_history,
     system_triggers,
     webhook_trigger,
     # System Grounding API (Phase 1-5 Audit)
@@ -35,6 +36,7 @@ urlpatterns = [
     path("feedback/", submit_feedback, name="layer2-feedback"),
     path("approve-training/", approve_lora_training, name="layer2-approve-training"),
     path("rl-status/", rl_status, name="layer2-rl-status"),
+    path("rl-history/", rl_history, name="layer2-rl-history"),
     # RAG pipeline endpoints
     path("rag/industrial/", industrial_rag_query, name="industrial-rag-query"),
     path("rag/industrial/health/", industrial_rag_health, name="industrial-rag-health"),

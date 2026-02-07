@@ -823,4 +823,33 @@ export const EVAL_QUERIES = [
   'Compare yesterday shift handover notes with today morning status',
   'Show everything about chiller plant including efficiency, alerts, and spare parts',
   'Give me a complete overview of transformer substations with load, alerts, and maintenance',
+
+  // ── Ambiguous / Vague Queries (test specificity scoring) ──
+  'Show status',
+  'Show me the pumps',
+  'What is the status?',
+  'Show everything',
+  'How is it going?',
+  'Show me the data',
+  'Display all equipment',
+  'What is happening?',
+  'Show inventory',
+  'Show alerts',
+
+  // ── Edge Cases & Boundary Conditions ──
+  'Show pump status',                                        // Vague — which pump?
+  'Temperature',                                             // Single word — minimal context
+  'Pump 1 pump 2 pump 3 comparison with alerts energy',     // Overloaded multi-domain
+  'What happened between 2am and 3am last Tuesday?',        // Very specific time window
+  'Show me the thing that was beeping earlier',              // Colloquial / non-technical
+  'Is transformer TR-001 going to fail soon?',               // Predictive question
+  'Why is the energy bill so high this month?',              // Diagnostic / root cause
+  'What should I check first today?',                        // Advisory / guidance
+  'Show me something useful',                                // Completely ambiguous
+
+  // ── Out-of-Scope Queries (test rejection) ──
+  'What is the weather today?',
+  'Tell me a joke',
+  'What is the meaning of life?',
+  'How do I cook pasta?',
 ]

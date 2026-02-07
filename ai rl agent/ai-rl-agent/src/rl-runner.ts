@@ -10,15 +10,14 @@
  *   train-cycle   — Full evaluate → feedback → train → re-evaluate cycle
  *   status        — Print RL system status
  *   weights       — Show current reward weights
+ *   api-eval      — Fast API-only evaluation, submits feedback
  *
  * Usage:
  *   npx tsx src/rl-runner.ts                              # Evaluate all
- *   npx tsx src/rl-runner.ts --mode evaluate               # Evaluate only
+ *   npx tsx src/rl-runner.ts --mode api-eval               # Fast API eval + feedback
  *   npx tsx src/rl-runner.ts --mode train-cycle            # Full training cycle
  *   npx tsx src/rl-runner.ts --mode status                 # Show RL status
- *   npx tsx src/rl-runner.ts --mode weights                # Show reward weights
  *   npx tsx src/rl-runner.ts --id rl-eval-001              # Single scenario
- *   npx tsx src/rl-runner.ts --category "Widget Quality"   # Filter by category
  *   npx tsx src/rl-runner.ts --headed                      # Show browser
  *   npx tsx src/rl-runner.ts --list                        # List scenarios
  */
@@ -27,9 +26,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { chromium } from '@playwright/test'
 import { AITestRunner, generateAuditReport, runScenarios } from './test-runner.js'
-import { rlAgentConfig, rlRunnerConfig, rlConfig } from './rl-config.js'
+import { rlAgentConfig, rlRunnerConfig, rlConfig, EVAL_WEIGHTS } from './rl-config.js'
 import { rlScenarios, EVAL_QUERIES } from './rl-scenarios.js'
-import { RLClient } from './rl-client.js'
+import { RLClient, type RLStatus } from './rl-client.js'
 import { RLEvaluator, type RLEvaluation, type PageWidget } from './rl-evaluator.js'
 import type { TestScenario, ScenarioResult } from './types.js'
 
@@ -46,6 +45,7 @@ interface CLIArgs {
   headed?: boolean
   list?: boolean
   dryRun?: boolean
+  count?: number
 }
 
 function parseArgs(): CLIArgs {
@@ -78,6 +78,9 @@ function parseArgs(): CLIArgs {
       case '--dry-run':
         parsed.dryRun = true
         break
+      case '--count':
+        parsed.count = parseInt(args[++i], 10)
+        break
       case '--help':
       case '-h':
         printUsage()
@@ -108,6 +111,7 @@ Filters:
   --priority <level>    Filter by priority (critical, high, medium)
 
 Options:
+  --count <n>           Limit to first N queries (api-eval mode)
   --headed              Show the browser window
   --list                List all scenarios and exit
   --dry-run             Show which scenarios would run, don't execute
@@ -116,6 +120,7 @@ Options:
 Examples:
   npx tsx src/rl-runner.ts                                    # Evaluate all 25 scenarios
   npx tsx src/rl-runner.ts --mode status                      # Check RL system
+  npx tsx src/rl-runner.ts --mode api-eval                    # Fast eval + submit feedback
   npx tsx src/rl-runner.ts --mode train-cycle --tag smoke     # Quick training cycle
   npx tsx src/rl-runner.ts --id rl-eval-003 --headed          # Debug safety scenario
   npx tsx src/rl-runner.ts --category "Feedback" --dry-run    # Preview feedback scenarios
@@ -212,33 +217,65 @@ function listScenarios(scenarios: TestScenario[]) {
 
 async function runStatusMode(client: RLClient) {
   console.log('\nRL System Status')
-  console.log('═'.repeat(50))
+  console.log('═'.repeat(60))
 
   try {
     const status = await client.getStatus()
 
-    console.log(`\n  Running: ${status.running ? 'YES' : 'NO'}`)
+    console.log(`\n  System Running: ${status.running ? 'YES' : 'NO'}`)
 
-    console.log('\n  Buffer:')
-    if (status.buffer) {
-      for (const [key, value] of Object.entries(status.buffer)) {
-        console.log(`    ${key}: ${value}`)
-      }
-    }
+    // Buffer
+    console.log('\n  Experience Buffer:')
+    console.log(`    Total experiences:   ${status.buffer.total_experiences}`)
+    console.log(`    With feedback:       ${status.buffer.with_feedback}`)
+    console.log(`    Without feedback:    ${status.buffer.without_feedback}`)
+    console.log(`    Ratings:             up=${status.buffer.ratings.up}  down=${status.buffer.ratings.down}  none=${status.buffer.ratings.none}`)
+    console.log(`    Max size:            ${status.buffer.max_size}`)
+    console.log(`    Redis connected:     ${status.buffer.redis_connected}`)
 
+    // Trainer overview
+    const t = status.trainer
     console.log('\n  Trainer:')
-    if (status.trainer) {
-      for (const [key, value] of Object.entries(status.trainer)) {
-        console.log(`    ${key}: ${value}`)
-      }
+    console.log(`    Running:             ${t.running}`)
+    console.log(`    Training steps:      ${t.training_steps}`)
+    console.log(`    Samples trained:     ${t.total_samples_trained}`)
+    console.log(`    Avg reward trend:    ${t.avg_reward_trend.toFixed(4)}`)
+    console.log(`    Recent rewards:      [${t.recent_rewards.map(r => r.toFixed(4)).join(', ')}]`)
+
+    // Tier 1 Scorer
+    const t1 = t.tier1_scorer
+    console.log('\n  Tier 1 — Low-Rank Scorer:')
+    console.log(`    Type:                ${t1.type}`)
+    console.log(`    Parameters:          ${t1.parameters.toLocaleString()} (rank ${t1.rank})`)
+    console.log(`    Device:              ${t1.device}`)
+    console.log(`    Training steps:      ${t1.training_steps.toLocaleString()}`)
+    console.log(`    Feedback events:     ${t1.total_feedback_events.toLocaleString()}`)
+    console.log(`    Avg loss:            ${t1.avg_loss.toFixed(6)}`)
+    if (t1.recent_losses.length > 0) {
+      console.log(`    Recent losses:       [${t1.recent_losses.map(l => l.toFixed(6)).join(', ')}]`)
     }
 
+    // Tier 2 LoRA
+    const t2 = t.tier2_lora
+    console.log('\n  Tier 2 — LoRA DPO:')
+    console.log(`    Training in progress: ${t2.training_in_progress}`)
+    console.log(`    Pending DPO pairs:   ${t2.pending_pairs} / ${t2.min_pairs_for_training} min`)
+    console.log(`    Total trainings:     ${t2.total_trainings}`)
+    console.log(`    Total pairs trained: ${t2.total_pairs_trained}`)
+    console.log(`    Current version:     v${t2.current_version}`)
+    console.log(`    Last loss:           ${t2.last_loss != null ? t2.last_loss.toFixed(4) : 'N/A'}`)
+    console.log(`    Last training:       ${t2.last_training_time || 'Never'}`)
+
+    // Config
     console.log('\n  Config:')
-    if (status.config) {
-      for (const [key, value] of Object.entries(status.config)) {
-        console.log(`    ${key}: ${value}`)
-      }
-    }
+    console.log(`    Train widget:        ${status.config.train_widget_selector}`)
+    console.log(`    Train fixture:       ${status.config.train_fixture_selector}`)
+    console.log(`    Train interval:      ${status.config.train_interval}s`)
+    console.log(`    Min batch size:      ${status.config.min_batch_size}`)
+
+    // DPO readiness
+    const pairsReady = t2.pending_pairs >= t2.min_pairs_for_training
+    console.log(`\n  LoRA Training Ready: ${pairsReady ? 'YES' : `NO (need ${t2.min_pairs_for_training - t2.pending_pairs} more DPO pairs)`}`)
 
     console.log()
   } catch (err: any) {
@@ -251,33 +288,33 @@ async function runStatusMode(client: RLClient) {
 
 async function runWeightsMode(client: RLClient) {
   console.log('\nRL Reward Weights')
-  console.log('═'.repeat(50))
+  console.log('═'.repeat(60))
+
+  // Agent evaluation weights (used by this agent)
+  console.log('\n  Agent Evaluation Weights (client-side):')
+  for (const [key, value] of Object.entries(EVAL_WEIGHTS)) {
+    const bar = '█'.repeat(Math.round(value * 40))
+    console.log(`    ${key.padEnd(22)} ${(value * 100).toFixed(0).padStart(3)}%  ${bar}`)
+  }
 
   try {
     const status = await client.getStatus()
 
-    console.log('\n  Current Configuration:')
-    if (status.config) {
-      for (const [key, value] of Object.entries(status.config)) {
-        console.log(`    ${key}: ${value}`)
-      }
-    }
+    // Backend scorer state
+    console.log('\n  Backend Scorer State:')
+    const t1 = status.trainer.tier1_scorer
+    console.log(`    Scorer type:         ${t1.type}`)
+    console.log(`    Training steps:      ${t1.training_steps.toLocaleString()}`)
+    console.log(`    Avg loss:            ${t1.avg_loss.toFixed(6)}`)
 
-    console.log('\n  Trainer State:')
-    if (status.trainer) {
-      const t = status.trainer as Record<string, any>
-      if (t.tier1_steps !== undefined) console.log(`    Scorer training steps: ${t.tier1_steps}`)
-      if (t.tier2_runs !== undefined) console.log(`    LoRA training runs: ${t.tier2_runs}`)
-      if (t.dpo_pairs_ready !== undefined) console.log(`    DPO pairs ready: ${t.dpo_pairs_ready}`)
-      if (t.scorer_loss !== undefined) console.log(`    Scorer loss: ${t.scorer_loss}`)
-    }
+    // Backend reward config
+    console.log('\n  Backend Reward Config (backend/rl/config.py):')
+    console.log('    explicit_rating:     1.0    (direct user thumbs up/down)')
+    console.log('    follow_up_type:      0.5    (clarify=positive, repeat=negative)')
+    console.log('    widget_engagement:   0.3    (view/expand duration)')
+    console.log('    response_latency:    0.1    (faster = higher reward)')
+    console.log('    intent_confidence:   0.1    (parser confidence)')
 
-    console.log('\n  Note: Reward weights are configured in backend/rl/config.py:')
-    console.log('    explicit_rating: 1.0')
-    console.log('    follow_up_type:  0.5')
-    console.log('    widget_engagement: 0.3')
-    console.log('    response_latency: 0.1')
-    console.log('    intent_confidence: 0.1')
     console.log()
   } catch (err: any) {
     console.error(`  Failed to get weights: ${err.message}`)
@@ -292,17 +329,23 @@ async function runApiEvalMode(
   evaluator: RLEvaluator,
   evidenceDir: string,
   submitFeedback: boolean = false,
+  maxCount?: number,
 ): Promise<RLEvaluation[]> {
-  const queries = EVAL_QUERIES
-  console.log(`\nAPI Evaluation: ${queries.length} queries (no browser)\n`)
+  const allQueries = EVAL_QUERIES
+  const queries = maxCount && maxCount > 0 ? allQueries.slice(0, maxCount) : allQueries
+  console.log(`\nAPI Evaluation: ${queries.length} queries (no browser)`)
+  if (submitFeedback) console.log('  Feedback submission: ENABLED')
+  console.log()
 
   const evaluations: RLEvaluation[] = []
   let passCount = 0
   let failCount = 0
+  let feedbackOk = 0
+  let feedbackFail = 0
 
   for (let i = 0; i < queries.length; i++) {
     const query = queries[i]
-    const num = `[${i + 1}/${queries.length}]`
+    const num = `[${String(i + 1).padStart(3)}/${queries.length}]`
 
     try {
       const result = await client.orchestrate(query)
@@ -318,32 +361,37 @@ async function runApiEvalMode(
       const evaluation = await evaluator.evaluateResponse(query, result, pageWidgets)
       evaluations.push(evaluation)
 
-      const scoreStr = (evaluation.overallScore * 100).toFixed(1)
-      const latencyStr = `${result.processing_time_ms}ms`
+      const scoreStr = (evaluation.overallScore * 100).toFixed(1).padStart(5)
+      const latencyStr = `${result.processing_time_ms}ms`.padStart(7)
       const icon = evaluation.rating === 'up' ? 'PASS' : 'FAIL'
+      const clarityTag = evaluation.queryClarity === 'vague' ? ' [VAGUE]' : evaluation.queryClarity === 'specific' ? '' : ''
 
       if (evaluation.rating === 'up') passCount++
       else failCount++
 
-      console.log(`  ${num} ${icon} ${scoreStr}% ${latencyStr} [${widgetCount}w] ${query.slice(0, 60)}`)
+      console.log(`  ${num} ${icon} ${scoreStr}% ${latencyStr} [${widgetCount}w] ${query.slice(0, 55)}${clarityTag}`)
 
       // Submit feedback if requested
       if (submitFeedback) {
         try {
           const feedback = evaluator.generateFeedback(evaluation)
           await client.submitFeedback(feedback)
-          console.log(`       -> feedback: ${evaluation.rating}`)
+          feedbackOk++
         } catch (err: any) {
+          feedbackFail++
           console.warn(`       -> feedback failed: ${err.message?.slice(0, 60)}`)
         }
       }
 
-      // Cooldown between queries (4s to stay within 20/min feedback throttle)
-      await new Promise(resolve => setTimeout(resolve, 4000))
+      // Cooldown between queries (5s to stay within 20/min feedback throttle
+      // and avoid overwhelming the dev server's single LLM worker)
+      await new Promise(resolve => setTimeout(resolve, 5000))
 
     } catch (err: any) {
       failCount++
       console.error(`  ${num} ERROR ${query.slice(0, 60)}: ${err.message?.slice(0, 80)}`)
+      // Longer cooldown after error — let backend recover
+      await new Promise(resolve => setTimeout(resolve, 10_000))
     }
   }
 
@@ -357,9 +405,17 @@ async function runApiEvalMode(
 
     console.log(`\n${'═'.repeat(60)}`)
     console.log('  API Evaluation Summary')
-    console.log(`  Total: ${batch.summary.total} | Passed: ${passCount} | Failed: ${failCount}`)
-    console.log(`  Average Score: ${(batch.summary.averageScore * 100).toFixed(1)}%`)
-    console.log(`  Average Latency: ${batch.summary.averageLatencyMs.toFixed(0)}ms`)
+    console.log(`${'─'.repeat(60)}`)
+    console.log(`  Total:              ${batch.summary.total}`)
+    console.log(`  Passed:             ${passCount}  (${(passCount / batch.summary.total * 100).toFixed(1)}%)`)
+    console.log(`  Failed:             ${failCount}`)
+    console.log(`  Average Score:      ${(batch.summary.averageScore * 100).toFixed(1)}%`)
+    console.log(`  Average Latency:    ${batch.summary.averageLatencyMs.toFixed(0)}ms`)
+    console.log(`  Avg Specificity:    ${(batch.summary.averageSpecificity * 100).toFixed(1)}%`)
+    console.log(`  Vague Queries:      ${batch.summary.vagueQueryCount}`)
+    if (submitFeedback) {
+      console.log(`  Feedback sent:      ${feedbackOk} ok / ${feedbackFail} failed`)
+    }
     console.log(`${'═'.repeat(60)}`)
   }
 
@@ -377,7 +433,6 @@ async function runEvaluateMode(
 ): Promise<RLEvaluation[]> {
   console.log(`\nEvaluating ${scenarios.length} scenario(s)...\n`)
 
-  // Launch browser
   const browser = await chromium.launch({
     headless: !args.headed && !rlRunnerConfig.headed,
   })
@@ -395,7 +450,6 @@ async function runEvaluateMode(
   const evaluations: RLEvaluation[] = []
 
   try {
-    // Run each scenario through the AI test runner
     const results = await runScenarios(
       page,
       scenarios,
@@ -410,7 +464,6 @@ async function runEvaluateMode(
         onScenarioComplete: async (result: ScenarioResult) => {
           console.log(`  ${result.status === 'pass' ? 'PASS' : 'FAIL'} ${result.scenarioId} — ${result.scenarioName}`)
 
-          // Also run API-level evaluation for scenarios with queries
           const queryHint = scenarios.find(s => s.id === result.scenarioId)?.hints?.find(h => h.startsWith('Query:'))
           if (queryHint) {
             const query = queryHint.replace(/^Query:\s*"/, '').replace(/"$/, '')
@@ -419,7 +472,7 @@ async function runEvaluateMode(
               const pageWidgets = await extractPageWidgets(page)
               const evaluation = await evaluator.evaluateResponse(query, orchestrateResult, pageWidgets)
               evaluations.push(evaluation)
-              console.log(`    Score: ${(evaluation.overallScore * 100).toFixed(1)}% (${evaluation.rating})`)
+              console.log(`    Score: ${(evaluation.overallScore * 100).toFixed(1)}% (${evaluation.rating}) [${evaluation.queryClarity}]`)
             } catch (err: any) {
               console.warn(`    Evaluation failed: ${err.message?.slice(0, 80)}`)
             }
@@ -428,7 +481,6 @@ async function runEvaluateMode(
       },
     )
 
-    // Generate scenario test report
     const report = generateAuditReport(results, 'Command Center RL Agent', '1.0.0')
     fs.writeFileSync(path.join(evidenceDir, 'scenario-report.json'), JSON.stringify(report, null, 2))
     fs.writeFileSync(path.join(evidenceDir, 'scenario-summary.txt'), report.summary)
@@ -443,7 +495,6 @@ async function runEvaluateMode(
     await browser.close().catch(() => {})
   }
 
-  // Save evaluation results
   if (evaluations.length > 0) {
     const batch = evaluator.summarizeBatch(evaluations)
     fs.writeFileSync(
@@ -456,6 +507,7 @@ async function runEvaluateMode(
     console.log(`  Total: ${batch.summary.total} | Passed: ${batch.summary.passed} | Failed: ${batch.summary.failed}`)
     console.log(`  Average Score: ${(batch.summary.averageScore * 100).toFixed(1)}%`)
     console.log(`  Average Latency: ${batch.summary.averageLatencyMs.toFixed(0)}ms`)
+    console.log(`  Avg Specificity: ${(batch.summary.averageSpecificity * 100).toFixed(1)}%`)
     console.log(`${'═'.repeat(60)}`)
   }
 
@@ -478,11 +530,14 @@ async function runTrainCycleMode(
 
   // Step 1: Record baseline status
   console.log('Step 1: Recording baseline RL status...')
-  let baselineStatus
+  let baselineStatus: RLStatus | undefined
   try {
     baselineStatus = await client.getStatus()
-    console.log(`  Buffer: ${JSON.stringify(baselineStatus.buffer)}`)
-    console.log(`  Trainer: ${JSON.stringify(baselineStatus.trainer)}`)
+    const t1 = baselineStatus.trainer.tier1_scorer
+    const t2 = baselineStatus.trainer.tier2_lora
+    console.log(`  Buffer: ${baselineStatus.buffer.total_experiences} experiences (${baselineStatus.buffer.with_feedback} with feedback)`)
+    console.log(`  Scorer: ${t1.training_steps} steps, avg loss ${t1.avg_loss.toFixed(6)}`)
+    console.log(`  LoRA: v${t2.current_version}, ${t2.pending_pairs}/${t2.min_pairs_for_training} DPO pairs, ${t2.total_trainings} trainings`)
   } catch (err: any) {
     console.error(`  Failed to get baseline status: ${err.message}`)
   }
@@ -501,12 +556,11 @@ async function runTrainCycleMode(
       const feedback = evaluator.generateFeedback(evaluation)
       await client.submitFeedback(feedback)
       feedbackCount++
-      console.log(`  Submitted feedback for ${evaluation.queryId}: ${evaluation.rating}`)
+      console.log(`  Submitted: ${evaluation.queryId} → ${evaluation.rating} (${(evaluation.overallScore * 100).toFixed(1)}%)`)
     } catch (err: any) {
-      console.warn(`  Failed to submit feedback: ${err.message?.slice(0, 80)}`)
+      console.warn(`  Failed: ${err.message?.slice(0, 80)}`)
     }
 
-    // Cooldown between feedback submissions
     await new Promise(resolve => setTimeout(resolve, rlConfig.cooldownMs))
   }
   console.log(`  Total feedback submitted: ${feedbackCount}`)
@@ -515,30 +569,29 @@ async function runTrainCycleMode(
   console.log('\nStep 4: Checking training readiness...')
   try {
     const status = await client.getStatus()
-    const dpoReady = (status.trainer as any)?.dpo_pairs_ready || 0
-    console.log(`  DPO pairs ready: ${dpoReady} (need ≥50 for LoRA)`)
+    const t2 = status.trainer.tier2_lora
+    console.log(`  DPO pairs ready: ${t2.pending_pairs} (need ≥${t2.min_pairs_for_training} for LoRA)`)
 
-    if (dpoReady >= 50) {
+    if (t2.pending_pairs >= t2.min_pairs_for_training) {
       console.log('  Approving LoRA training...')
       const approval = await client.approveTraining()
       console.log(`  Training approved: ${approval.status}`)
 
       // Poll until training completes (max 10 min)
       console.log('  Waiting for training to complete...')
+      const baseTier2Trainings = baselineStatus?.trainer.tier2_lora.total_trainings || 0
       const deadline = Date.now() + 600_000
       while (Date.now() < deadline) {
         await new Promise(resolve => setTimeout(resolve, 15_000))
         const s = await client.getStatus()
-        const tier2 = (s.trainer as any)?.tier2_runs || 0
-        const baseTier2 = (baselineStatus?.trainer as any)?.tier2_runs || 0
-        if (tier2 > baseTier2) {
-          console.log(`  Training complete! Tier 2 runs: ${baseTier2} → ${tier2}`)
+        if (s.trainer.tier2_lora.total_trainings > baseTier2Trainings) {
+          console.log(`  Training complete! Trainings: ${baseTier2Trainings} → ${s.trainer.tier2_lora.total_trainings}`)
           break
         }
-        console.log('  Still training...')
+        console.log(`  Still training... (${Math.round((Date.now() - (deadline - 600_000)) / 1000)}s elapsed)`)
       }
     } else {
-      console.log(`  Not enough DPO pairs for LoRA training (${dpoReady}/50). Scorer will still update.`)
+      console.log(`  Not enough DPO pairs for LoRA training (${t2.pending_pairs}/${t2.min_pairs_for_training}). Scorer still updates from feedback.`)
     }
   } catch (err: any) {
     console.warn(`  Training check failed: ${err.message}`)
@@ -577,6 +630,7 @@ async function runTrainCycleMode(
 
   console.log(`\n${'═'.repeat(60)}`)
   console.log('  Training Cycle Results')
+  console.log(`${'─'.repeat(60)}`)
   console.log(`  Baseline avg score: ${(baselineAvg * 100).toFixed(1)}% (${baselineEvals.length} evals)`)
   console.log(`  After avg score:    ${(afterAvg * 100).toFixed(1)}% (${afterEvals.length} evals)`)
   console.log(`  Delta:              ${delta >= 0 ? '+' : ''}${(delta * 100).toFixed(1)}% (${deltaPercent}% relative)`)
@@ -656,8 +710,18 @@ async function main() {
     fs.mkdirSync(evidenceDir, { recursive: true })
     const evaluator = new RLEvaluator(rlConfig, rlAgentConfig)
 
-    const evaluations = await runApiEvalMode(client, evaluator, evidenceDir, true)
+    const evaluations = await runApiEvalMode(client, evaluator, evidenceDir, true, args.count)
     const passed = evaluations.filter(e => e.rating === 'up').length
+
+    // Print post-run RL system status
+    try {
+      const status = await client.getStatus()
+      console.log(`\nPost-run RL Status:`)
+      console.log(`  Buffer: ${status.buffer.total_experiences} experiences`)
+      console.log(`  Scorer: ${status.trainer.tier1_scorer.training_steps} steps`)
+      console.log(`  LoRA pairs: ${status.trainer.tier2_lora.pending_pairs}/${status.trainer.tier2_lora.min_pairs_for_training}`)
+    } catch { /* ignore */ }
+
     console.log(`\nFeedback submitted for all ${evaluations.length} evaluations.`)
     console.log(`Exit code: ${passed === evaluations.length ? 0 : 1}`)
     process.exit(passed === evaluations.length ? 0 : 1)
@@ -713,7 +777,7 @@ async function main() {
   }
 
   // Default: api-eval (fastest, generates most training data)
-  await runApiEvalMode(client, evaluator, evidenceDir, true)
+  await runApiEvalMode(client, evaluator, evidenceDir, true, args.count)
 }
 
 // Run

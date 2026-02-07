@@ -60,13 +60,13 @@ function WidgetSkeleton() {
   );
 }
 
-// --- Size → CSS class mapping ---
+// --- Size → CSS class mapping (responsive, matches Blob.tsx sizeClasses) ---
 
 const SIZE_CLASSES: Record<WidgetSize, string> = {
-  hero: "col-span-12 row-span-2",
-  expanded: "col-span-6",
-  normal: "col-span-4",
-  compact: "col-span-3",
+  hero: "col-span-1 md:col-span-6 xl:col-span-12 row-span-4",
+  expanded: "col-span-1 md:col-span-6 xl:col-span-6 row-span-2",
+  normal: "col-span-1 md:col-span-3 xl:col-span-4 row-span-2",
+  compact: "col-span-1 md:col-span-3 xl:col-span-3 row-span-2",
   hidden: "hidden",
 };
 

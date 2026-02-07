@@ -1,0 +1,18 @@
+[Unit]
+Description=Neuract OS Live Data Simulator (OPC UA + Modbus TCP)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=rohith
+WorkingDirectory=/home/rohith/desktop/CommandCenter/rl_training_data
+ExecStart=/usr/bin/python3 /home/rohith/desktop/CommandCenter/rl_training_data/live_simulator.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

@@ -32,14 +32,20 @@ const HEIGHT_CLASSES: Record<WidgetHeightHint, string> = {
   "x-tall": "row-span-4",
 };
 
+/**
+ * Responsive size classes matching BlobGrid breakpoints:
+ *   mobile (<768):     grid-cols-1   → all widgets full width
+ *   tablet (768-1279): grid-cols-6   → compact=3, normal=3, expanded=6, hero=6
+ *   desktop (1280+):   grid-cols-12  → compact=3, normal=4, expanded=6, hero=12
+ */
 function sizeClasses(size: WidgetSize, heightHint: WidgetHeightHint): string {
   const h = HEIGHT_CLASSES[heightHint];
   switch (size) {
-    case "hero": return "col-span-12 row-span-4";
-    case "expanded": return `col-span-6 ${h}`;
-    case "normal": return `col-span-4 ${h}`;
-    case "compact": return `col-span-3 ${h}`;
-    default: return `col-span-4 ${h}`;
+    case "hero": return "col-span-1 md:col-span-6 xl:col-span-12 row-span-4";
+    case "expanded": return `col-span-1 md:col-span-6 xl:col-span-6 ${h}`;
+    case "normal": return `col-span-1 md:col-span-3 xl:col-span-4 ${h}`;
+    case "compact": return `col-span-1 md:col-span-3 xl:col-span-3 ${h}`;
+    default: return `col-span-1 md:col-span-3 xl:col-span-4 ${h}`;
   }
 }
 

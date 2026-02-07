@@ -113,6 +113,7 @@ export type {
   FeedbackRequest,
   FeedbackResponse,
   RLStatus,
+  RLHistory,
   ApproveTrainingResponse,
   HealthResponse,
   RLClientConfig,
@@ -139,6 +140,7 @@ export {
   rlConfig,
   EVAL_WEIGHTS,
   EXPECTED_SCENARIOS,
+  SPECIFICITY_INDICATORS,
 } from './rl-config'
 
 export type { RLConfig } from './rl-config'

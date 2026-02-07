@@ -109,9 +109,18 @@ class SchemaDataCollector:
         """
         Collect data for all widgets in parallel.
 
+        Widget selection is prompt-driven — every widget the LLM selected is
+        kept in the layout.  If data collection or validation fails, the widget
+        is included with its demo_shape placeholder so the frontend can still
+        render it.
+
         Returns list of dicts with:
             scenario, size, data_override, relevance, why
         """
+        # Reset per-run dedup trackers
+        self._kpi_seen_entities = set()
+        self._kpi_seen_meters = set()
+
         with ThreadPoolExecutor(max_workers=5) as executor:
             futures = {
                 executor.submit(self._collect_one, w, query): i
@@ -127,33 +136,26 @@ class SchemaDataCollector:
                     logger.warning(f"Data collection failed for {widget.scenario}: {e}")
                     data_override = {}
 
-                # PIPELINE: normalize → validate → pass
-                # 1. Normalize: lossless, unambiguous transformations
-                # 2. Validate: strict, unchanged
+                schema_valid = True
+                # Try normalize → validate; fall back to demo_shape placeholder
                 try:
                     normalized_data = _normalize_and_validate(widget.scenario, data_override)
-                    schema_valid = True
-                except NormalizationError as ne:
-                    # Ambiguous data - cannot determine intent
-                    logger.error(
-                        f"NORMALIZATION FAILED {widget.scenario}: {ne.reason}"
+                except (NormalizationError, ValidationError) as exc:
+                    reason = getattr(exc, 'reason', None) or getattr(exc, 'errors', str(exc))
+                    logger.warning(
+                        f"Validation fallback for {widget.scenario}: {reason}"
                     )
-                    # Skip this widget - ambiguous data
-                    continue
-                except ValidationError as ve:
-                    # Invalid data - fails strict validation
-                    logger.error(
-                        f"VALIDATION REJECTED {widget.scenario}: {ve.errors}"
-                    )
-                    # Skip this widget - invalid data
-                    continue
+                    # Use demo_shape placeholder so the widget still appears
+                    schema = WIDGET_SCHEMAS.get(widget.scenario, {})
+                    normalized_data = schema.get("demo_shape", data_override or {})
+                    schema_valid = False
 
                 results[idx] = {
                     "scenario": widget.scenario,
                     "size": widget.size,
                     "relevance": widget.relevance,
                     "why": widget.why,
-                    "data_override": normalized_data,  # Use normalized data
+                    "data_override": normalized_data,
                     "schema_valid": schema_valid,
                 }
 
@@ -218,23 +220,61 @@ class SchemaDataCollector:
 
     # ── Strategy implementations ──
 
+    # Track which entities we've already used for KPIs in this collection run
+    # to avoid duplicate data across multiple KPI widgets
+    _kpi_seen_entities: set = set()
+
     def _collect_single_metric(self, query: str, entities: list, metric: str, collections: list) -> dict:
-        """Collect a single metric for KPI widget."""
+        """Collect a single metric for KPI widget.
+
+        Uses entity/metric from data_request when available, and skips
+        entities already shown in other KPIs to ensure diversity.
+        """
         vs = self.pipeline.vector_store
         entity = entities[0] if entities else ""
-        search_q = f"{entity} {metric}".strip() or query
 
-        results = vs.search(
-            collections[0] if collections else EQUIPMENT_COLLECTION,
-            search_q,
-            n_results=1,
-        )
+        # Map common metric aliases to SQL column names
+        metric_aliases = {
+            "power": "power_kw", "consumption": "power_kw", "energy": "power_kw",
+            "load": "power_kw", "demand": "max_demand_kw",
+            "power_factor": "power_factor", "pf": "power_factor",
+            "voltage": "voltage_avg", "frequency": "frequency",
+        }
+        resolved_metric = metric_aliases.get((metric or "").lower().strip(), metric)
+
+        # If a specific energy metric is requested, try SQL
+        energy_metrics = {"power_kw", "power_factor", "voltage_avg", "frequency",
+                         "energy_kwh", "max_demand_kw", "max_demand_kva"}
+        if resolved_metric in energy_metrics:
+            return self._collect_kpi_from_energy_sql(entity, resolved_metric)
+
+        # If query context suggests energy, try SQL with power_kw
+        energy_keywords = {"energy", "power", "consumption", "kw", "kwh", "load", "demand", "meter", "voltage"}
+        query_words = set(query.lower().split())
+        if query_words & energy_keywords and not metric:
+            return self._collect_kpi_from_energy_sql(entity, "power_kw")
+
+        search_q = f"{entity} {metric}".strip() or query
+        coll = collections[0] if collections else EQUIPMENT_COLLECTION
+
+        # Fetch multiple results to ensure diversity across KPI widgets
+        results = vs.search(coll, search_q, n_results=5)
 
         if not results:
             return {"demoData": {"label": entity or "Unknown", "value": "N/A", "unit": "",
                                  "_synthetic": True, "_data_source": "no_data_fallback"}}
 
-        doc = results[0]
+        # Pick first result not already used in another KPI
+        doc = None
+        for r in results:
+            eid = r.metadata.get("equipment_id", r.metadata.get("name", ""))
+            if eid not in self._kpi_seen_entities:
+                doc = r
+                self._kpi_seen_entities.add(eid)
+                break
+        if doc is None:
+            doc = results[0]
+
         meta = doc.metadata
         value, unit, state = self._extract_metric_from_doc(doc, metric)
 
@@ -246,6 +286,62 @@ class SchemaDataCollector:
                 "state": state,
             }
         }
+
+    # Track meters already used in KPI SQL queries for diversity
+    _kpi_seen_meters: set = set()
+
+    def _collect_kpi_from_energy_sql(self, entity: str, metric: str) -> dict:
+        """Collect a KPI value directly from energy_readings SQL.
+
+        Ensures diversity by tracking which meters have been used.
+        """
+        from django.db import connection
+        try:
+            metric_col = metric if metric in (
+                "power_kw", "power_factor", "voltage_avg", "frequency"
+            ) else "power_kw"
+            with connection.cursor() as c:
+                if entity:
+                    c.execute(f"""
+                        SELECT meter_id, meter_name, {metric_col}
+                        FROM energy_readings
+                        WHERE meter_id = %s OR meter_name LIKE %s
+                        ORDER BY timestamp DESC LIMIT 1
+                    """, [entity, f"%{entity}%"])
+                else:
+                    # Get top meters, skip ones already shown
+                    skip_clause = ""
+                    params = []
+                    if self._kpi_seen_meters:
+                        placeholders = ",".join(["%s"] * len(self._kpi_seen_meters))
+                        skip_clause = f"WHERE meter_id NOT IN ({placeholders})"
+                        params = list(self._kpi_seen_meters)
+                    c.execute(f"""
+                        SELECT meter_id, meter_name, {metric_col}
+                        FROM energy_readings
+                        {skip_clause}
+                        ORDER BY energy_kwh_cumulative DESC LIMIT 1
+                    """, params)
+                row = c.fetchone()
+                if row:
+                    self._kpi_seen_meters.add(row[0])  # row[0] = meter_id
+                    unit_map = {
+                        "power_kw": "kW", "power_factor": "PF",
+                        "voltage_avg": "V", "frequency": "Hz",
+                    }
+                    val = round(float(row[2]), 1) if row[2] is not None else "N/A"
+                    return {
+                        "demoData": {
+                            "label": row[1] or entity or "Meter",  # row[1] = meter_name
+                            "value": str(val),
+                            "unit": unit_map.get(metric_col, ""),
+                            "state": "normal",
+                        }
+                    }
+        except Exception as e:
+            logger.warning(f"KPI energy SQL failed: {e}")
+        return {"demoData": {"label": entity or "Unknown", "value": "N/A", "unit": "",
+                             "_synthetic": True, "_data_source": "no_data_fallback"}}
 
     def _collect_alerts(self, query: str, entities: list) -> dict:
         """Collect alerts for alerts widget."""
@@ -451,69 +547,202 @@ class SchemaDataCollector:
         }
 
     def _collect_multi_time_series(self, query: str, entities: list, metric: str) -> dict:
-        """Collect multiple time series for multi-line trend."""
+        """Collect multiple time series for multi-line trend.
+
+        When entities are provided (and they're distinct), fetches each entity's time series.
+        Otherwise, gets top 3 meters from energy_readings SQL directly.
+        """
         series = []
-        for entity in (entities or [""])[:4]:
-            ts_data = self._collect_time_series(query, [entity] if entity else [], metric)
-            demo = ts_data.get("demoData", {})
-            series.append({
-                "name": demo.get("label", entity or "Series"),
-                "timeSeries": demo.get("timeSeries", []),
-            })
+
+        # Deduplicate entities and check we have at least 2 unique ones
+        unique_entities = list(dict.fromkeys(entities)) if entities else []
+        if len(unique_entities) >= 2:
+            seen_labels = set()
+            for entity in unique_entities[:4]:
+                ts_data = self._collect_time_series(query, [entity], metric)
+                demo = ts_data.get("demoData", {})
+                label = demo.get("label", entity or "Series")
+                # Skip if we already got this meter (fuzzy match collision)
+                if label in seen_labels:
+                    continue
+                seen_labels.add(label)
+                series.append({
+                    "name": label,
+                    "timeSeries": demo.get("timeSeries", []),
+                })
+            # If dedup reduced to <2, fall through to SQL
+            if len(series) >= 2:
+                return {
+                    "demoData": {
+                        "label": f"{metric or 'Multi-Metric'}".replace("_", " ").title(),
+                        "unit": "kW",
+                        "series": series,
+                    }
+                }
+            series = []  # reset and use SQL path below
+
+        if not series:
+            # Fetch all data for top 3 meters in one query (avoids cursor issues)
+            from django.db import connection
+            try:
+                with connection.cursor() as c:
+                    c.execute("""
+                        SELECT e.meter_id, e.meter_name, e.timestamp, e.power_kw
+                        FROM energy_readings e
+                        INNER JOIN (
+                            SELECT meter_id, MAX(energy_kwh_cumulative) as max_kwh
+                            FROM energy_readings
+                            GROUP BY meter_id
+                            ORDER BY max_kwh DESC
+                            LIMIT 3
+                        ) top ON e.meter_id = top.meter_id
+                        ORDER BY e.meter_id, e.timestamp ASC
+                    """)
+                    rows = c.fetchall()
+
+                    # Group by meter
+                    from collections import OrderedDict
+                    meter_data = OrderedDict()
+                    for meter_id, meter_name, ts, power_kw in rows:
+                        if meter_id not in meter_data:
+                            meter_data[meter_id] = {"name": meter_name, "points": []}
+                        meter_data[meter_id]["points"].append({
+                            "time": str(ts), "value": power_kw or 0
+                        })
+
+                    for mid, mdata in meter_data.items():
+                        series.append({
+                            "name": mdata["name"] or mid,
+                            "timeSeries": mdata["points"],
+                        })
+            except Exception as e:
+                logger.warning(f"Multi time series SQL failed: {e}")
+
+            if not series:
+                # Fallback: single series from time_series collector
+                ts_data = self._collect_time_series(query, [], metric)
+                demo = ts_data.get("demoData", {})
+                series.append({
+                    "name": demo.get("label", "Series"),
+                    "timeSeries": demo.get("timeSeries", []),
+                })
 
         return {
             "demoData": {
                 "label": f"{metric or 'Multi-Metric'}".replace("_", " ").title(),
-                "unit": series[0].get("unit", "units") if series else "units",
+                "unit": "kW",
                 "series": series,
             }
         }
 
     def _collect_aggregation(self, query: str, entities: list, metric: str, collections: list) -> dict:
-        """Collect aggregation data for distribution/composition/category-bar."""
+        """Collect aggregation data for distribution/composition/category-bar.
+
+        Tries SQL energy breakdown first (groups by meter type/building),
+        then falls back to vector search grouping.
+        """
+        # Try SQL-based energy breakdown for richer aggregation
+        energy_breakdown = self._collect_aggregation_energy_sql(metric)
+        if energy_breakdown:
+            return energy_breakdown
+
         vs = self.pipeline.vector_store
         coll = collections[0] if collections else EQUIPMENT_COLLECTION
 
-        results = vs.search(coll, query, n_results=10)
+        # Search broadly for diverse equipment types
+        results = vs.search(coll, query, n_results=30)
         if not results:
             return {"demoData": {"total": 0, "unit": "", "series": []}}
 
-        # Group by equipment type or name and aggregate counts
+        # Group by equipment type and sum power_kw where available
         groups = {}
         for r in results:
             meta = r.metadata
             key = meta.get("equipment_type", meta.get("name", "Other"))
+            power = float(meta.get("power_kw", 0) or 0)
             if key not in groups:
-                groups[key] = {"label": key.replace("_", " ").title(), "count": 0}
+                groups[key] = {"label": key.replace("_", " ").title(), "total_power": 0, "count": 0}
+            groups[key]["total_power"] += power
             groups[key]["count"] += 1
 
-        # Calculate percentages (each segment as % of total)
-        total_count = sum(g["count"] for g in groups.values())
+        # Use actual power values if available, otherwise fall back to counts
+        has_power = any(g["total_power"] > 0 for g in groups.values())
+        total = sum(g["total_power"] if has_power else g["count"] for g in groups.values())
+
         series = []
         for g in groups.values():
-            pct = round((g["count"] / total_count * 100), 1) if total_count > 0 else 0
+            raw = g["total_power"] if has_power else g["count"]
+            pct = round((raw / total * 100), 1) if total > 0 else 0
             series.append({"label": g["label"], "value": pct})
 
         sorted_series = sorted(series, key=lambda s: -s["value"])
         categories = [s["label"] for s in sorted_series]
         values = [s["value"] for s in sorted_series]
 
-        # AUDIT FIX: Generate schema-compliant data for all aggregation widgets
-        # - distribution: total=100 (percentages), unit="%"
-        # - composition: requires label, unit, categories, series (with name, values)
-        # - category-bar: requires label, unit, categories, values
         return {
             "demoData": {
                 "label": metric.replace("_", " ").title() if metric else "Distribution",
-                "unit": "%",
-                "total": 100.0,  # Percentages sum to 100%
-                # For distribution
+                "unit": "kW" if has_power else "%",
+                "total": round(total, 1) if has_power else 100.0,
                 "series": [{"name": s["label"], "values": [s["value"]]} for s in sorted_series],
-                # For category-bar
                 "categories": categories,
                 "values": values,
             }
         }
+
+    def _collect_aggregation_energy_sql(self, metric: str) -> dict | None:
+        """Try SQL-based energy breakdown grouped by meter type or building."""
+        from django.db import connection
+        try:
+            with connection.cursor() as c:
+                # Get latest reading per meter, grouped by meter type prefix
+                c.execute("""
+                    SELECT
+                        CASE
+                            WHEN meter_id LIKE 'EM-INC%%' THEN 'Main Incomer'
+                            WHEN meter_id LIKE 'EM-SUB%%' THEN 'Sub Meter'
+                            WHEN meter_id LIKE 'EM-DG%%' THEN 'DG Set'
+                            WHEN meter_id LIKE 'EM-SOL%%' THEN 'Solar'
+                            WHEN meter_id LIKE 'EM-UPS%%' THEN 'UPS'
+                            ELSE 'Other'
+                        END as category,
+                        ROUND(AVG(power_kw), 1) as avg_power,
+                        COUNT(DISTINCT meter_id) as meter_count
+                    FROM energy_readings
+                    WHERE id IN (
+                        SELECT MAX(id) FROM energy_readings GROUP BY meter_id
+                    )
+                    GROUP BY category
+                    ORDER BY avg_power DESC
+                """)
+                rows = c.fetchall()
+                if not rows or len(rows) < 2:
+                    return None
+
+                total = sum(float(r[1] or 0) for r in rows)
+                if total <= 0:
+                    return None
+
+                sorted_data = [
+                    {"label": r[0], "value": round(float(r[1] or 0) / total * 100, 1)}
+                    for r in rows if float(r[1] or 0) > 0
+                ]
+                categories = [s["label"] for s in sorted_data]
+                values = [s["value"] for s in sorted_data]
+
+                return {
+                    "demoData": {
+                        "label": metric.replace("_", " ").title() if metric else "Energy Distribution",
+                        "unit": "%",
+                        "total": 100.0,
+                        "series": [{"name": s["label"], "values": [s["value"]]} for s in sorted_data],
+                        "categories": categories,
+                        "values": values,
+                    }
+                }
+        except Exception as e:
+            logger.debug(f"Energy aggregation SQL failed: {e}")
+            return None
 
     def _collect_events(self, query: str, entities: list, collections: list) -> dict:
         """Collect events for timeline or eventlogstream."""

@@ -185,7 +185,7 @@ export default function Blob() {
               exit={variants.exit}
               transition={{
                 duration: TRANSITION_DURATION_S,
-                delay: index * 0.05, // Stagger: 50ms per widget
+                delay: 0, // All widgets appear at once after full processing
               }}
               className={sizeClasses(instruction.size, instruction.heightHint)}
               data-scenario={instruction.scenario}

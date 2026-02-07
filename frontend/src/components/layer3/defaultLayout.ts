@@ -12,6 +12,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "kpi",
       fixture: "kpi_live-standard",
       size: "compact",
+      heightHint: "short",
       position: null,
       relevance: 0.8,
       data_override: {
@@ -22,6 +23,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "kpi",
       fixture: "kpi_live-standard",
       size: "compact",
+      heightHint: "short",
       position: null,
       relevance: 0.8,
       data_override: {
@@ -32,6 +34,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "kpi",
       fixture: "kpi_live-standard",
       size: "compact",
+      heightHint: "short",
       position: null,
       relevance: 0.7,
       data_override: {
@@ -42,6 +45,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "kpi",
       fixture: "kpi_alert-warning-state",
       size: "compact",
+      heightHint: "short",
       position: null,
       relevance: 0.9,
       data_override: {
@@ -52,6 +56,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "trend",
       fixture: "trend_live-line",
       size: "expanded",
+      heightHint: "tall",
       position: null,
       relevance: 0.6,
       data_override: null,
@@ -60,6 +65,7 @@ export const DEFAULT_LAYOUT: LayoutJSON = {
       scenario: "alerts",
       fixture: "banner-energy-peak-threshold-exceeded",
       size: "expanded",
+      heightHint: "medium",
       position: null,
       relevance: 0.7,
       data_override: null,

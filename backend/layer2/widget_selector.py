@@ -138,6 +138,9 @@ FAST_SELECT_PROMPT = '''Select 8 widgets for this industrial operations query.
 ## QUERY
 "{query}"
 
+## DATA AVAILABLE
+{data_summary}
+
 ## SIZING RULES
 Hero-capable widgets (use for first/main answer):
   trend, trend-multi-line, trends-cumulative, comparison, timeline,
@@ -154,17 +157,20 @@ Small widgets (NOT hero, use for supporting info):
 2. Use EXACT scenario names (e.g., "trend" not "trend chart")
 3. Include diverse widget types (kpi, trends, alerts, etc.)
 4. 8 widgets total
+5. Each widget MUST have a data_request with query, metric, and entities
+6. Each KPI widget must show a DIFFERENT metric (e.g. power_kw, power_factor, health_score, voltage_avg)
+7. Use specific equipment/meter IDs from the DATA AVAILABLE section
 
 ## OUTPUT (JSON only)
 {{"heading": "<title>", "widgets": [
-  {{"scenario": "<hero-capable>", "size": "hero"}},
-  {{"scenario": "<any>", "size": "expanded"}},
-  {{"scenario": "<any>", "size": "expanded"}},
-  {{"scenario": "<any>", "size": "normal"}},
-  {{"scenario": "<any>", "size": "normal"}},
-  {{"scenario": "<any>", "size": "normal"}},
-  {{"scenario": "<any>", "size": "compact"}},
-  {{"scenario": "<any>", "size": "compact"}}
+  {{"scenario": "<hero-capable>", "size": "hero", "data_request": {{"query": "<what to show>", "metric": "<metric_name>", "entities": ["<equipment_id>"]}}}},
+  {{"scenario": "<any>", "size": "expanded", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "expanded", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "compact", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
+  {{"scenario": "<any>", "size": "compact", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}}
 ]}}'''
 
 # Template-based "why" descriptions - avoids slow LLM text generation
@@ -332,15 +338,19 @@ class WidgetSelector:
             query=intent.raw_text,
             intent_type=intent.type,
             domains=json.dumps(intent.domains),
+            data_summary=data_summary or "No pre-fetched data available.",
         )
 
         # F3 Fix: Set temperature=0.0 for deterministic widget selection
         # (same query → same layout)
+        # Use only the user query as cache key — the full prompt contains a
+        # large template that drowns out the variable portion in embeddings.
         data = llm.generate_json(
             prompt=prompt,
             system_prompt=SYSTEM_PROMPT,
             temperature=0.0,
             max_tokens=2048,  # Generous tokens for 7-8 widgets
+            cache_key=f"widget_select:{intent.raw_text}",
         )
 
         if data is None:

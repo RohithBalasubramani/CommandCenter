@@ -168,6 +168,7 @@ class IntentParser:
             system_prompt=SYSTEM_PROMPT,
             temperature=0.0,  # AUDIT FIX: Deterministic intent parsing
             max_tokens=512,
+            cache_key=f"intent:{transcript}",
         )
 
         if data is None:

@@ -483,14 +483,21 @@ class OllamaLLMService:
         system_prompt: str = None,
         temperature: float = 0.7,
         max_tokens: int = 1024,
+        cache_key: str = None,
     ) -> str:
-        """Generate response from LLM."""
+        """Generate response from LLM.
+
+        Args:
+            cache_key: If provided, used as the semantic cache key instead of
+                       the full prompt (useful when the prompt contains large
+                       templates that drown out the variable query portion).
+        """
         if not REQUESTS_AVAILABLE:
             raise ImportError("requests not installed. Run: pip install requests")
 
         # Check cache first
         if self.cache is not None:
-            cached = self.cache.get(prompt, system_prompt or "")
+            cached = self.cache.get(cache_key or prompt, system_prompt or "")
             if cached is not None:
                 return cached
 
@@ -527,7 +534,7 @@ class OllamaLLMService:
 
             # Store in cache
             if self.cache is not None:
-                self.cache.put(prompt, result_text, system_prompt or "")
+                self.cache.put(cache_key or prompt, result_text, system_prompt or "")
 
             return result_text
         except requests.exceptions.ConnectionError:
@@ -577,18 +584,23 @@ class OllamaLLMService:
         system_prompt: str = None,
         temperature: float = 0.3,
         max_tokens: int = 2048,
+        cache_key: str = None,
     ) -> dict | None:
         """Generate structured JSON response from LLM.
 
         Uses Ollama's JSON format mode and validates the output.
         Returns parsed dict on success, None on failure.
+
+        Args:
+            cache_key: If provided, used as the semantic cache key instead of
+                       the full prompt.
         """
         if not REQUESTS_AVAILABLE:
             raise ImportError("requests not installed. Run: pip install requests")
 
         # Check cache first
         if self.cache is not None:
-            cached = self.cache.get(prompt, system_prompt or "")
+            cached = self.cache.get(cache_key or prompt, system_prompt or "")
             if cached is not None:
                 return cached
 
@@ -616,7 +628,7 @@ class OllamaLLMService:
 
                 # Store in cache
                 if self.cache is not None:
-                    self.cache.put(prompt, parsed, system_prompt or "")
+                    self.cache.put(cache_key or prompt, parsed, system_prompt or "")
 
                 return parsed
             except json.JSONDecodeError:
@@ -682,16 +694,26 @@ class LLMCache:
         norm = np.linalg.norm(a) * np.linalg.norm(b)
         return float(dot / norm) if norm > 0 else 0.0
 
+    def _partition_key(self, system_prompt: str) -> str:
+        """Create a short partition key from the system prompt so entries
+        with different system prompts never match each other."""
+        import hashlib
+        return hashlib.md5(system_prompt.encode()).hexdigest()[:8] if system_prompt else ""
+
     def get(self, prompt: str, system_prompt: str = "") -> object:
-        """Look up a cached response for a semantically similar prompt."""
+        """Look up a cached response for a semantically similar prompt.
+
+        Only the user prompt is embedded for similarity (the system prompt is
+        used as a partition key so different call-sites don't collide).
+        """
         import time as _time
         import numpy as np
 
         now = _time.time()
-        cache_text = f"{system_prompt}\n{prompt}" if system_prompt else prompt
+        partition = self._partition_key(system_prompt)
 
         try:
-            query_emb = np.array(self.embedding_service.embed(cache_text))
+            query_emb = np.array(self.embedding_service.embed(prompt))
         except Exception:
             return None
 
@@ -701,7 +723,9 @@ class LLMCache:
 
             best_sim = 0.0
             best_response = None
-            for emb, response, ts in self._cache:
+            for emb, response, ts, part in self._cache:
+                if part != partition:
+                    continue
                 sim = self._cosine_similarity(query_emb, emb)
                 if sim > best_sim:
                     best_sim = sim
@@ -709,7 +733,7 @@ class LLMCache:
 
             if best_sim >= self.similarity_threshold:
                 self.hits += 1
-                logger.debug(f"LLMCache HIT: similarity={best_sim:.3f}")
+                logger.debug(f"LLMCache HIT: similarity={best_sim:.3f} partition={partition}")
                 return best_response
 
         self.misses += 1
@@ -720,9 +744,9 @@ class LLMCache:
         import time as _time
         import numpy as np
 
-        cache_text = f"{system_prompt}\n{prompt}" if system_prompt else prompt
+        partition = self._partition_key(system_prompt)
         try:
-            embedding = np.array(self.embedding_service.embed(cache_text))
+            embedding = np.array(self.embedding_service.embed(prompt))
         except Exception:
             return
 
@@ -731,7 +755,7 @@ class LLMCache:
             if len(self._cache) >= self.max_entries:
                 self._cache.sort(key=lambda e: e[2])
                 self._cache = self._cache[-(self.max_entries - 1):]
-            self._cache.append((embedding, response, now))
+            self._cache.append((embedding, response, now, partition))
 
     def get_stats(self) -> dict:
         total = self.hits + self.misses
@@ -1045,25 +1069,55 @@ class IndustrialRAGPipeline:
         return len(docs)
 
     def query_energy_sql(self, equipment_id: str = None, days: int = 30) -> list[dict]:
-        """Direct SQL query for energy time-series data (not vector search)."""
+        """Direct SQL query for energy time-series data (not vector search).
+
+        Accepts meter_id (e.g. "EM-INC-01") or name fragment (e.g. "Main Incomer").
+        When nothing is given, returns data for the main incomer.
+        """
         from django.db import connection
         try:
             with connection.cursor() as c:
+                resolved_meter = None
+
                 if equipment_id:
+                    # Try exact meter_id match first
                     c.execute("""
-                        SELECT meter_id, meter_name, timestamp, power_kw, power_factor, voltage_avg
-                        FROM energy_readings
-                        WHERE meter_id = %s
-                        ORDER BY timestamp DESC
-                        LIMIT 100
+                        SELECT meter_id FROM energy_readings
+                        WHERE meter_id = %s LIMIT 1
                     """, [equipment_id])
-                else:
+                    row = c.fetchone()
+                    if row:
+                        resolved_meter = row[0]
+                    else:
+                        # Try fuzzy match on meter_name or meter_id
+                        c.execute("""
+                            SELECT DISTINCT meter_id FROM energy_readings
+                            WHERE meter_name LIKE %s OR meter_id LIKE %s
+                            LIMIT 1
+                        """, [f"%{equipment_id}%", f"%{equipment_id}%"])
+                        row = c.fetchone()
+                        if row:
+                            resolved_meter = row[0]
+
+                if not resolved_meter:
+                    # Pick the main incomer meter (highest cumulative energy)
                     c.execute("""
-                        SELECT meter_id, meter_name, timestamp, power_kw, power_factor, voltage_avg
-                        FROM energy_readings
-                        ORDER BY timestamp DESC
-                        LIMIT 100
+                        SELECT meter_id FROM energy_readings
+                        ORDER BY energy_kwh_cumulative DESC
+                        LIMIT 1
                     """)
+                    row = c.fetchone()
+                    if not row:
+                        return []
+                    resolved_meter = row[0]
+
+                c.execute("""
+                    SELECT meter_id, meter_name, timestamp, power_kw, power_factor, voltage_avg
+                    FROM energy_readings
+                    WHERE meter_id = %s
+                    ORDER BY timestamp ASC
+                    LIMIT 200
+                """, [resolved_meter])
                 rows = c.fetchall()
                 return [
                     {"meter_id": r[0], "meter_name": r[1], "timestamp": r[2],
