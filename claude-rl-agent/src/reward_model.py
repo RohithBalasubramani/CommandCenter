@@ -2,21 +2,22 @@
 """
 Behavioral Reward Model
 
-Scores LLaMA-generated workflows based on behavioral quality metrics:
-- Constraint adherence
-- Reasoning depth
-- Tool efficiency
-- Self-correction presence
-- Exploration appropriateness
+Scores LLaMA-generated workflows based on behavioral quality metrics.
+
+Weight ordering reflects Claude's real priority:
+  constraint adherence > correct terminal outcome > tool correctness > self-correction > reasoning > exploration
+
+Exploration only matters when outcome is ambiguous — it should never outweigh getting the answer right.
 """
 
+import re
 import torch
 import torch.nn as nn
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 import logging
 
-from claude_trace_schema import ClaudeTrace, ReasoningSignals
+from claude_trace_schema import ClaudeTrace, ReasoningSignals, OutputArtifact
 
 logger = logging.getLogger(__name__)
 
@@ -25,19 +26,21 @@ logger = logging.getLogger(__name__)
 class RewardComponents:
     """Individual reward components for workflow quality."""
     constraint_adherence: float  # 0-1: Did it respect constraints?
-    reasoning_depth: float  # 0-1: How thorough was the reasoning?
-    tool_efficiency: float  # 0-1: Were tools used appropriately?
-    self_correction: float  # 0-1: Did it self-correct when needed?
-    exploration_fit: float  # 0-1: Was exploration depth appropriate?
+    outcome_correctness: float   # 0-1: Is the terminal artifact valid and complete?
+    tool_efficiency: float       # 0-1: Were tools used appropriately?
+    self_correction: float       # 0-1: Did it self-correct when needed?
+    reasoning_depth: float       # 0-1: How thorough was the reasoning?
+    exploration_fit: float       # 0-1: Was exploration depth appropriate?
 
     total_reward: float  # Weighted sum
 
     def to_dict(self) -> Dict[str, float]:
         return {
             "constraint_adherence": self.constraint_adherence,
-            "reasoning_depth": self.reasoning_depth,
+            "outcome_correctness": self.outcome_correctness,
             "tool_efficiency": self.tool_efficiency,
             "self_correction": self.self_correction,
+            "reasoning_depth": self.reasoning_depth,
             "exploration_fit": self.exploration_fit,
             "total_reward": self.total_reward,
         }
@@ -52,13 +55,14 @@ class BehavioralRewardModel:
     """
 
     def __init__(self, weights: Dict[str, float] = None):
-        # Default weights for reward components
+        # Default weights — ordered by Claude's real priority
         self.weights = weights or {
-            "constraint_adherence": 0.25,
-            "reasoning_depth": 0.20,
-            "tool_efficiency": 0.20,
-            "self_correction": 0.15,
-            "exploration_fit": 0.20,
+            "constraint_adherence": 0.30,   # Highest: did it respect constraints?
+            "outcome_correctness": 0.25,    # Second: is the final artifact correct/complete?
+            "tool_efficiency": 0.15,        # Third: were tools used correctly?
+            "self_correction": 0.15,        # Fourth: did it recover from mistakes?
+            "reasoning_depth": 0.10,        # Fifth: appropriate reasoning depth?
+            "exploration_fit": 0.05,        # Last: exploration only matters when outcome is ambiguous
         }
 
         # Normalize weights to sum to 1.0
@@ -68,17 +72,18 @@ class BehavioralRewardModel:
     def compute_reward(
         self,
         reasoning_signals: ReasoningSignals,
-        task_complexity: str = "medium"
+        task_complexity: str = "medium",
+        output_artifact: Optional[OutputArtifact] = None,
+        response_text: str = "",
     ) -> RewardComponents:
         """Compute reward for a generated workflow."""
 
-        # 1. Constraint adherence
+        # 1. Constraint adherence (highest priority)
         constraint_score = self._score_constraints(reasoning_signals)
 
-        # 2. Reasoning depth
-        reasoning_score = self._score_reasoning_depth(
-            reasoning_signals,
-            task_complexity
+        # 2. Outcome correctness (new — success-state anchoring)
+        outcome_score = self._score_outcome_correctness(
+            output_artifact, response_text, reasoning_signals
         )
 
         # 3. Tool efficiency
@@ -87,29 +92,151 @@ class BehavioralRewardModel:
         # 4. Self-correction
         correction_score = self._score_self_correction(reasoning_signals)
 
-        # 5. Exploration fit
+        # 5. Reasoning depth
+        reasoning_score = self._score_reasoning_depth(
+            reasoning_signals, task_complexity
+        )
+
+        # 6. Exploration fit (lowest priority)
         exploration_score = self._score_exploration_fit(
-            reasoning_signals,
-            task_complexity
+            reasoning_signals, task_complexity
         )
 
         # Compute weighted total
         total_reward = (
             self.weights["constraint_adherence"] * constraint_score +
-            self.weights["reasoning_depth"] * reasoning_score +
+            self.weights["outcome_correctness"] * outcome_score +
             self.weights["tool_efficiency"] * tool_score +
             self.weights["self_correction"] * correction_score +
+            self.weights["reasoning_depth"] * reasoning_score +
             self.weights["exploration_fit"] * exploration_score
         )
 
         return RewardComponents(
             constraint_adherence=constraint_score,
-            reasoning_depth=reasoning_score,
+            outcome_correctness=outcome_score,
             tool_efficiency=tool_score,
             self_correction=correction_score,
+            reasoning_depth=reasoning_score,
             exploration_fit=exploration_score,
             total_reward=total_reward,
         )
+
+    def _score_outcome_correctness(
+        self,
+        artifact: Optional[OutputArtifact],
+        response_text: str,
+        signals: ReasoningSignals,
+    ) -> float:
+        """
+        Score the terminal output artifact for correctness and completeness.
+
+        This is success-state anchoring: does the output satisfy functional requirements?
+        Not style — structure, completeness, validity.
+        """
+        score = 0.0
+        checks = 0
+
+        # --- If we have a structured OutputArtifact, use it ---
+        if artifact is not None:
+            # Schema validity (hard gate — invalid schema is a strong negative)
+            if artifact.schema_valid:
+                score += 1.0
+            else:
+                score += 0.1  # heavy penalty
+            checks += 1
+
+            # Completeness from checklist
+            if artifact.completeness_checklist:
+                completeness = artifact.compute_completeness()
+                score += completeness
+                checks += 1
+
+            # Required components present
+            if artifact.required_components and response_text:
+                present = sum(
+                    1 for comp in artifact.required_components
+                    if comp.lower() in response_text.lower()
+                )
+                component_ratio = present / len(artifact.required_components)
+                score += component_ratio
+                checks += 1
+
+            # Penalize missing edge cases when task is complex
+            if artifact.edge_cases_mentioned:
+                score += min(len(artifact.edge_cases_mentioned) * 0.2, 1.0)
+                checks += 1
+
+            # Penalize schema violations
+            if artifact.schema_violations:
+                violation_penalty = min(len(artifact.schema_violations) * 0.25, 0.8)
+                score += (1.0 - violation_penalty)
+                checks += 1
+
+            # Reward appropriate refusals (Claude says "data unavailable" instead of hallucinating)
+            if artifact.refusals:
+                score += 0.8  # refusals are almost always correct
+                checks += 1
+
+        # --- Heuristic fallback when no artifact ---
+        if checks == 0:
+            score, checks = self._heuristic_outcome_score(response_text, signals)
+
+        return score / max(checks, 1)
+
+    def _heuristic_outcome_score(
+        self, response_text: str, signals: ReasoningSignals
+    ) -> tuple:
+        """
+        Fallback heuristic scoring when no OutputArtifact is available.
+        Checks structural markers that indicate a correct terminal output.
+        """
+        score = 0.0
+        checks = 0
+
+        if not response_text:
+            return 0.3, 1  # empty response = bad
+
+        # 1. Does the response actually answer something? (not just meta-commentary)
+        has_substantive_content = len(response_text.strip()) > 50
+        filler_ratio = len(re.findall(
+            r'\b(let me|I would|I can|I\'ll|here\'s what|based on)\b',
+            response_text, re.IGNORECASE
+        )) / max(len(response_text.split()), 1)
+
+        if has_substantive_content and filler_ratio < 0.15:
+            score += 1.0
+        elif has_substantive_content:
+            score += 0.6
+        else:
+            score += 0.3
+        checks += 1
+
+        # 2. Does it contain specific data points (not vague claims)?
+        has_numbers = bool(re.search(r'\d+\.?\d*\s*(?:PSI|kW|MW|rpm|°?C|bar|%|mm|Hz)', response_text))
+        has_ids = bool(re.search(r'(?:pump|chiller|transformer|CT|DG|AHU)[-_]?\d+', response_text, re.IGNORECASE))
+        specificity = (0.5 if has_numbers else 0.0) + (0.5 if has_ids else 0.0)
+        score += specificity
+        checks += 1
+
+        # 3. Does it address the question directly (first sentence)?
+        sentences = re.split(r'[.!?]\s+', response_text.strip())
+        if sentences:
+            first = sentences[0].lower()
+            is_direct = not any(first.startswith(p) for p in [
+                "i ", "let me", "sure", "of course", "great question",
+                "i'd be happy", "absolutely", "certainly"
+            ])
+            score += 1.0 if is_direct else 0.4
+            checks += 1
+
+        # 4. Task completion signal from reasoning
+        if signals and signals.tool_sequence:
+            # If tools were used and a response was generated, likely completed
+            score += 0.8
+            checks += 1
+
+        return score, checks
 
     def _score_constraints(self, signals: ReasoningSignals) -> float:
         """Score constraint detection and adherence."""
@@ -119,9 +246,9 @@ class BehavioralRewardModel:
         # More constraints detected = better awareness
         num_constraints = len(signals.constraints_detected)
 
-        # Check for explicit constraint handling
+        # Check for explicit constraint handling (impact field describes how it was handled)
         has_explicit_handling = any(
-            c.handling_strategy is not None
+            c.impact is not None and len(c.impact) > 0
             for c in signals.constraints_detected
         )
 
@@ -176,8 +303,6 @@ class BehavioralRewardModel:
         tool_diversity = unique_tools / len(tool_sequence)
 
         # Check for logical tool ordering
-        # Good patterns: Read → Grep → Bash → Edit
-        # Bad patterns: Edit → Read → Edit (redundant)
         has_logical_flow = self._check_tool_flow(tool_sequence)
 
         # Score: 0.5 base + 0.25 for diversity + 0.25 for logical flow
@@ -217,13 +342,13 @@ class BehavioralRewardModel:
         if not corrections:
             return 0.7  # No corrections needed (good or bad?)
 
-        # Check correction types
+        # Check correction triggers for quality signals
         has_approach_correction = any(
-            c.correction_type == "approach_revision"
+            any(kw in c.trigger.lower() for kw in ["approach", "revis", "rethink", "better", "instead"])
             for c in corrections
         )
         has_error_correction = any(
-            c.correction_type == "error_recovery"
+            any(kw in c.trigger.lower() for kw in ["error", "fail", "didn't work", "wrong", "bug"])
             for c in corrections
         )
 
@@ -241,7 +366,12 @@ class BehavioralRewardModel:
         signals: ReasoningSignals,
         task_complexity: str
     ) -> float:
-        """Score exploration depth appropriateness."""
+        """
+        Score exploration depth appropriateness.
+
+        Downweighted to 5% — exploration should only matter when outcome is ambiguous.
+        Model should commit when Claude would commit, not explore endlessly.
+        """
         exploration = signals.exploration_depth
 
         # Expected exploration by complexity
@@ -286,8 +416,16 @@ class BehavioralRewardModel:
             (claude_reward, llama_reward, similarity_score)
         """
         # Compute rewards for both
-        claude_reward = self.compute_reward(claude_trace.reasoning_signals)
-        llama_reward = self.compute_reward(llama_trace.reasoning_signals)
+        claude_reward = self.compute_reward(
+            claude_trace.reasoning_signals,
+            output_artifact=claude_trace.output_artifact,
+            response_text=claude_trace.claude_response,
+        )
+        llama_reward = self.compute_reward(
+            llama_trace.reasoning_signals,
+            output_artifact=llama_trace.output_artifact,
+            response_text=llama_trace.claude_response,
+        )
 
         # Compute similarity (0-1, higher = more similar)
         similarity = self._compute_similarity(claude_reward, llama_reward)
@@ -300,12 +438,12 @@ class BehavioralRewardModel:
         reward2: RewardComponents
     ) -> float:
         """Compute similarity between two reward profiles."""
-        # Compare each component
         components = [
             "constraint_adherence",
-            "reasoning_depth",
+            "outcome_correctness",
             "tool_efficiency",
             "self_correction",
+            "reasoning_depth",
             "exploration_fit",
         ]
 
@@ -313,11 +451,9 @@ class BehavioralRewardModel:
         for comp in components:
             val1 = getattr(reward1, comp)
             val2 = getattr(reward2, comp)
-            # Similarity = 1 - absolute difference
             sim = 1.0 - abs(val1 - val2)
             similarities.append(sim)
 
-        # Average similarity across components
         return sum(similarities) / len(similarities)
 
 
@@ -362,6 +498,7 @@ def main():
         ReasoningSignals,
         ConstraintDetection,
         SelfCorrection,
+        OutputArtifact,
     )
 
     # Example signals
@@ -371,43 +508,68 @@ def main():
         exploration_depth="moderate",
         constraints_detected=[
             ConstraintDetection(
-                constraint_type="file_exists",
-                description="Must check if file exists before editing",
-                handling_strategy="Read first, then Edit"
+                constraint="Must check if file exists before editing",
+                source="file_structure",
+                impact="Read first, then Edit"
             )
         ],
-        pruning_decisions=[],
+        tools_pruned=[],
         self_corrections=[
             SelfCorrection(
-                original_approach="Direct edit",
-                corrected_approach="Read first to verify content",
-                correction_type="approach_revision",
-                trigger="Realized need to check current state"
+                step_number=2,
+                original_plan="Direct edit",
+                correction="Read first to verify content",
+                trigger="Realized need to check current state — rethink approach"
             )
         ],
     )
 
+    # Example output artifact
+    artifact = OutputArtifact(
+        required_components=["equipment_id", "metric_value", "status"],
+        schema_valid=True,
+        schema_type="text",
+        completeness_checklist={
+            "answers_question": True,
+            "includes_data": True,
+            "cites_source": True,
+            "mentions_caveats": False,
+        },
+        factual_claims=["pump-002 pressure is 37.5 PSI", "status is normal"],
+        edge_cases_mentioned=["pump was offline for maintenance Jan 15"],
+    )
+
     # Score it
     rm = BehavioralRewardModel()
-    reward = rm.compute_reward(signals, task_complexity="medium")
+    reward = rm.compute_reward(
+        signals,
+        task_complexity="medium",
+        output_artifact=artifact,
+        response_text="Pump-002 is running at 37.5 PSI, status normal. Note: was offline for maintenance Jan 15.",
+    )
 
     print("=" * 70)
     print(" Behavioral Reward Model Demo")
     print("=" * 70)
     print()
+    print("Reward Weights (Claude's priority order):")
+    for k, v in rm.weights.items():
+        print(f"  {k}: {v:.2f}")
+    print()
     print("Workflow Analysis:")
-    print(f"  Tools: {' → '.join(signals.tool_sequence)}")
+    print(f"  Tools: {' -> '.join(signals.tool_sequence)}")
     print(f"  Reasoning steps: {signals.reasoning_steps}")
     print(f"  Exploration: {signals.exploration_depth}")
     print(f"  Constraints detected: {len(signals.constraints_detected)}")
     print(f"  Self-corrections: {len(signals.self_corrections)}")
     print()
     print("Reward Breakdown:")
-    print(f"  Constraint adherence: {reward.constraint_adherence:.3f}")
-    print(f"  Reasoning depth: {reward.reasoning_depth:.3f}")
-    print(f"  Tool efficiency: {reward.tool_efficiency:.3f}")
-    print(f"  Self-correction: {reward.self_correction:.3f}")
-    print(f"  Exploration fit: {reward.exploration_fit:.3f}")
+    print(f"  Constraint adherence:  {reward.constraint_adherence:.3f}  (weight: {rm.weights['constraint_adherence']:.2f})")
+    print(f"  Outcome correctness:   {reward.outcome_correctness:.3f}  (weight: {rm.weights['outcome_correctness']:.2f})")
+    print(f"  Tool efficiency:       {reward.tool_efficiency:.3f}  (weight: {rm.weights['tool_efficiency']:.2f})")
+    print(f"  Self-correction:       {reward.self_correction:.3f}  (weight: {rm.weights['self_correction']:.2f})")
+    print(f"  Reasoning depth:       {reward.reasoning_depth:.3f}  (weight: {rm.weights['reasoning_depth']:.2f})")
+    print(f"  Exploration fit:       {reward.exploration_fit:.3f}  (weight: {rm.weights['exploration_fit']:.2f})")
     print()
     print(f"  TOTAL REWARD: {reward.total_reward:.3f}")
     print()

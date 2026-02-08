@@ -190,7 +190,7 @@ const TrendRenderer: React.FC<TrendRendererProps> = ({ spec }) => {
 
     if (representation === 'Area') {
       return (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <AreaChart data={demoData.timeSeries}>
             <defs>
               <linearGradient id={`grad${spec.variant}`} x1="0" y1="0" x2="0" y2="1">
@@ -207,7 +207,7 @@ const TrendRenderer: React.FC<TrendRendererProps> = ({ spec }) => {
 
     if (representation === 'RGB Phase Line') {
       return (
-         <ResponsiveContainer width="100%" height="100%">
+         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
            <LineChart data={demoData.timeSeries}>
              {CommonAxis}
              <Line type="monotone" dataKey="r" stroke={visual.colors?.[0]} strokeWidth={1.5} dot={false} />
@@ -223,7 +223,7 @@ const TrendRenderer: React.FC<TrendRendererProps> = ({ spec }) => {
     const stepType = representation === 'Step Line' ? 'stepAfter' : 'monotone';
     
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <LineChart data={demoData.timeSeries}>
           {CommonAxis}
           {variant === 'TREND_ALERT_CONTEXT' && (

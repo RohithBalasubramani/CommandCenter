@@ -63,10 +63,10 @@ function WidgetSkeleton() {
 // --- Size → CSS class mapping (responsive, matches Blob.tsx sizeClasses) ---
 
 const SIZE_CLASSES: Record<WidgetSize, string> = {
-  hero: "col-span-1 md:col-span-6 xl:col-span-12 row-span-4",
-  expanded: "col-span-1 md:col-span-6 xl:col-span-6 row-span-2",
-  normal: "col-span-1 md:col-span-3 xl:col-span-4 row-span-2",
-  compact: "col-span-1 md:col-span-3 xl:col-span-3 row-span-2",
+  hero: "col-span-1 md:col-span-6 lg:col-span-12 row-span-4",
+  expanded: "col-span-1 md:col-span-6 lg:col-span-6 row-span-2",
+  normal: "col-span-1 md:col-span-3 lg:col-span-4 row-span-2",
+  compact: "col-span-1 md:col-span-3 lg:col-span-3 row-span-2",
   hidden: "hidden",
 };
 
@@ -96,6 +96,12 @@ interface WidgetSlotProps {
   onDrillDown?: (context: string) => void;
   /** When true, shows a visual "Demo Data" indicator on the widget. */
   isDemo?: boolean;
+  /** Phase 2: Data is stale (older than freshness threshold). */
+  isStale?: boolean;
+  /** Phase 1: Contradiction message (e.g. KPI vs alert disagree). */
+  conflictFlag?: string;
+  /** Phase 2: Per-widget confidence (0-1). */
+  widgetConfidence?: number;
 }
 
 export default function WidgetSlot({
@@ -116,6 +122,9 @@ export default function WidgetSlot({
   onSnapshot,
   onDrillDown,
   isDemo = false,
+  isStale = false,
+  conflictFlag,
+  widgetConfidence,
 }: WidgetSlotProps) {
   if (size === "hidden") return null;
 
@@ -128,12 +137,31 @@ export default function WidgetSlot({
 
   const inner = (
     <div className="relative h-full w-full group rounded-xl border border-neutral-700/50 bg-neutral-900/80 backdrop-blur-sm shadow-lg overflow-hidden hover:border-neutral-600/50 transition-colors duration-200 flex flex-col">
-      {/* Demo data badge — always visible when data is stub/demo */}
-      {isDemo && (
-        <div className="absolute top-2 right-2 z-20 rounded bg-amber-600/90 px-1.5 py-0.5 pointer-events-none" data-testid="demo-badge">
-          <span className="text-[9px] font-bold uppercase tracking-wider text-white">Demo Data</span>
-        </div>
-      )}
+      {/* Status badges — top-right stack */}
+      <div className="absolute top-2 right-2 z-20 flex flex-col items-end gap-1 pointer-events-none">
+        {isDemo && (
+          <div className="rounded bg-amber-600/90 px-1.5 py-0.5" data-testid="demo-badge">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-white">Demo Data</span>
+          </div>
+        )}
+        {isStale && (
+          <div className="rounded bg-orange-600/80 px-1.5 py-0.5" data-testid="stale-badge">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-white">Stale</span>
+          </div>
+        )}
+        {conflictFlag && (
+          <div className="rounded bg-red-600/80 px-1.5 py-0.5 max-w-[140px]" data-testid="conflict-badge" title={conflictFlag}>
+            <span className="text-[9px] font-bold uppercase tracking-wider text-white truncate block">Conflict</span>
+          </div>
+        )}
+        {widgetConfidence !== undefined && widgetConfidence < 0.5 && (
+          <div className="rounded bg-yellow-600/70 px-1.5 py-0.5" data-testid="low-confidence-badge">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-white">
+              {Math.round(widgetConfidence * 100)}% conf
+            </span>
+          </div>
+        )}
+      </div>
       {/* Title label — top-left, appears on hover */}
       {title && (
         <div className="absolute top-2 left-2 z-10 rounded-lg bg-neutral-800/80 backdrop-blur-sm border border-neutral-700/50 px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none max-w-[60%] truncate">

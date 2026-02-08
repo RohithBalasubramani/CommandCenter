@@ -141,7 +141,7 @@ const UniversalChart: React.FC<UniversalChartProps> = ({ spec }) => {
 
   if (isPieOrDonut) {
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <PieChart>
           <Pie
             data={demoData.series}
@@ -170,7 +170,7 @@ const UniversalChart: React.FC<UniversalChartProps> = ({ spec }) => {
 
   if (isHorizontal) {
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
           layout="vertical"
           data={demoData.series}
@@ -199,7 +199,7 @@ const UniversalChart: React.FC<UniversalChartProps> = ({ spec }) => {
 
   if (isPareto) {
      return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart data={demoData.series} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid vertical={false} stroke="#f5f5f5" />
           <XAxis 
@@ -236,7 +236,7 @@ const UniversalChart: React.FC<UniversalChartProps> = ({ spec }) => {
 
   if (isGrouped) {
       return (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart
             data={demoData.categories.map((cat: string, i: number) => ({
                 name: cat,

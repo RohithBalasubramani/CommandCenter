@@ -298,6 +298,11 @@ def submit_feedback(request):
     missing_widgets = request.data.get("missing_widgets", [])
     suggested_improvements = request.data.get("suggested_improvements", [])
 
+    # Extract Claude voice evaluation fields (Tier 2)
+    voice_evaluation_confidence = request.data.get("voice_evaluation_confidence")
+    voice_evaluation_reasoning = request.data.get("voice_evaluation_reasoning")
+    voice_dimension_scores_claude = request.data.get("voice_dimension_scores_claude", {})
+
     if not query_id:
         return Response(
             {"error": "query_id is required"},
@@ -350,6 +355,10 @@ def submit_feedback(request):
             per_widget_feedback=per_widget_feedback,
             missing_widgets=missing_widgets,
             suggested_improvements=suggested_improvements,
+            # Claude voice evaluation fields (Tier 2)
+            voice_evaluation_confidence=voice_evaluation_confidence,
+            voice_evaluation_reasoning=voice_evaluation_reasoning,
+            voice_dimension_scores_claude=voice_dimension_scores_claude,
         )
 
         if success:
@@ -1076,3 +1085,24 @@ def traversal_action_view(request):
         "duration_ms": step.duration_ms,
         "error": step.error,
     })
+
+
+@api_view(["POST"])
+def cancel_plan(request):
+    """
+    POST /api/layer2/cancel/
+    Body: {"plan_id": "abc123"}
+
+    Cancels a running plan via the PlanCancellationManager.
+    """
+    plan_id = request.data.get("plan_id", "")
+    if not plan_id:
+        return Response(
+            {"cancelled": False, "reason": "missing_plan_id"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    from layer2.voice_control import PlanCancellationManager
+    mgr = PlanCancellationManager()
+    result = mgr.cancel(plan_id)
+    return Response(result)

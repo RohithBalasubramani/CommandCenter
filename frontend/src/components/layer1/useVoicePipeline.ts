@@ -130,6 +130,13 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
   const messageQueueRef = useRef<string[]>([]);
   const [queueDepth, setQueueDepth] = useState(0);
 
+  // Interactive mode conversation history
+  const interactiveHistoryRef = useRef<Array<{ role: "user" | "ai"; text: string }>>([]);
+  const interactiveActiveRef = useRef(false);
+
+  // General conversation history (for follow-up context in normal mode)
+  const conversationHistoryRef = useRef<Array<{ role: "user" | "ai"; text: string }>>([]);
+
   // STT
   const {
     transcript: userTranscript,
@@ -196,24 +203,34 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
       .substr(2, 9)}`;
     layer2Service.setSessionId(sessionIdRef.current);
 
-    const checkLayer2 = async () => {
+    const checkLayer2 = async (retries = 5) => {
       setLayer2Status("checking");
-      try {
-        const res = await fetch(`${config.api.baseUrl}/api/layer2/rag/industrial/health/`, {
-          method: "GET",
-          signal: AbortSignal.timeout(5000),
-        });
-        if (res.ok) {
-          setLayer2Status("ready");
-          console.info("[VoicePipeline] Layer 2 healthy");
-        } else {
-          setLayer2Status("error");
-          setLayer2Error(`Backend returned ${res.status}`);
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          // Use Next.js API proxy to avoid browser HTTP/1.1 connection pool
+          // blocking (slow orchestrate requests to localhost:8100 can starve
+          // other fetches to the same origin). The proxy runs server-side.
+          const res = await fetch("/api/health", {
+            method: "GET",
+            signal: AbortSignal.timeout(10000),
+          });
+          if (res.ok) {
+            setLayer2Status("ready");
+            setLayer2Error(null);
+            console.info("[VoicePipeline] Layer 2 healthy");
+            return;
+          } else {
+            console.warn(`[VoicePipeline] Health check attempt ${attempt}/${retries}: HTTP ${res.status}`);
+          }
+        } catch (e) {
+          console.warn(`[VoicePipeline] Health check attempt ${attempt}/${retries} failed:`, e);
         }
-      } catch {
-        setLayer2Status("error");
-        setLayer2Error(`Backend unreachable at ${config.api.baseUrl}`);
+        if (attempt < retries) {
+          await new Promise(r => setTimeout(r, 3000));
+        }
       }
+      setLayer2Status("error");
+      setLayer2Error(`Backend unreachable at ${config.api.baseUrl}`);
     };
     checkLayer2();
   }, [layer2Service]);
@@ -301,6 +318,35 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
     setAiResponse(voiceResponse);
     setLayer2Response(response);
     addMessageRef.current("ai", voiceResponse, "response");
+
+    // Track AI response in conversation history (both modes)
+    if (voiceResponse) {
+      conversationHistoryRef.current.push({ role: "ai", text: voiceResponse });
+      if (conversationHistoryRef.current.length > 10) {
+        conversationHistoryRef.current = conversationHistoryRef.current.slice(-10);
+      }
+    }
+
+    // Track AI response in interactive conversation history
+    if (interactiveActiveRef.current && voiceResponse) {
+      interactiveHistoryRef.current.push({ role: "ai", text: voiceResponse });
+      // Update context with latest history (last 10 exchanges for token budget)
+      const ctx = layer2Service.getContext();
+      const wc = ctx?.widget_context;
+      if (wc && typeof wc === "object") {
+        layer2Service.updateContext({
+          widget_context: {
+            ...(wc as Record<string, unknown>),
+            conversation_history: interactiveHistoryRef.current.slice(-10),
+          },
+        });
+      }
+    } else if (voiceResponse) {
+      // Normal mode: update context with conversation history for follow-ups
+      layer2Service.updateContext({
+        conversation_history: conversationHistoryRef.current.slice(-10),
+      });
+    }
 
     if (pipelineStartTimeRef.current) {
       const l2Elapsed = Math.round(performance.now() - pipelineStartTimeRef.current);
@@ -612,6 +658,24 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
     if (!trimmed) return;
     console.info(`[VoicePipeline] Direct text input: "${trimmed}"`);
     addMessage("user", trimmed, "transcript");
+
+    // Track user message in conversation history (both modes)
+    conversationHistoryRef.current.push({ role: "user", text: trimmed });
+    // Keep last 10 entries for token budget
+    if (conversationHistoryRef.current.length > 10) {
+      conversationHistoryRef.current = conversationHistoryRef.current.slice(-10);
+    }
+    if (interactiveActiveRef.current) {
+      interactiveHistoryRef.current.push({ role: "user", text: trimmed });
+    }
+
+    // In normal mode, pass conversation_history for follow-up context
+    if (!interactiveActiveRef.current) {
+      layer2Service.updateContext({
+        conversation_history: conversationHistoryRef.current.slice(-10),
+      });
+    }
+
     if (isProcessingRef.current) {
       messageQueueRef.current.push(trimmed);
       setQueueDepth(messageQueueRef.current.length);
@@ -621,12 +685,43 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
     }
   }, [addMessage, processOneTranscript]);
 
-  // Widget Focus → Voice Drill-Down Bridge
-  // When a user clicks "Focus" on a widget, auto-send a drill-down query to Layer 2
+  // Widget Interactive Mode Bridge
   const sendTextDirectRef = useRef(sendTextDirect);
   sendTextDirectRef.current = sendTextDirect;
 
   useEffect(() => {
+    // Interactive mode: enter — set context and auto-query
+    const unsubInteractiveEnter = commandCenterBus.on("WIDGET_INTERACTIVE_ENTER", (event) => {
+      if (event.type === "WIDGET_INTERACTIVE_ENTER") {
+        console.info(`[VoicePipeline] Interactive mode ENTER: ${event.equipment} / ${event.metric}`);
+        interactiveActiveRef.current = true;
+        interactiveHistoryRef.current = [];
+        layer2Service.updateContext({
+          widget_context: {
+            equipment: event.equipment,
+            metric: event.metric,
+            scenario: event.scenario,
+            label: event.label,
+            conversation_history: [],
+          },
+        });
+        // Auto-send drill-down query
+        const query = `Tell me more about ${event.label}`;
+        sendTextDirectRef.current(query);
+      }
+    });
+
+    // Interactive mode: exit — clear context
+    const unsubInteractiveExit = commandCenterBus.on("WIDGET_INTERACTIVE_EXIT", (event) => {
+      if (event.type === "WIDGET_INTERACTIVE_EXIT") {
+        console.info("[VoicePipeline] Interactive mode EXIT");
+        interactiveActiveRef.current = false;
+        interactiveHistoryRef.current = [];
+        layer2Service.updateContext({ widget_context: null });
+      }
+    });
+
+    // Legacy focus (non-interactive) — still supported
     const unsubFocus = commandCenterBus.on("WIDGET_FOCUS", (event) => {
       if (event.type === "WIDGET_FOCUS") {
         const query = `Tell me more about ${event.label}`;
@@ -634,6 +729,8 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
         sendTextDirectRef.current(query);
       }
     });
+
+    // Drill-down within any mode
     const unsubDrill = commandCenterBus.on("WIDGET_DRILL_DOWN", (event) => {
       if (event.type === "WIDGET_DRILL_DOWN") {
         const query = `Show me details about ${event.context} from ${event.label}`;
@@ -641,7 +738,8 @@ export function useVoicePipeline(deviceId?: string): UseVoicePipelineReturn {
         sendTextDirectRef.current(query);
       }
     });
-    return () => { unsubFocus(); unsubDrill(); };
+
+    return () => { unsubInteractiveEnter(); unsubInteractiveExit(); unsubFocus(); unsubDrill(); };
   }, []);
 
   const pipelineStats: PipelineStats = {

@@ -57,6 +57,19 @@ class Experience:
     missing_widgets: list = field(default_factory=list)  # Widget types that should be added
     suggested_improvements: list = field(default_factory=list)  # Actionable suggestions
 
+    # Voice response data (Tier 2: text quality)
+    voice_response: Optional[str] = None           # The actual text generated
+    voice_response_rating: Optional[str] = None    # "good"/"bad" (derived from user feedback)
+    voice_quality_scores: dict = field(default_factory=dict)  # Per-dimension scores
+
+    # Claude voice evaluation (Tier 2: from auto-evaluator)
+    voice_evaluation_confidence: Optional[float] = None   # 0.0-1.0 Claude's confidence in voice quality
+    voice_evaluation_reasoning: Optional[str] = None       # Why Claude rated the voice response
+    voice_dimension_scores_claude: dict = field(default_factory=dict)  # Per-dimension scores from Claude
+
+    # Prompt variant tracking (for RL prompt optimization)
+    prompt_version: Optional[str] = None  # Which prompt variant was used
+
     # Computed reward (set by RewardSignalAggregator)
     computed_reward: Optional[float] = None
 
@@ -66,6 +79,7 @@ class Experience:
             self.user_rating is not None
             or self.follow_up_type is not None
             or len(self.widget_interactions) > 0
+            or self.voice_response_rating is not None
         )
 
     def to_dict(self) -> dict:
@@ -76,10 +90,14 @@ class Experience:
 
     @classmethod
     def from_dict(cls, d: dict) -> "Experience":
-        """Create from dict."""
+        """Create from dict (tolerates unknown keys from old/new schema versions)."""
         d = d.copy()
         if isinstance(d.get("timestamp"), str):
             d["timestamp"] = datetime.fromisoformat(d["timestamp"])
+        # Filter to only known fields (forward/backward compat)
+        import dataclasses
+        known = {f.name for f in dataclasses.fields(cls)}
+        d = {k: v for k, v in d.items() if k in known}
         return cls(**d)
 
 
@@ -187,7 +205,8 @@ class ExperienceBuffer:
                         with open(buffer_path) as f:
                             data = json.load(f)
                         # Rebuild buffer from disk
-                        self.buffer = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        reloaded = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        self.buffer = collections.deque(reloaded, maxlen=self.max_size)
                         self._query_index = {exp.query_id: exp for exp in self.buffer}
                         logger.debug(f"Reloaded {len(self.buffer)} experiences from disk before add")
                 except Exception as e:
@@ -198,7 +217,7 @@ class ExperienceBuffer:
                 # Remove oldest from index
                 oldest = self.buffer[0]
                 self._query_index.pop(oldest.query_id, None)
-                self.buffer.pop(0)
+                self.buffer.popleft()
 
             self.buffer.append(experience)
             self._query_index[experience.query_id] = experience
@@ -231,8 +250,9 @@ class ExperienceBuffer:
                     if buffer_path.exists():
                         with open(buffer_path) as f:
                             data = json.load(f)
-                        # Rebuild buffer from disk
-                        self.buffer = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        # Rebuild buffer from disk (must stay deque for popleft)
+                        reloaded = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        self.buffer = collections.deque(reloaded, maxlen=self.max_size)
                         self._query_index = {exp.query_id: exp for exp in self.buffer}
                         logger.debug(f"Reloaded {len(self.buffer)} experiences from disk before update_feedback")
                 except Exception as e:
@@ -266,6 +286,14 @@ class ExperienceBuffer:
                 exp.missing_widgets = feedback["missing_widgets"]
             if "suggested_improvements" in feedback:
                 exp.suggested_improvements = feedback["suggested_improvements"]
+
+            # Update Claude voice evaluation fields (Tier 2)
+            if "voice_evaluation_confidence" in feedback:
+                exp.voice_evaluation_confidence = feedback["voice_evaluation_confidence"]
+            if "voice_evaluation_reasoning" in feedback:
+                exp.voice_evaluation_reasoning = feedback["voice_evaluation_reasoning"]
+            if "voice_dimension_scores_claude" in feedback:
+                exp.voice_dimension_scores_claude = feedback["voice_dimension_scores_claude"]
 
             logger.debug(f"Updated feedback for {query_id}: rating={exp.user_rating}, confidence={exp.evaluation_confidence}")
 

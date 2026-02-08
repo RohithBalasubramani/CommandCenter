@@ -73,6 +73,22 @@ def merge_lora_weights(
     tokenizer = AutoTokenizer.from_pretrained(base_model_path)
     tokenizer.save_pretrained(output_path)
 
+    # Fix tokenizer_class if the tokenizers library wrote an invalid class name.
+    # Some versions of transformers/tokenizers save "TokenizersBackend" which
+    # convert_hf_to_gguf.py cannot load. The correct class is PreTrainedTokenizerFast.
+    import json
+    tok_config_path = Path(output_path) / "tokenizer_config.json"
+    if tok_config_path.exists():
+        with open(tok_config_path, "r") as f:
+            tok_config = json.load(f)
+        if tok_config.get("tokenizer_class") not in (
+            "PreTrainedTokenizerFast", "LlamaTokenizerFast", "LlamaTokenizer",
+        ):
+            tok_config["tokenizer_class"] = "PreTrainedTokenizerFast"
+            with open(tok_config_path, "w") as f:
+                json.dump(tok_config, f, indent=2)
+            logger.info(f"Fixed tokenizer_class in {tok_config_path}")
+
     return output_path
 
 

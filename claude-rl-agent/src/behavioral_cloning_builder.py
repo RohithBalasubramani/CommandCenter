@@ -50,27 +50,30 @@ logger = logging.getLogger(__name__)
 class BehavioralCloningSample:
     """
     A single training sample for behavioral cloning.
-    
-    Format optimized for LLaMA to learn workflow design, not just text generation.
+
+    Format optimized for LLaMA to learn workflow design AND terminal artifact quality.
     """
     # Input (what user asks)
     prompt: str
-    
+
     # Claude's workflow design (what LLaMA needs to learn)
     reasoning_chain: List[str]  # Step-by-step reasoning
     tool_sequence: List[Dict[str, Any]]  # Tools used, in order, with reasoning
-    
+
     # Output (final answer)
     response: str
-    
+
+    # Output artifact analysis (success-state anchoring)
+    output_artifact: Optional[Dict[str, Any]] = None  # Serialized OutputArtifact
+
     # Metadata
-    trace_id: str
-    workflow_type: str  # linear, parallel, exploratory, iterative
-    exploration_depth: str  # minimal, moderate, thorough, exhaustive
-    
+    trace_id: str = ""
+    workflow_type: str = "linear"  # linear, parallel, exploratory, iterative
+    exploration_depth: str = "moderate"  # minimal, moderate, thorough, exhaustive
+
     def to_dict(self) -> dict:
         """Convert to JSON-serializable dict."""
-        return {
+        d = {
             "prompt": self.prompt,
             "reasoning_chain": self.reasoning_chain,
             "tool_sequence": self.tool_sequence,
@@ -79,6 +82,9 @@ class BehavioralCloningSample:
             "workflow_type": self.workflow_type,
             "exploration_depth": self.exploration_depth,
         }
+        if self.output_artifact:
+            d["output_artifact"] = self.output_artifact
+        return d
     
     def to_llama_format(self) -> str:
         """
@@ -108,14 +114,27 @@ class BehavioralCloningSample:
                 assistant_content.append(f"- {tool_name}: {reasoning}")
             assistant_content.append("")
         
+        # Add output requirements (teaches LLaMA what success looks like)
+        if self.output_artifact:
+            checklist = self.output_artifact.get("completeness_checklist", {})
+            required = self.output_artifact.get("required_components", [])
+            if required or checklist:
+                assistant_content.append("**Output requirements:**")
+                for comp in required:
+                    assistant_content.append(f"- Must include: {comp}")
+                for check, passed in checklist.items():
+                    if passed:
+                        assistant_content.append(f"- [{check}]: satisfied")
+                assistant_content.append("")
+
         # Add final response
         assistant_content.append(self.response)
-        
+
         # Format for LLaMA
-        formatted = f"""<|system|>You are Claude, an AI assistant that designs and executes multi-step workflows to solve problems. When answering, first design your workflow (what tools to use and why), then execute it step-by-step, then synthesize the results.
+        formatted = f"""<|system|>You are Claude, an AI assistant that designs and executes multi-step workflows to solve problems. When answering, first design your workflow (what tools to use and why), then execute it step-by-step, then synthesize the results into a complete, correct terminal artifact.
 <|user|>{self.prompt}
 <|assistant|>{''.join(assistant_content)}"""
-        
+
         return formatted
 
 
@@ -210,12 +229,18 @@ class BehavioralCloningDatasetBuilder:
             # Determine workflow type
             workflow_type = self._classify_workflow(trace)
             
+            # Extract output artifact if present
+            artifact_dict = None
+            if trace.output_artifact:
+                artifact_dict = trace.output_artifact.to_dict()
+
             # Create sample
             sample = BehavioralCloningSample(
                 prompt=trace.user_prompt,
                 reasoning_chain=reasoning_chain,
                 tool_sequence=tool_sequence,
                 response=trace.claude_response,
+                output_artifact=artifact_dict,
                 trace_id=trace.trace_id,
                 workflow_type=workflow_type,
                 exploration_depth=trace.reasoning_signals.exploration_depth.value

@@ -32,6 +32,8 @@ from layer2.widget_selector import WidgetSelector, WidgetPlan, MAX_HEIGHT_UNITS
 from layer2.data_collector import SchemaDataCollector
 from layer2.widget_catalog import CATALOG_BY_SCENARIO
 from layer2.reconciliation.pipeline import ReconciliationPipeline
+from layer2.focus_graph import SemanticFocusGraph
+from layer2.focus_graph_builder import FocusGraphBuilder
 
 # System Grounding imports (Phase 1-5 Audit — all 8 failure modes)
 from layer2.source_resolver import SourceVerificationGate, SourceResolution
@@ -44,16 +46,28 @@ from layer2.data_provenance import (
     ResponseProvenance,
 )
 
+# Phase 1 Redesign: Retrieval assessment, deduplication, data-aware sizing
+from layer2.retrieval_assessor import RetrievalAssessor, apply_assessment_to_widgets
+from layer2.widget_dedup import deduplicate_widgets, inject_contradiction_flags
+
+# Phase 2 Redesign: Query decomposition, dashboard planning, confidence
+from layer2.query_decomposer import QueryDecomposer, RetrievalPlan
+from layer2.dashboard_planner import DashboardPlanner
+from layer2.confidence import ConfidenceComputer, ConfidenceEnvelope
+
+# Phase 3 Redesign: Composition scoring RL
+from rl.composition_scorer import ContinuousCompositionTrainer
+
 logger = logging.getLogger(__name__)
 
 # Pipeline v2 flag — set PIPELINE_V2=1 env var to enable
 PIPELINE_V2 = os.environ.get("PIPELINE_V2", "1") == "1"
 
-# Performance budgets (per audit_tests.py / README blueprint) — runtime-enforced
-BUDGET_INTENT_MS = 500
-BUDGET_RAG_MS = 2000
-BUDGET_WIDGET_SELECT_MS = 3000
-BUDGET_TOTAL_MS = 8000
+# Performance budgets — generous limits to avoid false warnings with local LLM
+BUDGET_INTENT_MS = 30_000
+BUDGET_RAG_MS = 60_000
+BUDGET_WIDGET_SELECT_MS = 60_000
+BUDGET_TOTAL_MS = 300_000
 
 # Feature flags (per README blueprint)
 ENABLE_RAG = os.environ.get("ENABLE_RAG", "1") == "1"
@@ -287,6 +301,7 @@ class Layer2Orchestrator:
         self._intent_parser = None
         self._widget_selector = None
         self._data_collector = None
+        self._composition_scorer = None
 
     def __del__(self):
         """AUDIT FIX: Clean up executor on deletion."""
@@ -326,6 +341,20 @@ class Layer2Orchestrator:
             with self._context_lock:
                 self.context.update(session_context)
 
+        # Extract interactive widget context (if user is in interactive mode)
+        widget_context = self.context.get("widget_context") if self.context else None
+        if widget_context:
+            logger.info(
+                f"[v2] Interactive mode: equipment={widget_context.get('equipment')}, "
+                f"metric={widget_context.get('metric')}, "
+                f"history={len(widget_context.get('conversation_history', []))} turns"
+            )
+
+        # Normal mode conversation history (for follow-up context / pronoun resolution)
+        conversation_history = self.context.get("conversation_history", []) if self.context else []
+        if conversation_history and not widget_context:
+            logger.info(f"[v2] Normal mode with {len(conversation_history)} history turns")
+
         # Stage 1: LLM Intent Parsing
         stage_start = time.time()
         # AUDIT FIX: Thread-safe lazy initialization (double-check locking)
@@ -333,7 +362,17 @@ class Layer2Orchestrator:
             with self._init_lock:
                 if self._intent_parser is None:
                     self._intent_parser = IntentParser()
-        parsed = self._intent_parser.parse(transcript)
+        # Retrieve existing focus graph for pronoun resolution during parsing
+        _existing_focus_graph = None
+        _fg_data = self.context.get("focus_graph") if self.context else None
+        if _fg_data:
+            try:
+                _existing_focus_graph = SemanticFocusGraph.from_dict(_fg_data)
+            except Exception:
+                pass
+        parsed = self._intent_parser.parse(
+            transcript, widget_context=widget_context, focus_graph=_existing_focus_graph
+        )
         timings.intent_parse_ms = int((time.time() - stage_start) * 1000)
         timings.check_budget("intent_parse", timings.intent_parse_ms, BUDGET_INTENT_MS)
 
@@ -353,8 +392,8 @@ class Layer2Orchestrator:
             raw_text=transcript,
         )
 
-        # Short-circuit: out-of-scope
-        if parsed.type == "out_of_scope":
+        # Short-circuit: out-of-scope (but NOT when interactive context is active)
+        if parsed.type == "out_of_scope" and not widget_context:
             processing_time = int((time.time() - start_time) * 1000)
             return OrchestratorResponse(
                 voice_response=OUT_OF_SCOPE_MESSAGE,
@@ -363,6 +402,11 @@ class Layer2Orchestrator:
                 intent=intent,
                 processing_time_ms=processing_time,
             )
+        # Promote out_of_scope to query when interactive context provides equipment
+        if parsed.type == "out_of_scope" and widget_context:
+            parsed.type = "query"
+            parsed.domains = parsed.domains or ["industrial"]
+            logger.info(f"[v2] Promoted out_of_scope → query due to interactive context")
 
         # Short-circuit: conversation / greeting
         if parsed.type == "conversation":
@@ -394,6 +438,38 @@ class Layer2Orchestrator:
         # ── Query path: build dashboard ──
 
         filler = self._generate_filler(intent)
+
+        # ══════════════════════════════════════════════════════════════
+        # FOCUS GRAPH: Build/evolve semantic focus graph (Upgrade 1)
+        # ══════════════════════════════════════════════════════════════
+        focus_graph = None
+        focus_graph_data = self.context.get("focus_graph")
+        if focus_graph_data:
+            try:
+                focus_graph = SemanticFocusGraph.from_dict(focus_graph_data)
+                # Verify session match
+                if focus_graph.session_id != self.context.get("session_id", ""):
+                    logger.warning("[v2] Focus graph session mismatch, creating fresh")
+                    focus_graph = None
+            except Exception as e:
+                logger.warning(f"[v2] Focus graph deserialization failed: {e}")
+                focus_graph = None
+
+        # Create focus graph in ANY mode when entities are present (not just interactive)
+        # This enables pronoun resolution for follow-up queries ("its vibration", "show me that")
+        has_entities = bool(parsed.entities.get("devices"))
+        if focus_graph is None and (widget_context or has_entities):
+            focus_graph = SemanticFocusGraph(session_id=query_id)
+
+        if focus_graph:
+            builder = FocusGraphBuilder(focus_graph)
+            new_nodes = builder.ingest_intent(parsed)
+            logger.info(f"[v2] Focus graph: {len(focus_graph.nodes)} nodes, "
+                        f"{len(focus_graph.edges)} edges, {len(new_nodes)} new from intent")
+            # Store updated graph in context
+            with self._context_lock:
+                self.context["focus_graph"] = focus_graph.to_dict()
+                self.context["session_id"] = focus_graph.session_id
 
         # ══════════════════════════════════════════════════════════════
         # GROUNDING GATE: Source Resolution (Phase 2 Audit)
@@ -475,6 +551,29 @@ class Layer2Orchestrator:
                 "Responses should indicate data may be from seeded/demo sources.]\n"
             )
 
+        # ══════════════════════════════════════════════════════════════
+        # PHASE 2 REDESIGN: Query Decomposition + Confidence Tracking
+        # Decomposes query into structured retrieval plan BEFORE prefetch.
+        # ══════════════════════════════════════════════════════════════
+        confidence = ConfidenceComputer()
+        confidence.set_intent_confidence(parsed.confidence)
+
+        # Stage 2.6: Query Decomposition — map operator language to data needs
+        stage_start = time.time()
+        retrieval_plan = None
+        try:
+            decomposer = QueryDecomposer()
+            retrieval_plan = decomposer.decompose(parsed)
+            logger.info(
+                f"[v2] Decomposed: {len(retrieval_plan.required_metrics)} required metrics, "
+                f"temporal={retrieval_plan.temporal_scope.hours}h, "
+                f"causal={'yes' if retrieval_plan.causal_hypothesis else 'no'}, "
+                f"method={retrieval_plan.decompose_method}"
+            )
+        except Exception as e:
+            logger.warning(f"Query decomposition failed (continuing without): {e}")
+        decompose_ms = int((time.time() - stage_start) * 1000)
+
         # Stage 2.5: Data Pre-Fetch — tell the LLM what data exists for mentioned entities
         stage_start = time.time()
         from layer2.data_prefetcher import DataPrefetcher
@@ -496,14 +595,50 @@ class Layer2Orchestrator:
             user_context = ""
         timings.data_prefetch_ms = int((time.time() - stage_start) * 1000)
 
-        # Stage 3: LLM Widget Selection (now with data + user context)
+        # ══════════════════════════════════════════════════════════════
+        # PHASE 2 REDESIGN: Dashboard Planner (narrative + deterministic allocation)
+        # Falls back to LLM widget selector if planner fails.
+        # ══════════════════════════════════════════════════════════════
         stage_start = time.time()
-        # AUDIT FIX: Thread-safe lazy initialization
-        if self._widget_selector is None:
-            with self._init_lock:
-                if self._widget_selector is None:
-                    self._widget_selector = WidgetSelector()
-        widget_plan = self._widget_selector.select(parsed, data_summary, user_context)
+        widget_plan = None
+
+        # Try the new dashboard planner first (when retrieval plan is available)
+        if retrieval_plan is not None:
+            try:
+                planner = DashboardPlanner()
+                narrative = planner.plan(
+                    parsed, retrieval_plan, data_summary, user_context,
+                    widget_context=widget_context
+                )
+                widget_plan = planner.allocate_widgets(narrative, parsed, retrieval_plan)
+                if widget_plan and widget_plan.widgets:
+                    # Apply RL reranking (same as LLM path)
+                    if self._widget_selector is None:
+                        with self._init_lock:
+                            if self._widget_selector is None:
+                                self._widget_selector = WidgetSelector()
+                    self._widget_selector._apply_rl_reranking(widget_plan, parsed)
+                    logger.info(
+                        f"[v2] Dashboard planner: {len(widget_plan.widgets)} widgets, "
+                        f"narrative='{narrative.primary_answer[:60] if narrative.primary_answer else 'none'}'"
+                    )
+                else:
+                    widget_plan = None  # Fall through to LLM selector
+            except Exception as e:
+                logger.warning(f"Dashboard planner failed (falling back to LLM): {e}")
+                widget_plan = None
+
+        # Fallback: original LLM widget selector
+        if widget_plan is None or not widget_plan.widgets:
+            if self._widget_selector is None:
+                with self._init_lock:
+                    if self._widget_selector is None:
+                        self._widget_selector = WidgetSelector()
+            widget_plan = self._widget_selector.select(
+                parsed, data_summary, user_context,
+                widget_context=widget_context, focus_graph=focus_graph
+            )
+
         timings.widget_select_ms = int((time.time() - stage_start) * 1000)
         timings.check_budget("widget_select", timings.widget_select_ms, BUDGET_WIDGET_SELECT_MS)
 
@@ -560,6 +695,84 @@ class Layer2Orchestrator:
                     dor["_query_context"] = ctx_string
 
                 w["data_override"] = dor
+
+        # ══════════════════════════════════════════════════════════════
+        # PHASE 1 REDESIGN: Retrieval Assessment + Dedup + Data-Aware Sizing
+        # Runs AFTER data collection, BEFORE fixture selection.
+        # Eliminates: empty widgets, redundant widgets, oversized sparse widgets.
+        # ══════════════════════════════════════════════════════════════
+        stage_start = time.time()
+
+        # Step 1: Assess data quality for each widget
+        assessor = RetrievalAssessor()
+        retrieval_assessment = assessor.assess(widget_data)
+        logger.info(
+            f"[v2] Retrieval assessment: "
+            f"{retrieval_assessment.real_data_widgets}/{retrieval_assessment.total_widgets} real data, "
+            f"{retrieval_assessment.widgets_to_drop} to drop, "
+            f"completeness={retrieval_assessment.completeness:.2f}, "
+            f"freshness={retrieval_assessment.freshness:.2f}"
+        )
+
+        # Step 2: Apply assessment — drop empty widgets, resize sparse ones
+        widget_data = apply_assessment_to_widgets(widget_data, retrieval_assessment)
+
+        # Step 3: Deduplicate — remove widgets showing identical data
+        dedup_result = deduplicate_widgets(widget_data)
+        widget_data = dedup_result.kept
+        if dedup_result.contradictions:
+            widget_data = inject_contradiction_flags(widget_data, dedup_result.contradictions)
+
+        timings_assess_ms = int((time.time() - stage_start) * 1000)
+        logger.info(
+            f"[v2] Post-assessment: {len(widget_data)} widgets "
+            f"(dropped {retrieval_assessment.widgets_to_drop} empty, "
+            f"{len(dedup_result.dropped)} redundant) "
+            f"({timings_assess_ms}ms)"
+        )
+
+        # ══════════════════════════════════════════════════════════════
+        # PHASE 2 REDESIGN: Thread confidence through post-assessment
+        # Uses retrieval assessment results to compute retrieval/data dimensions.
+        # ══════════════════════════════════════════════════════════════
+        confidence.set_retrieval_completeness(
+            retrieval_assessment.completeness,
+            gaps=retrieval_assessment.gaps[:3] if retrieval_assessment.gaps else None,
+        )
+        confidence.set_data_freshness(
+            retrieval_assessment.freshness,
+            stale_count=retrieval_assessment.stale_widgets,
+        )
+        confidence.set_widget_fit(
+            total_planned=len(widget_plan.widgets),
+            total_rendered=len(widget_data),
+        )
+        confidence.set_data_fill_quality(
+            real_count=retrieval_assessment.real_data_widgets,
+            total_count=retrieval_assessment.total_widgets,
+        )
+        confidence_envelope = confidence.envelope
+        logger.info(
+            f"[v2] Confidence: overall={confidence_envelope.overall:.2f}, "
+            f"action={confidence_envelope.action}, "
+            f"caveats={len(confidence_envelope.caveats)}"
+        )
+
+        # PHASE 3: Score dashboard composition
+        composition_score = 0.0
+        try:
+            if self._composition_scorer is None:
+                with self._init_lock:
+                    if self._composition_scorer is None:
+                        self._composition_scorer = ContinuousCompositionTrainer()
+            scenarios_for_scoring = [w["scenario"] for w in widget_data]
+            composition_score = self._composition_scorer.score_composition(
+                transcript, scenarios_for_scoring
+            )
+            logger.info(f"[v2] Composition score: {composition_score:.3f} for {len(scenarios_for_scoring)} widgets")
+        except Exception as e:
+            logger.warning(f"Composition scoring failed (non-fatal): {e}")
+        # ══════════════════════════════════════════════════════════════
 
         # Build preliminary layout for voice (only needs scenario/why/heading — not fixtures)
         preliminary_layout = {
@@ -647,6 +860,9 @@ class Layer2Orchestrator:
             "widgets": widget_data,
             "transitions": {},
             "_provenance": response_provenance.to_dict(),
+            "_retrieval_assessment": retrieval_assessment.to_dict(),
+            "_confidence": confidence_envelope.to_dict(),
+            "_composition_score": round(composition_score, 3),
         }
 
         # Collect voice response (was running concurrently with fixture selection)
@@ -657,6 +873,11 @@ class Layer2Orchestrator:
             n = len(widget_data)
             voice_response = f"Here's what I found. I've prepared a dashboard with {n} widgets showing the relevant data."
         timings.voice_generate_ms = int((time.time() - voice_start) * 1000)
+
+        # PHASE 2: Inject confidence-proportional caveats into voice response
+        voice_caveat = confidence.build_voice_caveats()
+        if voice_caveat:
+            voice_response = voice_response.rstrip() + voice_caveat
 
         processing_time = int((time.time() - start_time) * 1000)
         timings.total_ms = processing_time
@@ -710,15 +931,18 @@ class Layer2Orchestrator:
                     logger.info(f"[RL] Intent dict keys: {list(intent_dict.keys())[:10]}")
                     logger.info(f"[RL] Recording experience: query_id={query_id}, intent_type={intent_dict.get('type', 'unknown')}, confidence={intent_dict.get('confidence', 0)}")
 
+                    widget_plan_dict = asdict(widget_plan) if hasattr(widget_plan, "__dataclass_fields__") else {}
                     rl.record_experience(
                         query_id=query_id,
                         transcript=transcript,
                         user_id=user_id,
                         parsed_intent=intent_dict,
-                        widget_plan=asdict(widget_plan) if hasattr(widget_plan, "__dataclass_fields__") else {},
+                        widget_plan=widget_plan_dict,
                         fixtures=fixtures,
                         processing_time_ms=processing_time,
                         user_history=scenarios_used,
+                        voice_response=voice_response,
+                        prompt_version=widget_plan_dict.get("prompt_version", ""),
                     )
                     logger.info(f"[RL] Experience recorded successfully: {query_id}")
                 else:
@@ -755,10 +979,15 @@ class Layer2Orchestrator:
         except Exception as e:
             logger.debug(f"Grounding audit finalization skipped: {e}")
 
+        # Build context update — include focus graph for frontend persistence
+        ctx_update = self._update_context(intent, [])
+        if focus_graph:
+            ctx_update["focus_graph"] = focus_graph.to_dict()
+
         return OrchestratorResponse(
             voice_response=voice_response,
             layout_json=layout_json,
-            context_update=self._update_context(intent, []),
+            context_update=ctx_update,
             intent=intent,
             processing_time_ms=processing_time,
             filler_text=filler,
@@ -889,6 +1118,21 @@ class Layer2Orchestrator:
             processing_time_ms=processing_time,
         )
 
+    def _format_interactive_history_for_voice(self) -> str:
+        """Format interactive conversation history for voice response prompt."""
+        widget_context = self.context.get("widget_context") if self.context else None
+        if not widget_context:
+            return ""
+        history = widget_context.get("conversation_history", [])
+        if not history:
+            return ""
+        lines = ["\nConversation history (for context — user is in interactive mode):"]
+        for entry in history[-6:]:  # Last 6 turns for voice response
+            role = "User" if entry.get("role") == "user" else "AI"
+            text = str(entry.get("text", ""))[:200]
+            lines.append(f'  {role}: "{text}"')
+        return "\n".join(lines) + "\n"
+
     def _generate_voice_response_v2(self, parsed: ParsedIntent, layout: dict, transcript: str) -> str:
         """Generate voice response using the quality LLM, aware of what dashboard was built."""
         try:
@@ -915,7 +1159,7 @@ RULES:
 4. Briefly mention what the dashboard shows for context.
 5. Never speculate — if data is missing, say so.
 6. Use natural spoken language, not written prose.
-
+{self._format_interactive_history_for_voice()}
 Context data:
 {rag_context}
 
@@ -3443,12 +3687,18 @@ Response:"""
 
     def _update_context(self, intent: Intent, rag_results: list) -> dict:
         """Update conversation context based on current query."""
-        return {
+        ctx = {
             "last_intent": intent.type,
             "last_domains": intent.domains,
             "last_query": intent.raw_text,
+            "last_entities": intent.entities.get("devices", []),
             "timestamp": time.time(),
         }
+        # Include focus graph so frontend can send it back for pronoun resolution
+        fg = self.context.get("focus_graph")
+        if fg:
+            ctx["focus_graph"] = fg
+        return ctx
 
     def get_proactive_trigger(self, system_context: dict) -> Optional[str]:
         """

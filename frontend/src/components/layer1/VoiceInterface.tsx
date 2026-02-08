@@ -94,27 +94,32 @@ export default function VoiceInterface() {
 
   // Check Layer 2 health on mount
   useEffect(() => {
-    const checkLayer2 = async () => {
+    const checkLayer2 = async (retries = 5) => {
       setLayer2Status("checking");
-      try {
-        const res = await fetch(`${config.api.baseUrl}/api/layer2/rag/industrial/health/`, {
-          method: "GET",
-          signal: AbortSignal.timeout(5000),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          console.info("[Layer2] Health check:", data);
-          setLayer2Status("ready");
-        } else {
-          console.warn("[Layer2] Health check failed:", res.status);
-          setLayer2Status("error");
-          setLayer2Error(`Backend returned ${res.status}`);
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          const res = await fetch("/api/health", {
+            method: "GET",
+            signal: AbortSignal.timeout(10000),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            console.info("[Layer2] Health check:", data);
+            setLayer2Status("ready");
+            setLayer2Error(null);
+            return;
+          } else {
+            console.warn(`[Layer2] Health check attempt ${attempt}/${retries}: HTTP ${res.status}`);
+          }
+        } catch (e) {
+          console.warn(`[Layer2] Health check attempt ${attempt}/${retries} failed:`, e);
         }
-      } catch (e) {
-        console.warn("[Layer2] Health check failed:", e);
-        setLayer2Status("error");
-        setLayer2Error(`Backend unreachable at ${config.api.baseUrl}`);
+        if (attempt < retries) {
+          await new Promise(r => setTimeout(r, 3000));
+        }
       }
+      setLayer2Status("error");
+      setLayer2Error(`Backend unreachable at ${config.api.baseUrl}`);
     };
     checkLayer2();
     // Set session ID

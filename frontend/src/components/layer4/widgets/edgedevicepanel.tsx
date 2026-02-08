@@ -2015,6 +2015,120 @@ function EdgeDevicePanel() {
   );
 }
 
+/**
+ * Dynamic device panel that renders real PG data when available.
+ * Falls back to the hardcoded EdgeDevicePanel when no data is provided.
+ */
+function DynamicDevicePanel({ demoData }: { demoData: any }) {
+  const device = demoData?.device || {};
+  const readings = demoData?.readings || [];
+  const alerts = demoData?.alerts || [];
+  const maintenance = demoData?.maintenance || [];
+
+  const statusColor = device.status === 'running' ? '#16a34a'
+    : device.status === 'stopped' ? '#ef4444'
+    : '#d97706';
+
+  return (
+    <Paper elevation={0} sx={{ height: '100%', overflow: 'auto', p: 2, bgcolor: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 3 }}>
+      <Stack spacing={2}>
+        {/* Device Header */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box>
+            <Box sx={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5, color: '#a3a3a3', mb: 0.5 }}>
+              {device.type || 'Device'} — {device.id || ''}
+            </Box>
+            <Box sx={{ fontSize: 18, fontWeight: 700, color: '#171717' }}>
+              {device.name || 'Unknown Device'}
+            </Box>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Chip label={device.status || 'unknown'} size="small"
+              sx={{ bgcolor: statusColor, color: '#fff', fontWeight: 600, textTransform: 'uppercase', fontSize: 10 }} />
+            {device.health != null && (
+              <Chip label={`${device.health}% health`} size="small" variant="outlined"
+                sx={{ fontWeight: 600, fontSize: 10 }} />
+            )}
+          </Box>
+        </Box>
+
+        {device.location && (
+          <Box sx={{ fontSize: 11, color: '#737373' }}>Location: {device.location}</Box>
+        )}
+
+        <Divider />
+
+        {/* Live Readings */}
+        {readings.length > 0 && (
+          <Box>
+            <Box sx={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5, color: '#a3a3a3', mb: 1 }}>
+              Live Readings
+            </Box>
+            <Stack spacing={1}>
+              {readings.map((r: any, i: number) => (
+                <Box key={i} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                  p: 1.5, bgcolor: '#fff', borderRadius: 2, border: '1px solid #e5e5e5' }}>
+                  <Box sx={{ fontSize: 12, color: '#525252', fontWeight: 500 }}>
+                    {(r.parameter || '').replace(/_/g, ' ')}
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
+                    <Box sx={{ fontSize: 18, fontWeight: 700, color: '#171717', fontFamily: 'monospace' }}>
+                      {typeof r.value === 'number' ? r.value.toFixed(2) : r.value}
+                    </Box>
+                    <Box sx={{ fontSize: 11, color: '#a3a3a3', fontWeight: 500 }}>{r.unit}</Box>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+        )}
+
+        {/* Alerts */}
+        {alerts.length > 0 && (
+          <Box>
+            <Box sx={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5, color: '#a3a3a3', mb: 1 }}>
+              Alerts ({alerts.length})
+            </Box>
+            <Stack spacing={0.5}>
+              {alerts.map((a: any, i: number) => {
+                const sevColor = a.severity === 'critical' ? '#ef4444' : a.severity === 'high' ? '#f97316' : '#d97706';
+                return (
+                  <Alert key={i} severity={a.severity === 'critical' ? 'error' : a.severity === 'high' ? 'error' : 'warning'}
+                    sx={{ py: 0.5, fontSize: 11, '.MuiAlert-message': { overflow: 'hidden', textOverflow: 'ellipsis' } }}>
+                    {a.message || a.description || ''}
+                  </Alert>
+                );
+              })}
+            </Stack>
+          </Box>
+        )}
+
+        {/* Maintenance */}
+        {maintenance.length > 0 && (
+          <Box>
+            <Box sx={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5, color: '#a3a3a3', mb: 1 }}>
+              Maintenance ({maintenance.length})
+            </Box>
+            <Stack spacing={0.5}>
+              {maintenance.map((m: any, i: number) => (
+                <Box key={i} sx={{ p: 1, bgcolor: '#fff', borderRadius: 1, border: '1px solid #e5e5e5', fontSize: 11, color: '#525252' }}>
+                  <Chip label={m.type || 'scheduled'} size="small" sx={{ fontSize: 9, mr: 1, height: 18 }} />
+                  {m.description || ''}
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+        )}
+      </Stack>
+    </Paper>
+  );
+}
+
 export default function ScenarioComponent({ data }) {
+  // Use dynamic panel when real backend data is available
+  const demoData = data?.demoData;
+  if (demoData && (demoData.device || demoData.readings)) {
+    return <DynamicDevicePanel demoData={demoData} />;
+  }
   return <EdgeDevicePanel />;
 }

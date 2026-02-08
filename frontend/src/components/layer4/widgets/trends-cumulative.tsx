@@ -282,7 +282,7 @@ const TrendWidget: React.FC<TrendWidgetProps> = ({
             </div>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <ComposedChart
               data={data}
               margin={{ top: 10, right: 10, left: 0, bottom: 0 }}

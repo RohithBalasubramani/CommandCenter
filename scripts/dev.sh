@@ -437,11 +437,25 @@ fi
 
 # ---------- Backend (Django) ------------------------------------------------
 
-log_line "BACKEND" "Starting Django on :$BACKEND_PORT..." "$YELLOW"
+log_line "BACKEND" "Starting Django (gunicorn) on :$BACKEND_PORT..." "$YELLOW"
 (
     cd "$BACKEND_DIR"
     activate_venv "$BACKEND_DIR"
-    exec python manage.py runserver "0.0.0.0:$BACKEND_PORT" 2>&1
+    export ENABLE_CONTINUOUS_RL=false
+    export HF_HUB_DISABLE_XET=1
+    export OLLAMA_MODEL_FAST="${OLLAMA_MODEL_FAST:-llama3.1:8b}"
+    export OLLAMA_MODEL_QUALITY="${OLLAMA_MODEL_QUALITY:-phi4}"
+    export GUNICORN_WORKER=true
+    exec gunicorn command_center.wsgi:application \
+        --bind "[::]:$BACKEND_PORT" \
+        --workers 2 \
+        --worker-class=gthread \
+        --threads=4 \
+        --timeout 300 \
+        --graceful-timeout 300 \
+        --access-logfile - \
+        --error-logfile - \
+        2>&1
 ) | prefix_output "BACKEND" "$YELLOW" &
 BACKEND_PID=$!
 

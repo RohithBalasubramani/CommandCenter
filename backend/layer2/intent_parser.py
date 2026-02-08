@@ -126,7 +126,8 @@ class IntentParser:
             self._pipeline = get_rag_pipeline()
         return self._pipeline
 
-    def parse(self, transcript: str) -> ParsedIntent:
+    def parse(self, transcript: str, widget_context: dict = None,
+              focus_graph=None) -> ParsedIntent:
         """Parse intent from transcript using 8B LLM, with regex fallback.
 
         Strategy:
@@ -135,6 +136,12 @@ class IntentParser:
         2. LLM for complex queries — enriched with any regex-detected domains
            the LLM may have missed.
         3. Pure regex fallback if LLM is unavailable.
+        4. If widget_context/focus_graph is active, inject context entities.
+
+        Args:
+            transcript: User's spoken/typed query
+            widget_context: Interactive mode context with equipment, metric, conversation_history
+            focus_graph: SemanticFocusGraph for pronoun resolution
         """
         # Always run regex first — it's fast and deterministic
         regex_result = self._parse_with_regex(transcript)
@@ -145,23 +152,66 @@ class IntentParser:
 
         # Complex queries: try LLM for richer entity extraction and confidence
         try:
-            result = self._parse_with_llm(transcript)
+            result = self._parse_with_llm(transcript, widget_context=widget_context)
             if result is not None:
                 # Merge regex-detected domains the LLM may have missed
                 for domain in regex_result.domains:
                     if domain not in result.domains:
                         result.domains.append(domain)
+                # Merge interactive context entities if query didn't mention any devices
+                result = self._merge_interactive_context(result, widget_context,
+                                                          focus_graph=focus_graph)
                 return result
         except Exception as e:
             logger.warning(f"LLM intent parsing failed: {e}")
 
-        # Fallback to regex
+        # Fallback to regex — also merge interactive context
+        regex_result = self._merge_interactive_context(regex_result, widget_context,
+                                                        focus_graph=focus_graph)
         return regex_result
 
-    def _parse_with_llm(self, transcript: str) -> Optional[ParsedIntent]:
+    def _merge_interactive_context(self, result: ParsedIntent, widget_context: dict = None,
+                                    focus_graph=None) -> ParsedIntent:
+        """Inject equipment/metric from focus graph or flat interactive context when query lacks devices."""
+        if focus_graph and not result.entities.get("devices"):
+            # Use focus graph for pronoun resolution
+            from layer2.focus_graph_builder import FocusGraphBuilder
+            builder = FocusGraphBuilder(focus_graph)
+            resolved = builder.resolve_pronoun(result.raw_text)
+            if resolved:
+                equip_id = resolved.properties.get("equipment_id", resolved.label)
+                result.entities.setdefault("devices", []).append(equip_id)
+                logger.info(f"[IntentParser] Focus graph resolved pronoun → {equip_id}")
+                if "industrial" not in result.domains:
+                    result.domains.append("industrial")
+                return result
+
+        # Fallback to flat widget_context
+        if not widget_context:
+            return result
+        equipment = widget_context.get("equipment", "")
+        if equipment and not result.entities.get("devices"):
+            result.entities.setdefault("devices", []).append(equipment)
+            logger.info(f"[IntentParser] Injected interactive equipment: {equipment}")
+        if "industrial" not in result.domains:
+            result.domains.append("industrial")
+        return result
+
+    def _parse_with_llm(self, transcript: str, widget_context: dict = None) -> Optional[ParsedIntent]:
         """Parse intent using the fast LLM model."""
         llm = self.pipeline.llm_fast
         prompt = PARSE_PROMPT_TEMPLATE.format(transcript=transcript)
+
+        # Append interactive context hint so LLM resolves pronouns to the right equipment
+        if widget_context:
+            equipment = widget_context.get("equipment", "")
+            metric = widget_context.get("metric", "")
+            if equipment:
+                prompt += (
+                    f"\n\nActive context: User is interacting with {equipment}"
+                    f"{f' ({metric})' if metric else ''}. "
+                    f'Ambiguous references like "it", "this", "the same" refer to {equipment}.'
+                )
 
         data = llm.generate_json(
             prompt=prompt,

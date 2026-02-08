@@ -161,9 +161,9 @@ const WATERFALL_SPEC = {
 
 
 
-const DonutPreview: React.FC = () => {
-  const data = DONUT_PIE_SPEC.demoData;
-  const palette = DONUT_PIE_SPEC.visual.palette;
+const DonutPreview: React.FC<{ demoData?: any[]; palette?: string[] }> = ({ demoData, palette: paletteProp }) => {
+  const data = demoData || DONUT_PIE_SPEC.demoData;
+  const palette = paletteProp || DONUT_PIE_SPEC.visual.palette;
 
   // Calculate total for center label
   const total = data.reduce((acc, curr) => acc + curr.value, 0);
@@ -176,7 +176,7 @@ const DonutPreview: React.FC = () => {
             <div className="text-[10px] uppercase font-bold tracking-widest text-neutral-400">Total Assets</div>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <PieChart>
           <Pie
             data={data}
@@ -217,48 +217,49 @@ const DonutPreview: React.FC = () => {
 
 
 
-const StackedAreaPreview: React.FC = () => {
-  const data = STACKED_AREA_SPEC.demoData;
-  const palette = STACKED_AREA_SPEC.visual.palette;
+const StackedAreaPreview: React.FC<{ demoData?: any[]; palette?: string[]; keys?: string[] }> = ({ demoData, palette: paletteProp, keys: keysProp }) => {
+  const data = demoData || STACKED_AREA_SPEC.demoData;
+  const palette = paletteProp || STACKED_AREA_SPEC.visual.palette;
+  const keys = keysProp || Object.keys(data[0] || {}).filter(k => k !== 'time');
 
   return (
     <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <AreaChart
           data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f5f5f5" />
-          <XAxis 
-            dataKey="time" 
-            tick={{ fontSize: 10, fill: '#a3a3a3' }} 
-            axisLine={false} 
+          <XAxis
+            dataKey="time"
+            tick={{ fontSize: 10, fill: '#a3a3a3' }}
+            axisLine={false}
             tickLine={false}
             dy={10}
           />
-          <YAxis 
-            tick={{ fontSize: 10, fill: '#a3a3a3' }} 
-            axisLine={false} 
-            tickLine={false} 
+          <YAxis
+            tick={{ fontSize: 10, fill: '#a3a3a3' }}
+            axisLine={false}
+            tickLine={false}
           />
-          <Tooltip 
-             contentStyle={{ 
-              backgroundColor: '#fff', 
-              border: '1px solid #e5e5e5', 
+          <Tooltip
+             contentStyle={{
+              backgroundColor: '#fff',
+              border: '1px solid #e5e5e5',
               borderRadius: '8px',
               fontSize: '12px',
               boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
           />
-          <Legend 
-             verticalAlign="top" 
-             align="right" 
-             wrapperStyle={{ fontSize: '12px', fontWeight: 500, paddingBottom: '20px', color: '#737373' }} 
+          <Legend
+             verticalAlign="top"
+             align="right"
+             wrapperStyle={{ fontSize: '12px', fontWeight: 500, paddingBottom: '20px', color: '#737373' }}
              iconType="circle"
           />
-          <Area type="monotone" dataKey="Running" stackId="1" stroke={palette[0]} fill={palette[0]} fillOpacity={0.9} />
-          <Area type="monotone" dataKey="Idle" stackId="1" stroke={palette[1]} fill={palette[1]} fillOpacity={0.9} />
-          <Area type="monotone" dataKey="Down" stackId="1" stroke={palette[2]} fill={palette[2]} fillOpacity={0.9} />
+          {keys.map((key, i) => (
+            <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={palette[i % palette.length]} fill={palette[i % palette.length]} fillOpacity={0.9} />
+          ))}
         </AreaChart>
       </ResponsiveContainer>
     </div>
@@ -268,49 +269,50 @@ const StackedAreaPreview: React.FC = () => {
 
 
 
-const StackedBarPreview: React.FC = () => {
-  const data = STACKED_BAR_SPEC.demoData;
-  const palette = STACKED_BAR_SPEC.visual.palette;
+const StackedBarPreview: React.FC<{ demoData?: any[]; palette?: string[]; keys?: string[] }> = ({ demoData, palette: paletteProp, keys: keysProp }) => {
+  const data = demoData || STACKED_BAR_SPEC.demoData;
+  const palette = paletteProp || STACKED_BAR_SPEC.visual.palette;
+  const keys = keysProp || Object.keys(data[0] || {}).filter(k => k !== 'name');
 
   return (
     <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
           data={data}
           margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f5f5f5" />
-          <XAxis 
-            dataKey="name" 
-            tick={{ fontSize: 10, fill: '#a3a3a3' }} 
-            axisLine={false} 
+          <XAxis
+            dataKey="name"
+            tick={{ fontSize: 10, fill: '#a3a3a3' }}
+            axisLine={false}
             tickLine={false}
             dy={10}
           />
-          <YAxis 
-            tick={{ fontSize: 10, fill: '#a3a3a3' }} 
-            axisLine={false} 
-            tickLine={false} 
+          <YAxis
+            tick={{ fontSize: 10, fill: '#a3a3a3' }}
+            axisLine={false}
+            tickLine={false}
           />
-          <Tooltip 
+          <Tooltip
             cursor={{ fill: 'rgba(0,0,0,0.02)' }}
-            contentStyle={{ 
-              backgroundColor: '#fff', 
-              border: '1px solid #e5e5e5', 
+            contentStyle={{
+              backgroundColor: '#fff',
+              border: '1px solid #e5e5e5',
               borderRadius: '8px',
               fontSize: '12px',
               boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
             }}
           />
-          <Legend 
-            verticalAlign="top" 
-            align="right" 
-            wrapperStyle={{ fontSize: '12px', fontWeight: 500, paddingBottom: '20px', color: '#737373' }} 
+          <Legend
+            verticalAlign="top"
+            align="right"
+            wrapperStyle={{ fontSize: '12px', fontWeight: 500, paddingBottom: '20px', color: '#737373' }}
             iconType="circle"
           />
-          <Bar dataKey="Solar" stackId="a" fill={palette[0]} barSize={40} />
-          <Bar dataKey="Grid" stackId="a" fill={palette[1]} barSize={40} />
-          <Bar dataKey="Diesel" stackId="a" fill={palette[2]} barSize={40} />
+          {keys.map((key, i) => (
+            <Bar key={key} dataKey={key} stackId="a" fill={palette[i % palette.length]} barSize={40} />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -366,9 +368,9 @@ const CustomContent = (props: any) => {
   );
 };
 
-const TreemapPreview: React.FC = () => {
-  const data = TREEMAP_SPEC.demoData;
-  const palette = TREEMAP_SPEC.visual.palette;
+const TreemapPreview: React.FC<{ demoData?: any[]; palette?: string[] }> = ({ demoData, palette: paletteProp }) => {
+  const data = demoData || TREEMAP_SPEC.demoData;
+  const palette = paletteProp || TREEMAP_SPEC.visual.palette;
 
   // Treemap expects a root object with children
   const treeData = [
@@ -400,7 +402,7 @@ const TreemapPreview: React.FC = () => {
 
   return (
     <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <Treemap
           data={treeData}
           dataKey="size"
@@ -419,9 +421,9 @@ const TreemapPreview: React.FC = () => {
 
 
 
-const WaterfallPreview: React.FC = () => {
-  const rawData = WATERFALL_SPEC.demoData;
-  const palette = WATERFALL_SPEC.visual.palette;
+const WaterfallPreview: React.FC<{ demoData?: any[]; palette?: string[] }> = ({ demoData, palette: paletteProp }) => {
+  const rawData = demoData || WATERFALL_SPEC.demoData;
+  const palette = paletteProp || WATERFALL_SPEC.visual.palette;
 
   // Process data for waterfall visual
   // We need to calculate start and end values for floating bars
@@ -486,7 +488,7 @@ const WaterfallPreview: React.FC = () => {
 
   return (
     <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
           data={processedData}
           margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
@@ -527,18 +529,22 @@ const WaterfallPreview: React.FC = () => {
 
 
 const CompositionPreview = ({ data }) => {
-  const variant = data && data.variant ? data.variant : data && data.spec ? data.spec.variant : data ? data.id : undefined;
+  const variant = data?.variant ?? data?.spec?.variant ?? data?.id;
+  const demoData = data?.demoData;
+  const palette = data?.visual?.palette;
+  const keys = data?.keys;
+
   switch (variant) {
     case "STACKED_AREA":
-      return <StackedAreaPreview />;
+      return <StackedAreaPreview demoData={demoData} palette={palette} keys={keys} />;
     case "STACKED_BAR":
-      return <StackedBarPreview />;
+      return <StackedBarPreview demoData={demoData} palette={palette} keys={keys} />;
     case "TREEMAP":
-      return <TreemapPreview />;
+      return <TreemapPreview demoData={demoData} palette={palette} />;
     case "WATERFALL":
-      return <WaterfallPreview />;
+      return <WaterfallPreview demoData={demoData} palette={palette} />;
     default:
-      return <DonutPreview />;
+      return <DonutPreview demoData={demoData} palette={palette} />;
   }
 };
 

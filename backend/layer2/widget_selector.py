@@ -26,17 +26,18 @@ from layer2.widget_catalog import (
     get_catalog_prompt_text,
 )
 from layer2.intent_parser import ParsedIntent
+from rl.prompt_evolver import get_prompt_evolver
 
 logger = logging.getLogger(__name__)
 
-MAX_HEIGHT_UNITS = 24  # scrollable dashboard budget (increased for more widgets)
-MAX_WIDGETS = 10
-MAX_KPIS = 4
+MAX_HEIGHT_UNITS = 72  # scrollable dashboard budget — generous for 20+ widget dashboards
+MAX_WIDGETS = 24
+MAX_KPIS = 6
 
 # Scenarios that should NEVER be selected by the LLM
 BANNED_SCENARIOS = {"helpview", "pulseview"}
 # Maximum instances of the same scenario type
-MAX_SAME_SCENARIO = 2
+MAX_SAME_SCENARIO = 3
 
 # Safety-critical scenarios that must maintain minimum visibility
 # These should never be suppressed by RL reranking (e.g., alerts, safety KPIs)
@@ -130,47 +131,49 @@ JSON:"""
 # Key optimization: No "why" field generation - use templates instead
 # ══════════════════════════════════════════════════════════════════════════════
 
-FAST_SELECT_PROMPT = '''Select 8 widgets for this industrial operations query.
+FAST_SELECT_PROMPT = '''Select widgets for this industrial operations query.
 
 ## WIDGET CATALOG
 {catalog}
 
 ## QUERY
 "{query}"
+Intent: {intent_type} | Domains: {domains} | Entities: {entities}
+Primary focus: {primary_char} | Also relevant: {secondary_chars}
 
 ## DATA AVAILABLE
 {data_summary}
 
-## SIZING RULES
-Hero-capable widgets (use for first/main answer):
-  trend, trend-multi-line, trends-cumulative, comparison, timeline,
-  category-bar, composition, flow-sankey, matrix-heatmap,
-  edgedevicepanel, eventlogstream, peopleview
+## DOMAIN AFFINITY (prefer these widget types):
+- Comparison queries → comparison (hero), trend-multi-line, kpi for each entity
+- Energy/power queries → trend (hero), distribution, kpi, trends-cumulative
+- Alerts queries → alerts (hero), kpi, trend, timeline
+- Maintenance queries → timeline (hero), eventlogstream, alerts, category-bar
+- Health/status single device → edgedevicepanel (hero), trend, alerts, kpi
+- Health/status overview → matrix-heatmap (hero), category-bar, alerts, kpi
+- HVAC/chiller queries → trend (hero), comparison, kpi, alerts
+- Top consumers → category-bar (hero), distribution, kpi, trend
 
-Small widgets (NOT hero, use for supporting info):
-  kpi: compact or normal only
-  alerts: normal or expanded only
-  distribution: normal or expanded only
+## SIZING RULES
+hero: First widget only (primary answer). Use: trend, trend-multi-line, comparison, category-bar, matrix-heatmap, edgedevicepanel, timeline, flow-sankey, eventlogstream
+expanded: Secondary detail widgets. Use: trend, trend-multi-line, comparison, distribution, alerts, timeline, composition
+normal: Supporting context. Use: alerts, distribution, kpi
+compact: Quick-glance metrics only. Use: kpi
 
 ## RULES
-1. First widget MUST be hero-capable with size="hero"
-2. Use EXACT scenario names (e.g., "trend" not "trend chart")
-3. Include diverse widget types (kpi, trends, alerts, etc.)
-4. 8 widgets total
-5. Each widget MUST have a data_request with query, metric, and entities
-6. Each KPI widget must show a DIFFERENT metric (e.g. power_kw, power_factor, health_score, voltage_avg)
-7. Use specific equipment/meter IDs from the DATA AVAILABLE section
+1. Select EXACTLY {widget_count} widgets — use ALL {widget_count} slots with DIVERSE widget types
+2. First widget MUST be hero size — pick the scenario that BEST answers the query
+3. Each widget MUST have a relevance score (0.0-1.0) reflecting how useful it is for THIS specific query
+   - Hero: 0.90-0.98 | Direct supporting: 0.75-0.89 | Context: 0.55-0.74 | Nice-to-have: 0.40-0.54
+4. Use EXACT scenario names from catalog
+5. Max 2 KPI widgets per entity, each showing a DIFFERENT metric
+6. Each widget MUST include data_request with query, metric, and entities from the query
+7. MAXIMIZE widget type diversity — use DIFFERENT scenario types (trend, alerts, distribution, category-bar, composition, timeline, eventlogstream, etc.)
+8. Operators need comprehensive dashboards — show KPIs AND trends AND alerts AND distributions, not just one type
 
-## OUTPUT (JSON only)
-{{"heading": "<title>", "widgets": [
-  {{"scenario": "<hero-capable>", "size": "hero", "data_request": {{"query": "<what to show>", "metric": "<metric_name>", "entities": ["<equipment_id>"]}}}},
-  {{"scenario": "<any>", "size": "expanded", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "expanded", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "normal", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "compact", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}},
-  {{"scenario": "<any>", "size": "compact", "data_request": {{"query": "<what>", "metric": "<metric>", "entities": []}}}}
+## OUTPUT (JSON only, no explanation)
+{{"heading": "<short dashboard title>", "widgets": [
+  {{"scenario": "<name>", "size": "<size>", "relevance": <0.0-1.0>, "data_request": {{"query": "<what data>", "metric": "<metric_name>", "entities": ["{entity_hint}"]}}}}
 ]}}'''
 
 # Template-based "why" descriptions - avoids slow LLM text generation
@@ -194,6 +197,59 @@ WHY_TEMPLATES = {
 }
 
 
+def build_production_prompt(
+    query: str,
+    intent_type: str = "query",
+    domains: str = "industrial",
+    entities: str = "none",
+    entity_hint: str = "",
+    primary_char: str = "general query",
+    secondary_chars: str = "none",
+    data_summary: str = "No pre-fetched data available.",
+    widget_count: int = 8,
+    use_evolver: bool = True,
+) -> tuple:
+    """Build the EXACT (system_prompt, user_prompt, prompt_version) that the LLM receives.
+
+    This is the single source of truth for prompt construction.
+    Used by:
+      - widget_selector._select_with_llm() during production inference
+      - claude_teacher.py during trace capture for distillation
+      - automated_runner.py for Claude vs Ollama comparison
+
+    All three MUST produce identical prompts for the training data to be valid.
+
+    Returns:
+        (system_prompt, formatted_user_prompt, prompt_version)
+    """
+    catalog_text = get_catalog_prompt_text()
+
+    # Select prompt template (evolver variant or static)
+    prompt_version = "static"
+    prompt_template = FAST_SELECT_PROMPT
+    if use_evolver:
+        try:
+            evolver = get_prompt_evolver()
+            prompt_template, prompt_version = evolver.get_prompt()
+        except Exception:
+            pass
+
+    user_prompt = prompt_template.format(
+        catalog=catalog_text,
+        query=query,
+        intent_type=intent_type,
+        domains=domains,
+        entities=entities,
+        primary_char=primary_char,
+        secondary_chars=secondary_chars,
+        data_summary=data_summary,
+        widget_count=widget_count,
+        entity_hint=entity_hint,
+    )
+
+    return SYSTEM_PROMPT, user_prompt, prompt_version
+
+
 @dataclass
 class WidgetPlanItem:
     """Single widget in the plan."""
@@ -212,6 +268,7 @@ class WidgetPlan:
     widgets: list = field(default_factory=list)  # list[WidgetPlanItem]
     total_height_units: int = 0
     select_method: str = "llm"  # "llm" or "fallback"
+    prompt_version: str = ""    # Which prompt variant was used (for RL prompt optimization)
 
 
 class WidgetSelector:
@@ -242,11 +299,14 @@ class WidgetSelector:
         return self._rl_scorer if self._rl_scorer is not False else None
 
     def select(self, intent: ParsedIntent, data_summary: str = "",
-               user_context: str = "") -> WidgetPlan:
+               user_context: str = "", widget_context: dict = None,
+               focus_graph=None) -> WidgetPlan:
         """Select widgets using 8B LLM, with RL reranking and rule-based fallback."""
         # Try LLM first
         try:
-            result = self._select_with_llm(intent, data_summary, user_context)
+            result = self._select_with_llm(intent, data_summary, user_context,
+                                            widget_context=widget_context,
+                                            focus_graph=focus_graph)
             if result is not None and result.widgets:
                 # Apply RL score adjustments from low-rank scorer
                 self._apply_rl_reranking(result, intent)
@@ -273,14 +333,21 @@ class WidgetSelector:
         try:
             transcript = intent.raw_text
             scenarios = [w.scenario for w in plan.widgets]
-            adjustments = scorer.score_widgets(transcript, scenarios)
+
+            # Build enriched query context from ParsedIntent
+            from rl.lora_scorer import QueryContext
+            ctx = QueryContext.from_parsed_intent(intent)
+            ctx.num_candidate_widgets = len(scenarios)
+
+            adjustments = scorer.score_widgets(transcript, scenarios, ctx=ctx)
 
             # Apply adjustments to relevance scores (keep hero in place)
             for i, widget in enumerate(plan.widgets):
                 adj = adjustments.get(widget.scenario, 0.0)
-                # Blend: 80% LLM relevance + 20% RL adjustment
+                # Blend: 50% LLM relevance + 50% RL adjustment
+                # (RL needs enough influence to meaningfully rerank)
                 new_relevance = max(0.0, min(1.0,
-                    widget.relevance + 0.2 * adj
+                    widget.relevance + 0.5 * adj
                 ))
 
                 # Enforce safety floor for critical widgets
@@ -317,46 +384,141 @@ class WidgetSelector:
         except Exception as e:
             logger.debug(f"RL reranking skipped: {e}")
 
+    def _compute_widget_count(self, intent: ParsedIntent) -> int:
+        """Determine optimal widget count based on query complexity.
+
+        Comprehensive dashboards: operators benefit from seeing all relevant
+        data at once (KPIs, trends, alerts, distributions, etc.).
+        """
+        entities = intent.entities.get("devices", [])
+        primary = intent.primary_characteristic
+        secondary = intent.secondary_characteristics
+
+        # Base count — generous to show comprehensive dashboards
+        if len(entities) == 0:
+            # No specific entities — broad overview: matrix, bars, alerts, KPIs, trends
+            base = 10
+        elif len(entities) == 1:
+            # Single entity — show all relevant aspects: KPI, trend, alerts, edge panel, distribution, etc.
+            base = 8
+        elif len(entities) == 2:
+            # Comparison — comparison + individual views + aggregates
+            base = 10
+        else:
+            # Multiple entities — comprehensive multi-entity dashboard
+            base = 12
+
+        # Adjust for characteristics
+        if primary == "comparison":
+            base = max(base, 10)
+        elif primary == "health_status" and len(entities) == 0:
+            base = max(base, 12)  # Overview needs matrix + bars + alerts + KPIs + trends
+        elif primary in ("alerts", "maintenance"):
+            base = max(base, 10)  # alerts list + timeline + context + trends + KPIs
+
+        # Add 1 for each relevant secondary characteristic (up to +3)
+        base += min(len(secondary), 3)
+
+        return min(base, MAX_WIDGETS)
+
     def _select_with_llm(self, intent: ParsedIntent, data_summary: str,
-                          user_context: str) -> Optional[WidgetPlan]:
-        """Select widgets using LLM with optimized fast prompt.
+                          user_context: str, widget_context: dict = None,
+                          focus_graph=None) -> Optional[WidgetPlan]:
+        """Select widgets using LLM with context-aware prompt.
 
-        Speed optimization: Uses FAST_SELECT_PROMPT (~2s) instead of verbose
-        SELECT_PROMPT_TEMPLATE (~15s). The "why" field is populated from
-        templates in post-processing rather than LLM generation.
+        Passes full intent context (entities, characteristics, domains) to the
+        LLM so it can make informed, query-specific widget choices.
 
-        Uses quality (70B) model if WIDGET_SELECT_QUALITY=1 (no accuracy benefit).
+        The "why" field is populated from templates in post-processing.
+        Uses quality (70B) model if WIDGET_SELECT_QUALITY=1.
         """
         use_quality = os.getenv("WIDGET_SELECT_QUALITY", "0") == "1"
         llm = self.pipeline.llm_quality if use_quality else self.pipeline.llm_fast
         logger.info(f"Widget selection using {'quality (70B)' if use_quality else 'fast (8B)'} model")
         catalog_text = get_catalog_prompt_text()
 
-        # Use optimized fast prompt (7.7x speedup, same accuracy)
-        prompt = FAST_SELECT_PROMPT.format(
-            catalog=catalog_text,
+        # Compute adaptive widget count
+        widget_count = self._compute_widget_count(intent)
+
+        # In interactive mode, always provide a rich dashboard (min 8 widgets)
+        if widget_context:
+            widget_count = max(widget_count, 8)
+
+        # Build entity and characteristic strings for the prompt
+        entities = intent.entities.get("devices", [])
+        entity_hint = entities[0] if entities else ""
+        entities_str = json.dumps(entities) if entities else "none"
+        primary_char = intent.primary_characteristic or "general query"
+        secondary_chars = ", ".join(intent.secondary_characteristics[:3]) if intent.secondary_characteristics else "none"
+
+        # Build the production prompt (shared with claude_teacher for distillation parity)
+        _, prompt, prompt_version = build_production_prompt(
             query=intent.raw_text,
             intent_type=intent.type,
-            domains=json.dumps(intent.domains),
+            domains=", ".join(intent.domains) if intent.domains else "industrial",
+            entities=entities_str,
+            entity_hint=entity_hint,
+            primary_char=primary_char,
+            secondary_chars=secondary_chars,
             data_summary=data_summary or "No pre-fetched data available.",
+            widget_count=widget_count,
         )
 
-        # F3 Fix: Set temperature=0.0 for deterministic widget selection
-        # (same query → same layout)
-        # Use only the user query as cache key — the full prompt contains a
-        # large template that drowns out the variable portion in embeddings.
+        # Append interactive context so LLM builds a contextual dashboard
+        if widget_context:
+            prompt += self._build_interactive_prompt_section(widget_context)
+
+        # Append focus graph context for entity-aware widget selection
+        if focus_graph and hasattr(focus_graph, 'to_prompt_context'):
+            graph_ctx = focus_graph.to_prompt_context()
+            if graph_ctx:
+                prompt += f"\n\n## SEMANTIC FOCUS\n{graph_ctx}"
+
+        logger.info(f"Widget selection: {widget_count} widgets for '{intent.raw_text[:60]}' "
+                     f"(primary={primary_char}, entities={entities})"
+                     f"{' [INTERACTIVE]' if widget_context else ''}")
+
         data = llm.generate_json(
             prompt=prompt,
             system_prompt=SYSTEM_PROMPT,
-            temperature=0.0,
-            max_tokens=2048,  # Generous tokens for 7-8 widgets
+            temperature=0.1,  # Slight variance for diversity while staying focused
+            max_tokens=2048,
             cache_key=f"widget_select:{intent.raw_text}",
         )
 
         if data is None:
             return None
 
-        return self._validate_and_build_plan(data, method="llm")
+        plan = self._validate_and_build_plan(data, method="llm")
+        plan.prompt_version = prompt_version
+
+        # Post-processing: ensure parsed entities flow into widget data_requests
+        if entities:
+            self._propagate_entities(plan, entities)
+
+        return plan
+
+    def _propagate_entities(self, plan: WidgetPlan, entities: list[str]):
+        """Ensure parsed entities appear in widget data_requests.
+
+        When the LLM omits entities in data_request, inject them from the
+        parsed intent so downstream data_collector can resolve them.
+        """
+        for widget in plan.widgets:
+            dr = widget.data_request
+            if not dr:
+                widget.data_request = {"entities": entities[:2], "query": "", "metric": ""}
+                continue
+
+            existing_entities = dr.get("entities", [])
+            if not existing_entities:
+                # Inject entities based on widget type
+                if widget.scenario in ("comparison", "trend-multi-line"):
+                    dr["entities"] = entities[:4]
+                elif widget.scenario in ("kpi", "trend", "edgedevicepanel"):
+                    dr["entities"] = entities[:1]
+                else:
+                    dr["entities"] = entities[:2]
 
     def _validate_and_build_plan(self, data: dict, method: str = "llm") -> WidgetPlan:
         """Validate LLM output and build a WidgetPlan."""
@@ -498,13 +660,28 @@ class WidgetSelector:
         elif primary == "supply_chain":
             add("supplychainglobe", "hero", 0.90, "Supply chain overview")
         else:
-            # Default: general status dashboard with diverse widgets
-            add("trend", "hero", 0.90, "Shows the most relevant metric trend over recent hours.")
-            add("kpi", "compact", 0.85, "Key metric at a glance showing current value and status.")
-            add("kpi", "compact", 0.83, "Secondary metric providing additional operational context.")
-            add("alerts", "normal", 0.80, "Active alerts and warnings requiring attention.")
-            add("distribution", "normal", 0.75, "Breakdown of key metrics by category or source.")
-            add("category-bar", "expanded", 0.70, "Ranking of equipment or zones by performance.")
+            # Default: adaptive dashboard based on entity count
+            if has_devices and len(entities.get("devices", [])) == 1:
+                # Single entity focus
+                device = entities["devices"][0]
+                add("trend", "hero", 0.95, f"Power consumption trend for {device}.")
+                add("kpi", "compact", 0.88, f"Current reading for {device}.")
+                add("alerts", "normal", 0.80, f"Active alerts for {device}.")
+            elif has_devices and len(entities.get("devices", [])) >= 2:
+                # Multi-entity comparison
+                add("comparison", "hero", 0.95, "Side-by-side comparison of the requested equipment.")
+                add("trend-multi-line", "expanded", 0.85, "Trend overlay of both entities over time.")
+                for dev in entities["devices"][:2]:
+                    add("kpi", "compact", 0.78, f"Current reading for {dev}.")
+                add("alerts", "normal", 0.72, "Related alerts and warnings.")
+            else:
+                # General overview — no specific entities
+                add("matrix-heatmap", "hero", 0.90, "Overview of equipment health across the facility.")
+                add("category-bar", "expanded", 0.82, "Ranking of equipment by power consumption.")
+                add("alerts", "normal", 0.78, "Active alerts and warnings requiring attention.")
+                add("distribution", "normal", 0.72, "Breakdown of energy consumption by category.")
+                add("kpi", "compact", 0.68, "Key operational metric at a glance.")
+                add("kpi", "compact", 0.64, "Secondary metric for operational context.")
 
         # Add secondary enrichments
         for char in secondary[:3]:
@@ -549,6 +726,32 @@ class WidgetSelector:
             total_height_units=MAX_HEIGHT_UNITS - budget,
             select_method="fallback",
         )
+
+    def _build_interactive_prompt_section(self, widget_context: dict) -> str:
+        """Build the interactive context section appended to the widget selection prompt."""
+        equipment = widget_context.get("equipment", "unknown")
+        metric = widget_context.get("metric", "")
+        history = widget_context.get("conversation_history", [])
+
+        section = f"""
+
+## INTERACTIVE CONTEXT
+User is in interactive mode focused on {equipment}{f' ({metric})' if metric else ''}.
+All queries relate to this equipment. Pronouns ("it", "this") refer to {equipment}.
+Build a FULL dashboard with multiple widgets for this follow-up query:
+- Include KPI, trend, maintenance, alerts, edge panel — whatever is relevant
+- Do NOT limit to a single widget — provide a complete contextual dashboard
+- The user expects rich, multi-widget responses scoped to {equipment}"""
+
+        if history:
+            section += "\n\n## CONVERSATION HISTORY\n"
+            # Last 10 exchanges, ~2000 tokens max
+            for turn in history[-10:]:
+                role = "User" if turn.get("role") == "user" else "AI"
+                text = turn.get("text", "")[:200]
+                section += f'{role}: "{text}"\n'
+
+        return section
 
     def _generate_heading_simple(self, intent: ParsedIntent) -> str:
         """Generate a simple heading from intent."""

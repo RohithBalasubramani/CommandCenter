@@ -14,8 +14,18 @@ class Layer2Config(AppConfig):
         """Initialize the RL system on app startup."""
         logger.info("Layer2Config.ready() called")
         # Only run in the main process (not in management commands or migrations)
-        if os.environ.get("RUN_MAIN") == "true" or os.environ.get("GUNICORN_WORKER"):
-            logger.info("RL system initialization triggered (GUNICORN_WORKER or RUN_MAIN set)")
+        # Auto-detect gunicorn workers even without explicit GUNICORN_WORKER env var
+        is_dev_server = os.environ.get("RUN_MAIN") == "true"
+        is_gunicorn_env = os.environ.get("GUNICORN_WORKER")
+        is_gunicorn_auto = "gunicorn" in os.environ.get("SERVER_SOFTWARE", "")
+        if not is_gunicorn_auto:
+            try:
+                import sys
+                is_gunicorn_auto = any("gunicorn" in arg for arg in sys.argv)
+            except Exception:
+                pass
+        if is_dev_server or is_gunicorn_env or is_gunicorn_auto:
+            logger.info("RL system initialization triggered (gunicorn detected or RUN_MAIN set)")
             self._init_rl_system()
         else:
             logger.info("Skipping RL init (not main process)")

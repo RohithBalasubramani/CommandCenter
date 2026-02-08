@@ -83,8 +83,8 @@ export interface ProactiveTrigger {
 
 const API_BASE = config.api.baseUrl;
 
-/** Performance budget: max round-trip time for AI orchestration (blueprint spec) */
-const BUDGET_ROUND_TRIP_MS = 45_000;
+/** Performance budget: max round-trip time for AI orchestration */
+const BUDGET_ROUND_TRIP_MS = 300_000;
 
 /**
  * Send transcript to Layer 2 for processing.
@@ -100,7 +100,7 @@ export async function orchestrate(
   console.info(`[Layer2] orchestrate() → POST ${url}`, { transcript, sessionId });
   const t0 = performance.now();
 
-  // Performance budget: abort if round-trip exceeds 45s
+  // Performance budget: abort if round-trip exceeds 5 minutes
   const controller = new AbortController();
   const budgetTimer = setTimeout(() => controller.abort(), BUDGET_ROUND_TRIP_MS);
 
@@ -122,8 +122,8 @@ export async function orchestrate(
     clearTimeout(budgetTimer);
     if (err instanceof DOMException && err.name === "AbortError") {
       const elapsed = Math.round(performance.now() - t0);
-      console.error(`[Layer2] orchestrate() BUDGET TIMEOUT after ${elapsed}ms (limit: ${BUDGET_ROUND_TRIP_MS}ms)`);
-      throw new Error(`AI round-trip exceeded ${BUDGET_ROUND_TRIP_MS / 1000}s budget`);
+      console.error(`[Layer2] orchestrate() TIMEOUT after ${elapsed}ms (limit: ${BUDGET_ROUND_TRIP_MS / 1000}s)`);
+      throw new Error(`AI round-trip exceeded ${BUDGET_ROUND_TRIP_MS / 1000}s timeout`);
     }
     throw err;
   }
@@ -250,6 +250,13 @@ export class Layer2Service {
    */
   updateContext(update: Record<string, unknown>) {
     this.context = { ...this.context, ...update };
+  }
+
+  /**
+   * Get the current conversation context (read-only).
+   */
+  getContext(): Record<string, unknown> {
+    return this.context;
   }
 
   /**

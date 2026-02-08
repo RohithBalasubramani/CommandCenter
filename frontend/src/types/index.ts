@@ -113,12 +113,30 @@ export interface WidgetInstruction {
   relevance: number;
   data_override: Record<string, unknown> | null; // real data from RAG, overrides fixture demoData
   description?: string;                          // user-facing explanation of what this widget shows
+  _is_stale?: boolean;                           // Phase 2: data freshness flag
+  _staleness_seconds?: number;                   // Phase 2: how stale (seconds since last update)
+  _widget_confidence?: number;                   // Phase 2: per-widget confidence 0-1
+  _conflict_flag?: string;                       // Phase 1: contradiction message (e.g. KPI vs alert)
+  _is_synthetic?: boolean;                       // Phase 1: synthetic/demo data flag
+  _data_quality?: string;                        // Phase 1: "real" | "synthetic" | "empty"
+}
+
+export interface ConfidenceEnvelope {
+  intent_confidence: number;
+  retrieval_completeness: number;
+  data_freshness: number;
+  widget_fit: number;
+  data_fill_quality: number;
+  overall: number;
+  action: string;  // "full_dashboard" | "partial_with_caveats" | "reduced_dashboard" | "reduced_with_warning" | "ask_clarification"
+  caveats: string[];
 }
 
 export interface LayoutJSON {
   heading?: string | null;
   widgets: WidgetInstruction[];
   transitions: Record<string, TransitionType>;
+  _confidence?: ConfidenceEnvelope;
 }
 
 // --- Layer 4: Widget Templates ---
@@ -195,4 +213,6 @@ export type CommandCenterEvent =
   | { type: "WIDGET_FOCUS"; scenario: string; label: string }
   | { type: "WIDGET_DRILL_DOWN"; scenario: string; label: string; context: string }
   | { type: "WIDGET_SNAPSHOT" }
+  | { type: "WIDGET_INTERACTIVE_ENTER"; scenario: string; label: string; equipment: string; metric: string }
+  | { type: "WIDGET_INTERACTIVE_EXIT" }
   | { type: "SYSTEM_TRIGGER"; trigger: SystemTrigger };

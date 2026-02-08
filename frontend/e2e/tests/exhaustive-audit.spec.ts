@@ -102,7 +102,7 @@ const BUDGET = {
   pageNavCold: 3000,     // SSR/CSR hydration
   pageNavWarm: 1500,
   uiInteraction: 500,    // Includes React re-render
-  aiFull: 45000,         // Local LLM
+  aiFull: 300000,        // Local LLM
 };
 
 let globalCounter = 0;

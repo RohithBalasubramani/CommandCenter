@@ -140,7 +140,7 @@ const CategoryBarChart: React.FC<Props> = ({ data, config, height = 320, enableB
 
   return (
     <div className="w-full h-full relative">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
           layout={config.layout || 'horizontal'}
           data={processedData}

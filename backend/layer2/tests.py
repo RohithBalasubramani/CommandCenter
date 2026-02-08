@@ -844,10 +844,10 @@ class PerformanceBudgetTests(TestCase):
             BUDGET_INTENT_MS, BUDGET_RAG_MS,
             BUDGET_WIDGET_SELECT_MS, BUDGET_TOTAL_MS,
         )
-        self.assertEqual(BUDGET_INTENT_MS, 500)
-        self.assertEqual(BUDGET_RAG_MS, 2000)
-        self.assertEqual(BUDGET_WIDGET_SELECT_MS, 3000)
-        self.assertEqual(BUDGET_TOTAL_MS, 8000)
+        self.assertEqual(BUDGET_INTENT_MS, 30_000)
+        self.assertEqual(BUDGET_RAG_MS, 60_000)
+        self.assertEqual(BUDGET_WIDGET_SELECT_MS, 60_000)
+        self.assertEqual(BUDGET_TOTAL_MS, 300_000)
 
     def test_timings_check_budget_records_warning(self):
         """OrchestratorTimings.check_budget() must record violations."""

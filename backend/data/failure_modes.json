@@ -1,0 +1,36 @@
+{
+  "failure_modes": [
+    {
+      "id": "fm_pump_seal_leak",
+      "equipment_type": "centrifugal_pump",
+      "symptom_signature": {"pressure": "low", "flow": "reduced", "vibration": "normal"},
+      "root_cause": "mechanical_seal_failure",
+      "description": "Mechanical seal leak — pressure loss and reduced flow rate",
+      "confidence_base": 0.65,
+      "resolution_steps": [
+        "Check for visible leaks around seal area",
+        "Monitor seal water flow",
+        "Replace mechanical seal during next outage"
+      ],
+      "prevention_steps": ["Regular seal inspection", "Monitor seal water flow rate"],
+      "severity": "medium",
+      "sources": ["maintenance_manual"]
+    },
+    {
+      "id": "fm_chiller_low_efficiency",
+      "equipment_type": "chiller",
+      "symptom_signature": {"temperature": "high", "power": "high", "efficiency": "low"},
+      "root_cause": "condenser_fouling",
+      "description": "Condenser fouling reduces heat transfer efficiency",
+      "confidence_base": 0.70,
+      "resolution_steps": [
+        "Check condenser approach temperature",
+        "Inspect condenser tubes for fouling",
+        "Clean condenser with tube cleaning system"
+      ],
+      "prevention_steps": ["Quarterly condenser tube cleaning"],
+      "severity": "medium",
+      "sources": ["domain_expert"]
+    }
+  ]
+}

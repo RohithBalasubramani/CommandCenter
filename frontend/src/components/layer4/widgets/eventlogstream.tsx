@@ -321,7 +321,7 @@ const MiniTrendChart: React.FC<MiniTrendChartProps> = ({ color = '#2563eb', heig
       className="w-full bg-neutral-50 rounded border border-neutral-100 overflow-hidden" 
       style={{ height: `${height}px` }}
     >
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <AreaChart data={data}>
           <defs>
             <linearGradient id={`colorValue-${color}`} x1="0" y1="0" x2="0" y2="1">
@@ -1057,10 +1057,12 @@ const DrillDownDrawer: React.FC<DrillDownDrawerProps> = ({ event, onClose }) => 
 
 
 
-const EventLogStream = ({ initialVariation }) => {
+const EventLogStream = ({ initialVariation, events: externalEvents }) => {
   const [variation, setVariation] = useState(initialVariation || WidgetVariation.CHRONOLOGICAL_TIMELINE);
   const [selectedEvent, setSelectedEvent] = useState<EventItemData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const allEvents = externalEvents || MOCK_EVENTS;
 
   // Map Variation to Internal Representation
   const representation = useMemo(() => {
@@ -1075,11 +1077,11 @@ const EventLogStream = ({ initialVariation }) => {
   }, [variation]);
 
   const filteredEvents = useMemo(() => {
-    return MOCK_EVENTS.filter(e => 
-        e.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        e.source.toLowerCase().includes(searchTerm.toLowerCase())
+    return allEvents.filter(e =>
+        (e.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (e.source || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [searchTerm]);
+  }, [searchTerm, allEvents]);
 
   // Grouping Logic for Correlation Stack
   const correlationGroups = useMemo(() => {
@@ -1244,5 +1246,6 @@ const EventLogStream = ({ initialVariation }) => {
 
 export default function ScenarioComponent({ data }) {
   const variation = data ? data.variation : undefined;
-  return <EventLogStream initialVariation={variation} />;
+  const events = data?.events;
+  return <EventLogStream initialVariation={variation} events={events} />;
 }

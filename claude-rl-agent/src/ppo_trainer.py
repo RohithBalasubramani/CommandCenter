@@ -66,11 +66,12 @@ class PPOTrainingConfig:
     def __post_init__(self):
         if self.reward_weights is None:
             self.reward_weights = {
-                "constraint_adherence": 0.25,
-                "reasoning_depth": 0.20,
-                "tool_efficiency": 0.20,
+                "constraint_adherence": 0.30,
+                "outcome_correctness": 0.25,
+                "tool_efficiency": 0.15,
                 "self_correction": 0.15,
-                "exploration_fit": 0.20,
+                "reasoning_depth": 0.10,
+                "exploration_fit": 0.05,
             }
 
 
@@ -165,9 +166,8 @@ class ClaudePPOTrainer:
         """
         Compute behavioral reward for a generated response.
 
-        This extracts reasoning signals from the response and scores them.
+        This extracts reasoning signals AND scores the terminal output artifact.
         """
-        # Create a mock trace for signal extraction
         from claude_trace_schema import ClaudeTrace, ToolCall
         from datetime import datetime
 
@@ -189,17 +189,104 @@ class ClaudePPOTrainer:
         # Extract reasoning signals
         trace.reasoning_signals = self.extractor.extract_signals(trace)
 
-        # Compute reward
+        # Build output artifact from response (heuristic extraction)
+        trace.output_artifact = self._extract_output_artifact(prompt, response)
+
+        # Compute reward — now includes outcome_correctness
         reward_components = self.reward_model.compute_reward(
             trace.reasoning_signals,
-            task_complexity="medium"
+            task_complexity="medium",
+            output_artifact=trace.output_artifact,
+            response_text=response,
         )
 
         # Return total reward (scaled to [-1, 1] for PPO)
-        # Convert from [0, 1] to [-1, 1]
         reward = (reward_components.total_reward * 2) - 1
 
         return reward
+
+    def _extract_output_artifact(self, prompt: str, response: str) -> 'OutputArtifact':
+        """
+        Build an OutputArtifact from the response using heuristics.
+
+        Extracts required components, schema type, factual claims, etc.
+        """
+        from claude_trace_schema import OutputArtifact
+        import re
+
+        artifact = OutputArtifact()
+
+        # Detect schema type
+        if '```json' in response or response.strip().startswith('{'):
+            artifact.schema_type = "json"
+            try:
+                import json
+                json.loads(response.strip().split('```json')[-1].split('```')[0].strip()
+                           if '```json' in response else response.strip())
+                artifact.schema_valid = True
+            except (json.JSONDecodeError, IndexError):
+                artifact.schema_valid = False
+                artifact.schema_violations.append("invalid_json")
+        elif '```' in response:
+            artifact.schema_type = "code"
+        elif '|' in response and '---' in response:
+            artifact.schema_type = "table"
+
+        # Extract factual claims (numbers with units, equipment IDs)
+        claims = re.findall(
+            r'(?:[\w-]+\s+(?:is|are|was|running at|operating at)\s+[\d.]+\s*\w+)',
+            response, re.IGNORECASE
+        )
+        artifact.factual_claims = claims[:10]  # cap at 10
+
+        # Extract equipment IDs mentioned
+        equipment_ids = re.findall(
+            r'(?:pump|chiller|transformer|CT|DG|AHU)[-_]?\d+',
+            response, re.IGNORECASE
+        )
+
+        # Extract refusals / uncertainty markers
+        refusal_patterns = [
+            r'data (?:is |)(?:not |un)available',
+            r'no data (?:found|exists)',
+            r'cannot determine',
+            r'insufficient (?:data|information)',
+        ]
+        for pattern in refusal_patterns:
+            if re.search(pattern, response, re.IGNORECASE):
+                artifact.refusals.append(pattern)
+
+        # Extract edge case mentions
+        edge_patterns = [
+            r'(?:note|caveat|warning|however|exception):\s*(.{20,100})',
+            r'(?:was offline|maintenance|outage|anomaly)\s+(.{10,80})',
+        ]
+        for pattern in edge_patterns:
+            matches = re.findall(pattern, response, re.IGNORECASE)
+            artifact.edge_cases_mentioned.extend(matches[:5])
+
+        # Build completeness checklist based on what the prompt asks
+        prompt_lower = prompt.lower()
+        checklist = {}
+        checklist["answers_question"] = len(response.strip()) > 30
+        checklist["includes_specific_data"] = bool(
+            re.search(r'\d+\.?\d*\s*(?:PSI|kW|MW|rpm|°?C|bar|%|mm|Hz)', response)
+        )
+        if equipment_ids:
+            checklist["references_equipment"] = True
+        if "compare" in prompt_lower or "difference" in prompt_lower:
+            checklist["makes_comparison"] = any(
+                w in response.lower() for w in ["higher", "lower", "compared", "versus", "difference", "while"]
+            )
+        if "status" in prompt_lower:
+            checklist["reports_status"] = any(
+                w in response.lower() for w in ["running", "normal", "alarm", "offline", "operating", "idle"]
+            )
+
+        artifact.completeness_checklist = checklist
+        artifact.compute_completeness()
+
+        return artifact
 
     def _extract_tool_calls(self, response: str) -> list:
         """Extract tool calls from response text (simple heuristic)."""

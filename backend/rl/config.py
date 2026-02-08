@@ -107,6 +107,7 @@ CONTINUOUS_RL_CONFIG = {
         "widget_engagement": 0.3,   # Which widgets did user interact with?
         "response_latency": 0.1,    # Faster is better (within bounds)
         "intent_confidence": 0.1,   # Higher confidence = more reliable
+        "text_quality": 0.4,        # Voice response quality
     },
 
     # Model updates
@@ -120,13 +121,13 @@ CONTINUOUS_RL_CONFIG = {
     "baseline_model_name": None,    # Keep baseline for A/B (set via env)
 
     # Tier 1: Low-rank scorer
-    "scorer_rank": 8,               # Low-rank factorization rank
+    "scorer_rank": 32,              # Low-rank factorization rank (32 for query-specificity)
     "scorer_lr": 1e-3,              # Learning rate for scorer
     "scorer_checkpoint_every": 50,  # Checkpoint frequency (feedback events)
 
-    # Tier 2: LoRA DPO fine-tuning
-    "lora_min_pairs": 50,           # Min DPO pairs before triggering training
-    "lora_train_cooldown": 3600,    # Seconds between LoRA training runs
+    # Tier 2: Unified LoRA DPO fine-tuning (widget + voice pairs)
+    "lora_min_pairs": 80,            # Min DPO pairs before triggering training
+    "lora_train_cooldown": 1800,    # 30 min cooldown between training runs
     "lora_auto_deploy": True,       # Auto-deploy to Ollama after training
 }
 

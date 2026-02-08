@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
-from .config import DPO_CONFIG, QLORA_CONFIG, CHECKPOINTS_DIR, get_config
+from .config import DPO_CONFIG, QLORA_CONFIG, MODEL_CONFIG, CHECKPOINTS_DIR, get_config
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class CommandCenterDPOTrainer:
         self.config = config
         self.dpo_config = config.get("dpo", DPO_CONFIG)
         self.qlora_config = config.get("qlora", QLORA_CONFIG)
-        self.base_model = config.get("base_model", DPO_CONFIG.get("base_model"))
+        self.base_model = config.get("base_model", MODEL_CONFIG.get("base_model"))
 
         self.model = None
         self.tokenizer = None

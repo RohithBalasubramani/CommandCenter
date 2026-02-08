@@ -62,13 +62,15 @@ ppo:
   cliprange: 0.2
   vf_coef: 0.1
   
-  # Behavioral reward weights
+  # Behavioral reward weights (Claude's real priority order)
+  # constraint adherence > correct terminal outcome > tool correctness > self-correction > reasoning > exploration
   reward_weights:
-    constraint_detection: 0.25
-    tool_use_alignment: 0.30
-    self_correction: 0.15
-    outcome_equivalence: 0.20
-    reasoning_depth: 0.10
+    constraint_adherence: 0.30   # Highest: did it respect constraints?
+    outcome_correctness: 0.25    # Second: is the terminal artifact correct/complete?
+    tool_efficiency: 0.15        # Third: were tools used correctly?
+    self_correction: 0.15        # Fourth: did it recover from mistakes?
+    reasoning_depth: 0.10        # Fifth: appropriate reasoning depth?
+    exploration_fit: 0.05        # Last: only matters when outcome is ambiguous
 
 # Adversarial mining
 adversarial:

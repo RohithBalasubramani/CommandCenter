@@ -121,6 +121,8 @@ class ContinuousRL:
         processing_time_ms: int = 0,
         available_data_summary: dict = None,
         user_history: list = None,
+        voice_response: str = "",
+        prompt_version: str = "",
     ):
         """
         Record a new experience from the orchestrator.
@@ -137,6 +139,7 @@ class ContinuousRL:
             processing_time_ms: Total processing time
             available_data_summary: Summary of available data
             user_history: User's recent query history
+            voice_response: The generated voice response text
         """
         # Detect implicit feedback from follow-up
         follow_up_type = None
@@ -174,10 +177,26 @@ class ContinuousRL:
             available_data_summary=available_data_summary or {},
             user_history=user_history or [],
             intent_confidence=(parsed_intent or {}).get("confidence", 0.0),
+            voice_response=voice_response or "",
+            prompt_version=prompt_version or "",
         )
 
         # Debug: Verify intent in created experience
         logger.info(f"[record_experience] Experience created, intent in object: {len(experience.parsed_intent)} fields")
+
+        # Validate widget_plan structure before saving
+        if not experience.widget_plan or not experience.widget_plan.get("widgets"):
+            logger.warning(
+                f"Experience {query_id} has no valid widget_plan "
+                f"(plan={bool(experience.widget_plan)}, "
+                f"widgets={bool(experience.widget_plan.get('widgets') if experience.widget_plan else False)}). "
+                f"This will limit its usefulness for training."
+            )
+            # Ensure consistent structure: always have "widgets" key even if empty
+            if experience.widget_plan is None or not isinstance(experience.widget_plan, dict):
+                experience.widget_plan = {"widgets": [], "heading": "No Response"}
+            elif "widgets" not in experience.widget_plan:
+                experience.widget_plan["widgets"] = []
 
         # Add to buffer
         self.buffer.add(experience)
@@ -200,6 +219,10 @@ class ContinuousRL:
         per_widget_feedback: list = None,
         missing_widgets: list = None,
         suggested_improvements: list = None,
+        # Claude voice evaluation fields
+        voice_evaluation_confidence: float = None,
+        voice_evaluation_reasoning: str = None,
+        voice_dimension_scores_claude: dict = None,
     ) -> bool:
         """
         Update an experience with user feedback.
@@ -236,12 +259,20 @@ class ContinuousRL:
             feedback["evaluation_reasoning"] = evaluation_reasoning
         if query_understanding:
             feedback["query_understanding"] = query_understanding
-        if per_widget_feedback:
+        if per_widget_feedback is not None:  # Fixed: save even empty list for consistency
             feedback["per_widget_feedback"] = per_widget_feedback
-        if missing_widgets:
+        if missing_widgets is not None:
             feedback["missing_widgets"] = missing_widgets
-        if suggested_improvements:
+        if suggested_improvements is not None:
             feedback["suggested_improvements"] = suggested_improvements
+
+        # Add Claude voice evaluation fields
+        if voice_evaluation_confidence is not None:
+            feedback["voice_evaluation_confidence"] = voice_evaluation_confidence
+        if voice_evaluation_reasoning:
+            feedback["voice_evaluation_reasoning"] = voice_evaluation_reasoning
+        if voice_dimension_scores_claude:
+            feedback["voice_dimension_scores_claude"] = voice_dimension_scores_claude
 
         success = self.buffer.update_feedback(query_id, feedback)
 
@@ -253,7 +284,41 @@ class ContinuousRL:
             if exp:
                 exp.computed_reward = self.reward_aggregator.compute_reward(exp)
 
-            # Also save rating to database for Tier 2 DPO training
+                # Derive voice_response_rating
+                # Prefer Claude's voice-specific judgment over blunt user_rating proxy
+                if exp.voice_response:
+                    if exp.voice_evaluation_confidence is not None:
+                        # Claude evaluated voice text directly — use its judgment
+                        exp.voice_response_rating = "good" if exp.voice_evaluation_confidence >= 0.5 else "bad"
+                    elif rating:
+                        # Fallback: derive from overall user rating (blunt proxy)
+                        exp.voice_response_rating = "good" if rating == "up" else "bad"
+
+            # Update prompt evolver reward signal (Tier 1)
+            # Uses Claude's evaluation_confidence as the reward
+            if exp and exp.prompt_version and exp.evaluation_confidence is not None:
+                try:
+                    from rl.prompt_evolver import get_prompt_evolver
+                    evolver = get_prompt_evolver()
+                    # Convert 0.0-1.0 confidence to -1.0 to 1.0 reward range
+                    reward = (exp.evaluation_confidence - 0.5) * 2.0
+                    evolver.update_reward(exp.prompt_version, reward, thumbs=rating)
+                    logger.debug(f"Updated prompt evolver: variant={exp.prompt_version}, confidence={exp.evaluation_confidence:.2f}, reward={reward:.2f}")
+                except Exception as e:
+                    logger.debug(f"Prompt evolver reward update failed: {e}")
+
+            # Tier 3: Capture trace for SFT training (async, non-blocking)
+            try:
+                from rl.tier3_integration import should_capture_trace, capture_trace_async
+                if exp and should_capture_trace(exp):
+                    # Use transcript (the actual query text)
+                    query_text = exp.transcript if hasattr(exp, 'transcript') and exp.transcript else None
+                    if query_text:
+                        capture_trace_async(query_text, query_id=query_id)
+            except Exception as e:
+                logger.debug(f"Tier 3 trace capture failed: {e}")
+
+            # Also save rating to database for DPO training
             if rating:
                 try:
                     from feedback.models import WidgetRating
@@ -268,7 +333,7 @@ class ContinuousRL:
                             "notes": f"Rating: {rating}" + (f", Correction: {correction}" if correction else ""),
                         }
                     )
-                    logger.debug(f"Saved rating to database for Tier 2 DPO training")
+                    logger.debug(f"Saved rating to database for DPO training")
                 except Exception as e:
                     logger.warning(f"Failed to save rating to database: {e}")
 

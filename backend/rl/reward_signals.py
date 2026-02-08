@@ -50,6 +50,12 @@ class RewardSignalAggregator:
         self.weights.setdefault("missing_widget_penalty", -0.3)
         self.weights.setdefault("size_appropriateness", 0.2)
 
+        # Tier 2: Text quality weight (voice response)
+        self.weights.setdefault("text_quality", 0.4)
+
+        # Lazy-loaded text quality scorer
+        self._text_scorer = None
+
         # Reward bounds
         self.max_reward = CONTINUOUS_RL_CONFIG.get("max_reward", 2.0)
         self.min_reward = CONTINUOUS_RL_CONFIG.get("min_reward", -2.0)
@@ -86,6 +92,9 @@ class RewardSignalAggregator:
         reward += self._per_widget_appropriateness_reward(experience)
         reward += self._missing_widget_penalty_reward(experience)
         reward += self._size_appropriateness_reward(experience)
+
+        # 7. Tier 2: Text quality (voice response)
+        reward += self._text_quality_reward(experience)
 
         # Clip to bounds
         reward = max(self.min_reward, min(self.max_reward, reward))
@@ -124,7 +133,7 @@ class RewardSignalAggregator:
         follow_up_rewards = {
             "satisfied": 1.0,      # Best outcome
             "new_topic": 0.3,      # Neutral to slightly positive
-            "refinement": -0.3,    # User needed to narrow down
+            "refinement": -0.1,    # User narrowing down (mild negative, was -0.3)
             "repeat": -1.0,        # User had to repeat (bad)
             "correction": -0.8,    # User had to correct (bad)
         }
@@ -329,6 +338,61 @@ class RewardSignalAggregator:
         normalized_reward = (size_ratio - 0.5) * 2.0
 
         return weight * normalized_reward
+
+    def _text_quality_reward(self, experience: "Experience") -> float:
+        """
+        Tier 2: Compute reward from voice response text quality.
+
+        Uses rule-based TextQualityScorer to evaluate 5 dimensions:
+        groundedness, conciseness, directness, specificity, tts_friendliness.
+
+        Only fires when voice_response exists. Score maps [0,1] → [-0.5, 0.5].
+        """
+        if not getattr(experience, "voice_response", None):
+            return 0.0
+
+        weight = self.weights.get("text_quality", 0.4)
+
+        # Lazy-load scorer
+        if self._text_scorer is None:
+            try:
+                from .text_quality_scorer import TextQualityScorer
+                self._text_scorer = TextQualityScorer()
+            except ImportError:
+                logger.warning("TextQualityScorer not available")
+                return 0.0
+
+        scores = self._text_scorer.score(
+            experience.voice_response,
+            experience.transcript or "",
+        )
+
+        # Blend with Claude's dimension scores if available (60% Claude, 40% rule-based)
+        # Claude captures semantic quality; rule-based captures structural quality
+        claude_dims = getattr(experience, "voice_dimension_scores_claude", {})
+        if claude_dims and isinstance(claude_dims, dict):
+            for dim in ["groundedness", "conciseness", "directness", "specificity", "tts_friendliness"]:
+                if dim in claude_dims and dim in scores:
+                    try:
+                        scores[dim] = 0.6 * float(claude_dims[dim]) + 0.4 * scores[dim]
+                    except (ValueError, TypeError):
+                        pass  # Keep rule-based score
+            # Recompute total with blended scores
+            total = sum(
+                scores[k] * self._text_scorer.weights.get(k, 0.2)
+                for k in ["groundedness", "conciseness", "directness", "specificity", "tts_friendliness"]
+                if k in scores
+            )
+            scores["total"] = round(total, 4)
+
+        # Store scores on experience for DPO pair generation
+        experience.voice_quality_scores = scores
+
+        # Map total [0, 1] → [-0.5, 0.5] so it's a centered reward signal
+        total = scores.get("total", 0.5)
+        normalized = (total - 0.5) * 1.0  # [-0.5, 0.5]
+
+        return weight * normalized
 
     def compute_batch_rewards(self, experiences: list["Experience"]) -> list[float]:
         """Compute rewards for a batch of experiences."""

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { commandCenterBus } from "@/lib/events";
-import type { LayoutJSON, WidgetSize, LayoutSnapshot } from "@/types";
+import type { LayoutJSON, WidgetSize, LayoutSnapshot, WidgetInstruction } from "@/types";
 import { DEFAULT_LAYOUT } from "./defaultLayout";
 
 /** Generate a stable key for a widget instruction. */
@@ -42,6 +42,20 @@ export function useLayoutState() {
   const [focusedKey, setFocusedKey] = useState<string | null>(null);
   const preFocusLayoutRef = useRef<LayoutJSON | null>(null);
 
+  // --- Layout History (for back button) ---
+  const layoutHistoryRef = useRef<LayoutJSON[]>([]);
+  const [hasHistory, setHasHistory] = useState(false);
+
+  // --- Interactive Mode ---
+  const [interactiveCtx, setInteractiveCtx] = useState<{
+    key: string;
+    scenario: string;
+    label: string;
+    equipment: string;
+    metric: string;
+  } | null>(null);
+  const preInteractiveLayoutRef = useRef<LayoutJSON | null>(null);
+
   // Subscribe to LAYOUT_UPDATE events — preserve pinned widgets
   useEffect(() => {
     const unsub = commandCenterBus.on("LAYOUT_UPDATE", (event) => {
@@ -52,6 +66,12 @@ export function useLayoutState() {
           if (!event.layout.widgets || event.layout.widgets.length === 0) {
             console.warn("[useLayoutState] Ignoring empty widget array");
             return prev;
+          }
+
+          // Push current layout to history for back navigation (max 10)
+          if (prev.widgets.length > 0) {
+            layoutHistoryRef.current = [...layoutHistoryRef.current.slice(-9), prev];
+            setHasHistory(true);
           }
 
           // If nothing is pinned, just replace
@@ -127,10 +147,47 @@ export function useLayoutState() {
     }));
   }, []);
 
-  /** Focus a widget: expand to hero, emit drill-down event. */
+  /** Enter interactive mode: full-screen widget with context-locked conversation. */
+  const enterInteractive = useCallback(
+    (key: string, instruction: WidgetInstruction) => {
+      const dataOverride = instruction.data_override || {};
+      const equipment = (dataOverride._equipment_id as string) || "";
+      const metric = (dataOverride._metric as string) || "";
+      const label =
+        (dataOverride.label as string) ||
+        ((dataOverride.demoData as Record<string, unknown>)?.label as string) ||
+        instruction.scenario.replace(/-/g, " ");
+
+      // Save current layout for restore on exit
+      setLayoutState((prev) => {
+        preInteractiveLayoutRef.current = prev;
+        return prev;
+      });
+
+      setInteractiveCtx({
+        key,
+        scenario: instruction.scenario,
+        label,
+        equipment,
+        metric,
+      });
+      setFocusedKey(key);
+
+      // Emit interactive event — voice pipeline picks this up
+      commandCenterBus.emit({
+        type: "WIDGET_INTERACTIVE_ENTER",
+        scenario: instruction.scenario,
+        label,
+        equipment,
+        metric,
+      });
+    },
+    []
+  );
+
+  /** Legacy focus (non-interactive): expand to hero, dim others. */
   const focusWidget = useCallback(
     (key: string, scenario: string, label: string) => {
-      // Save pre-focus layout for restore
       setLayoutState((prev) => {
         preFocusLayoutRef.current = prev;
         return {
@@ -143,30 +200,57 @@ export function useLayoutState() {
         };
       });
       setFocusedKey(key);
-      // Emit focus event — voice pipeline picks this up for drill-down
       commandCenterBus.emit({ type: "WIDGET_FOCUS", scenario, label });
     },
     []
   );
 
-  /** Unfocus: restore the pre-focus layout. */
+  /** Go back to previous layout (layout history). */
+  const goBack = useCallback(() => {
+    const history = layoutHistoryRef.current;
+    if (history.length === 0) return;
+    const prev = history.pop()!;
+    setLayoutState(prev);
+    setHasHistory(history.length > 0);
+  }, []);
+
+  /** Exit interactive mode: restore pre-interactive layout. */
+  const exitInteractive = useCallback(() => {
+    if (preInteractiveLayoutRef.current) {
+      setLayoutState(preInteractiveLayoutRef.current);
+      preInteractiveLayoutRef.current = null;
+    }
+    setInteractiveCtx(null);
+    setFocusedKey(null);
+    commandCenterBus.emit({ type: "WIDGET_INTERACTIVE_EXIT" });
+  }, []);
+
+  /** Unfocus: restore the pre-focus layout (non-interactive). */
   const unfocus = useCallback(() => {
+    // If in interactive mode, exit interactive instead
+    if (interactiveCtx) {
+      exitInteractive();
+      return;
+    }
     if (preFocusLayoutRef.current) {
       setLayoutState(preFocusLayoutRef.current);
       preFocusLayoutRef.current = null;
     }
     setFocusedKey(null);
-  }, []);
+  }, [interactiveCtx, exitInteractive]);
 
-  // Escape key to unfocus
+  // Escape key to unfocus / exit interactive
   useEffect(() => {
-    if (!focusedKey) return;
+    if (!focusedKey && !interactiveCtx) return;
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") unfocus();
+      if (e.key === "Escape") {
+        if (interactiveCtx) exitInteractive();
+        else unfocus();
+      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [focusedKey, unfocus]);
+  }, [focusedKey, interactiveCtx, unfocus, exitInteractive]);
 
   // --- Relevance Decay ---
   // Tick every DECAY_INTERVAL_MS: reduce each non-pinned widget's relevance
@@ -226,5 +310,12 @@ export function useLayoutState() {
     focusWidget,
     unfocus,
     saveSnapshot,
+    // Layout history
+    hasHistory,
+    goBack,
+    // Interactive mode
+    interactiveCtx,
+    enterInteractive,
+    exitInteractive,
   };
 }

@@ -12,6 +12,7 @@ Data sources:
 
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -115,6 +116,43 @@ class DataPrefetcher:
     def _search_one(self, vs, collection: str, entity: str):
         """Single ChromaDB search — runs in thread pool."""
         return vs.search(collection, entity, n_results=3)
+
+    def _probe_pg_timeseries(self, entity: str) -> Optional[str]:
+        """Probe PostgreSQL command_center_data for timeseries availability."""
+        try:
+            from layer2.data_collector import resolve_entity_to_table, resolve_metric_column
+            from django.db import connections
+
+            resolved = resolve_entity_to_table(entity)
+            if not resolved:
+                return None
+
+            table_name, prefix, default_metric, default_unit = resolved
+            metric_col, unit = default_metric, default_unit
+
+            # Quick stats query — uses latest available timestamp as reference
+            sql = f"""
+                WITH latest AS (SELECT MAX(timestamp) AS max_ts FROM {table_name})
+                SELECT COUNT(*), MIN(t.timestamp), MAX(t.timestamp),
+                       AVG(t.{metric_col}), MIN(t.{metric_col}), MAX(t.{metric_col})
+                FROM {table_name} t, latest l
+                WHERE t.timestamp >= l.max_ts - INTERVAL '24 hours'
+                  AND t.timestamp <= l.max_ts
+            """
+            with connections['timeseries'].cursor() as cursor:
+                cursor.execute(sql)
+                row = cursor.fetchone()
+                if row and row[0] > 0:
+                    parts = [
+                        f"table={table_name}",
+                        f"last_24h_points={row[0]}",
+                        f"avg_{metric_col}={round(float(row[3]), 1)}{unit}" if row[3] else "",
+                        f"range=[{round(float(row[4]), 1)}-{round(float(row[5]), 1)}]{unit}" if row[4] else "",
+                    ]
+                    return ", ".join(p for p in parts if p)
+        except Exception as e:
+            logger.debug(f"PG timeseries probe failed for {entity}: {e}")
+        return None
 
     def _summarize(self, search_results, fields: list, label: str) -> str:
         """Extract metadata fields from search results into a compact string."""

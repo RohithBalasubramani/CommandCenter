@@ -169,7 +169,7 @@ const TrendWidget: React.FC<TrendWidgetProps> = ({ preset }) => {
 
       {/* Chart Area */}
       <div className="flex-1 min-h-0 p-4">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <LineChart data={preset.data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" vertical={false} />
             <XAxis 

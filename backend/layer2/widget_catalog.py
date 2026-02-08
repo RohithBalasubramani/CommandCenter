@@ -84,14 +84,14 @@ WIDGET_CATALOG = [
         "scenario": "flow-sankey",
         "description": "Sankey diagram showing flow from sources to destinations — energy flows, material flows, loss analysis.",
         "good_for": ["flow", "sankey", "energy balance", "losses", "source to destination", "where does it go"],
-        "sizes": ["hero"],
+        "sizes": ["expanded", "hero"],
         "height_units": 4,
     },
     {
         "scenario": "matrix-heatmap",
         "description": "Color-coded matrix/heatmap — shows values across two dimensions (e.g., equipment × parameter, hour × day).",
         "good_for": ["heatmap", "matrix", "cross-tabulation", "pattern", "correlation matrix", "all equipment"],
-        "sizes": ["hero"],
+        "sizes": ["expanded", "hero"],
         "height_units": 4,
     },
     {
@@ -105,7 +105,7 @@ WIDGET_CATALOG = [
         "scenario": "edgedevicepanel",
         "description": "Detailed single-device panel — shows all parameters, readings, and status for one specific piece of equipment.",
         "good_for": ["device detail", "single device", "all parameters", "equipment panel", "deep dive", "specific equipment"],
-        "sizes": ["hero"],
+        "sizes": ["expanded", "hero"],
         "height_units": 4,
     },
     {
@@ -140,7 +140,21 @@ WIDGET_CATALOG = [
         "scenario": "supplychainglobe",
         "description": "3D globe visualization of supply chain — shows vendor locations, shipment routes, delivery status.",
         "good_for": ["supply chain", "vendors", "shipments", "global", "logistics", "delivery tracking"],
-        "sizes": ["hero"],
+        "sizes": ["expanded", "hero"],
+        "height_units": 3,
+    },
+    {
+        "scenario": "diagnosticpanel",
+        "description": "Diagnostic analysis panel — shows ranked hypotheses with confidence bars, supporting/contradicting evidence, unknowns, and recommended next steps.",
+        "good_for": ["why", "diagnostic", "root cause", "troubleshoot", "explain", "reasoning", "cause"],
+        "sizes": ["expanded", "hero"],
+        "height_units": 3,
+    },
+    {
+        "scenario": "uncertaintypanel",
+        "description": "Uncertainty assessment panel — shows what the system knows (with sources/freshness), what it doesn't know (with impact), constraint violations, and recommended next steps.",
+        "good_for": ["confidence", "uncertain", "what don't you know", "how sure", "data quality", "gaps", "limitations"],
+        "sizes": ["expanded", "hero"],
         "height_units": 3,
     },
 ]

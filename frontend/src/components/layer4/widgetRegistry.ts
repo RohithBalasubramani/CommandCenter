@@ -32,6 +32,8 @@ const WIDGET_REGISTRY: Record<string, AnyComponent> = {
   "peoplenetwork": lazy(() => import("./widgets/peoplenetwork")),
   "peopleview": lazy(() => import("./widgets/peopleview")),
   "supplychainglobe": lazy(() => import("./widgets/supplychainglobe")),
+  "diagnosticpanel": lazy(() => import("./widgets/diagnosticpanel")),
+  "uncertaintypanel": lazy(() => import("./widgets/uncertaintypanel")),
 };
 
 export function getWidgetComponent(

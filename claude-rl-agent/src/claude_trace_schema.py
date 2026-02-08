@@ -41,6 +41,82 @@ class ExplorationDepth(Enum):
 
 
 @dataclass
+class OutputArtifact:
+    """
+    Structured representation of Claude's final output.
+
+    Captures what success looks like — not the text, but the functional requirements
+    the output satisfies. Used for output-alignment scoring in PPO.
+
+    This is success-state anchoring: we don't copy Claude's style,
+    we enforce that LLaMA's output satisfies the same functional constraints.
+    """
+    # Required components that must be present in the output
+    required_components: List[str] = field(default_factory=list)
+    # e.g., ["equipment_id", "metric_value", "unit", "status_assessment"]
+
+    # Whether the output conforms to expected structure/schema
+    schema_valid: bool = True
+    schema_type: str = "text"  # "text", "json", "code", "table", "mixed"
+    schema_violations: List[str] = field(default_factory=list)
+
+    # Completeness: which required elements are present
+    completeness_checklist: Dict[str, bool] = field(default_factory=dict)
+    # e.g., {"answers_question": True, "includes_data": True, "cites_source": False}
+
+    # Factual claims made (for groundedness checking)
+    factual_claims: List[str] = field(default_factory=list)
+    # e.g., ["pump-002 pressure is 37.5 PSI", "status is normal"]
+
+    # Edge cases / caveats mentioned
+    edge_cases_mentioned: List[str] = field(default_factory=list)
+    # e.g., ["pump-002 was offline for maintenance Jan 15"]
+
+    # What Claude explicitly refused or flagged
+    refusals: List[str] = field(default_factory=list)
+    # e.g., ["data unavailable for pump-005"]
+
+    # Completeness score (0-1, computed)
+    completeness_score: float = 0.0
+
+    def compute_completeness(self) -> float:
+        """Compute completeness from checklist."""
+        if not self.completeness_checklist:
+            return 0.5  # neutral if no checklist
+        present = sum(1 for v in self.completeness_checklist.values() if v)
+        self.completeness_score = present / len(self.completeness_checklist)
+        return self.completeness_score
+
+    def to_dict(self) -> dict:
+        return {
+            "required_components": self.required_components,
+            "schema_valid": self.schema_valid,
+            "schema_type": self.schema_type,
+            "schema_violations": self.schema_violations,
+            "completeness_checklist": self.completeness_checklist,
+            "factual_claims": self.factual_claims,
+            "edge_cases_mentioned": self.edge_cases_mentioned,
+            "refusals": self.refusals,
+            "completeness_score": self.completeness_score,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'OutputArtifact':
+        """Deserialize from dict."""
+        return cls(
+            required_components=data.get("required_components", []),
+            schema_valid=data.get("schema_valid", True),
+            schema_type=data.get("schema_type", "text"),
+            schema_violations=data.get("schema_violations", []),
+            completeness_checklist=data.get("completeness_checklist", {}),
+            factual_claims=data.get("factual_claims", []),
+            edge_cases_mentioned=data.get("edge_cases_mentioned", []),
+            refusals=data.get("refusals", []),
+            completeness_score=data.get("completeness_score", 0.0),
+        )
+
+
+@dataclass
 class ToolCall:
     """
     A single tool invocation by Claude.
@@ -225,6 +301,9 @@ class ClaudeTrace:
     tokens_used: int = 0
     model_used: str = "claude-sonnet-4.5"
 
+    # Output artifact analysis (success-state anchoring)
+    output_artifact: Optional[OutputArtifact] = None
+
     # Quality indicators
     claude_confidence: Optional[float] = None  # If extractable
     task_completed: bool = True
@@ -248,6 +327,7 @@ class ClaudeTrace:
             "response_time_ms": self.response_time_ms,
             "tokens_used": self.tokens_used,
             "model_used": self.model_used,
+            "output_artifact": self.output_artifact.to_dict() if self.output_artifact else None,
             "claude_confidence": self.claude_confidence,
             "task_completed": self.task_completed,
             "errors_encountered": self.errors_encountered
@@ -313,6 +393,7 @@ class ClaudeTrace:
             response_time_ms=data.get("response_time_ms", 0),
             tokens_used=data.get("tokens_used", 0),
             model_used=data.get("model_used", "claude-sonnet-4.5"),
+            output_artifact=OutputArtifact.from_dict(data["output_artifact"]) if data.get("output_artifact") else None,
             claude_confidence=data.get("claude_confidence"),
             task_completed=data.get("task_completed", True),
             errors_encountered=data.get("errors_encountered", [])

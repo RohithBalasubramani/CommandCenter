@@ -14,6 +14,7 @@ from .views import (
     rl_history,
     system_triggers,
     webhook_trigger,
+    cancel_plan,
     # System Grounding API (Phase 1-5 Audit)
     system_registry_view,
     schema_introspect_view,
@@ -50,4 +51,6 @@ urlpatterns = [
     path("grounding/find-table/", find_table_view, name="grounding-find-table"),
     path("grounding/audit/", grounding_audit_view, name="grounding-audit"),
     path("grounding/traverse/", traversal_action_view, name="grounding-traverse"),
+    # Voice control — plan cancellation
+    path("cancel/", cancel_plan, name="layer2-cancel"),
 ]

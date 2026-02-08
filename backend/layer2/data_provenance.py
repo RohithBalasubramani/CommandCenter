@@ -137,8 +137,16 @@ def stamp_widget_provenance(
     if primary_source and primary_source.integration_status == IntegrationStatus.STUB:
         safe = False
 
-    # Stamp the data_override
-    data_override["_data_source"] = source_id
+    # Stamp the data_override — preserve collector-set _data_source if present
+    # (e.g., "pg_timeseries:trf_001" from data_collector is more specific than
+    # the generic "django.industrial" from source resolution)
+    existing_source = data_override.get("_data_source")
+    if not existing_source:
+        # Also check nested demoData for collector-set source
+        demo = data_override.get("demoData", {})
+        if isinstance(demo, dict):
+            existing_source = demo.get("_data_source")
+    data_override["_data_source"] = existing_source or source_id
     data_override["_integration_status"] = integration_status
     data_override["_authoritative"] = is_authoritative
     data_override["_synthetic"] = synthetic

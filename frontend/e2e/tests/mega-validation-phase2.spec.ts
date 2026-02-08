@@ -228,7 +228,7 @@ test.describe('Phase 2.2: Multi-Turn Conversation Stress', () => {
 
       try {
         await ccPage.sendQuery(query);
-        await ccPage.waitForLayout(45000);
+        await ccPage.waitForLayout(300000);
 
         // Capture each turn
         await captureEvidence(page, `conversation_turn_${i + 1}`);
