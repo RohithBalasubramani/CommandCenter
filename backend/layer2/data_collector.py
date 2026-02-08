@@ -13,6 +13,7 @@ import logging
 import re
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
 from typing import Optional
 
 from layer2.rag_pipeline import (
@@ -27,6 +28,201 @@ from layer2.rag_pipeline import (
     WORK_ORDERS_COLLECTION,
 )
 from layer2.widget_schemas import WIDGET_SCHEMAS, validate_widget_data, ValidationError
+
+# ── PostgreSQL Timeseries Entity Resolution ──
+# Maps natural language equipment names to PostgreSQL table prefixes in command_center_data.
+# Each entry: keyword → (table_prefix, primary_metric_column, unit)
+ENTITY_TABLE_PREFIX_MAP = {
+    "transformer": ("trf", "active_power_kw", "kW"),
+    "trafo": ("trf", "active_power_kw", "kW"),
+    "generator": ("dg", "active_power_kw", "kW"),
+    "genset": ("dg", "active_power_kw", "kW"),
+    "dg": ("dg", "active_power_kw", "kW"),
+    "diesel": ("dg", "active_power_kw", "kW"),
+    "ups": ("ups", "output_power_kw", "kW"),
+    "chiller": ("chiller", "power_consumption_kw", "kW"),
+    "ahu": ("ahu", "fan_motor_power_kw", "kW"),
+    "air handling": ("ahu", "fan_motor_power_kw", "kW"),
+    "cooling tower": ("ct", "fan_motor_power_kw", "kW"),
+    "pump": ("pump", "motor_power_kw", "kW"),
+    "compressor": ("compressor", "motor_power_kw", "kW"),
+    "motor": ("motor", "active_power_kw", "kW"),
+    "energy meter": ("em", "active_power_total_kw", "kW"),
+    "meter": ("em", "active_power_total_kw", "kW"),
+    "mcc": ("lt_mcc", "active_power_total_kw", "kW"),
+    "motor control": ("lt_mcc", "active_power_total_kw", "kW"),
+    "pcc": ("lt_pcc", "active_power_total_kw", "kW"),
+    "power control": ("lt_pcc", "active_power_total_kw", "kW"),
+    "apfc": ("lt_apfc", "active_power_total_kw", "kW"),
+    "distribution board": ("lt_db", "active_power_total_kw", "kW"),
+    "vfd": ("lt_vfd", "active_power_kw", "kW"),
+    "variable frequency": ("lt_vfd", "active_power_kw", "kW"),
+    "plc": ("lt_plc", "active_power_total_kw", "kW"),
+    "ats": ("lt_ats", "active_power_total_kw", "kW"),
+    "auto transfer": ("lt_ats", "active_power_total_kw", "kW"),
+    "changeover": ("lt_changeover", "active_power_total_kw", "kW"),
+    "mldb": ("lt_mldb", "active_power_total_kw", "kW"),
+    "smdb": ("lt_smdb", "active_power_total_kw", "kW"),
+}
+
+# Metric aliases for each equipment type prefix → {metric_alias: (column_name, unit)}
+EQUIPMENT_METRIC_MAP = {
+    "trf": {
+        "power": ("active_power_kw", "kW"), "load": ("load_percent", "%"),
+        "power_factor": ("power_factor", "PF"), "pf": ("power_factor", "PF"),
+        "voltage": ("secondary_voltage_r", "V"), "oil_temp": ("oil_temperature_top_c", "°C"),
+        "winding_temp": ("winding_temperature_hv_c", "°C"), "temperature": ("oil_temperature_top_c", "°C"),
+        "frequency": ("frequency_hz", "Hz"), "default": ("active_power_kw", "kW"),
+    },
+    "dg": {
+        "power": ("active_power_kw", "kW"), "load": ("load_percent", "%"),
+        "voltage": ("output_voltage_r", "V"), "frequency": ("frequency_hz", "Hz"),
+        "coolant": ("coolant_temperature_c", "°C"), "temperature": ("coolant_temperature_c", "°C"),
+        "fuel": ("fuel_level_pct", "%"), "rpm": ("engine_rpm", "RPM"),
+        "default": ("active_power_kw", "kW"),
+    },
+    "ups": {
+        "power": ("output_power_kw", "kW"), "load": ("load_percent", "%"),
+        "voltage": ("output_voltage_r", "V"), "battery": ("battery_voltage_v", "V"),
+        "temperature": ("battery_temperature_c", "°C"), "default": ("output_power_kw", "kW"),
+    },
+    "chiller": {
+        "power": ("power_consumption_kw", "kW"), "load": ("load_percent", "%"),
+        "cop": ("current_cop", "COP"), "capacity": ("cooling_capacity_kw", "kW"),
+        "temperature": ("chw_supply_temp_c", "°C"), "flow": ("chw_flow_rate_m3h", "m³/h"),
+        "default": ("power_consumption_kw", "kW"),
+    },
+    "ahu": {
+        "power": ("fan_motor_power_kw", "kW"), "temperature": ("supply_air_temp_c", "°C"),
+        "flow": ("supply_air_flow_cfm", "CFM"), "humidity": ("supply_air_humidity_pct", "%"),
+        "default": ("fan_motor_power_kw", "kW"),
+    },
+    "ct": {
+        "power": ("fan_motor_power_kw", "kW"), "temperature": ("cw_inlet_temp_c", "°C"),
+        "default": ("fan_motor_power_kw", "kW"),
+    },
+    "pump": {
+        "power": ("motor_power_kw", "kW"), "flow": ("flow_rate_m3h", "m³/h"),
+        "pressure": ("discharge_pressure_bar", "bar"), "vibration": ("vibration_mm_s", "mm/s"),
+        "default": ("motor_power_kw", "kW"),
+    },
+    "compressor": {
+        "power": ("motor_power_kw", "kW"), "pressure": ("discharge_pressure_bar", "bar"),
+        "temperature": ("discharge_temperature_c", "°C"), "default": ("motor_power_kw", "kW"),
+    },
+    "motor": {
+        "power": ("active_power_kw", "kW"), "load": ("load_percent", "%"),
+        "temperature": ("winding_temperature_c", "°C"), "vibration": ("vibration_mm_s", "mm/s"),
+        "default": ("active_power_kw", "kW"),
+    },
+    "em": {
+        "power": ("active_power_total_kw", "kW"), "voltage": ("voltage_avg", "V"),
+        "current": ("current_avg", "A"), "power_factor": ("power_factor", "PF"),
+        "frequency": ("frequency_hz", "Hz"), "default": ("active_power_total_kw", "kW"),
+    },
+}
+
+# Number words to digits
+_NUMBER_WORDS = {
+    "one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+    "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10",
+    "eleven": "11", "twelve": "12", "thirteen": "13", "fourteen": "14",
+    "fifteen": "15", "sixteen": "16", "seventeen": "17", "eighteen": "18",
+    "nineteen": "19", "twenty": "20", "first": "1", "second": "2", "third": "3",
+}
+
+
+def resolve_entity_to_table(entity: str) -> Optional[tuple]:
+    """
+    Resolve a natural language entity name to a PostgreSQL timeseries table.
+
+    Examples:
+        "transformer 1"   → ("trf_001", "trf", "active_power_kw", "kW")
+        "Transformer One"  → ("trf_001", "trf", "active_power_kw", "kW")
+        "chiller 3"        → ("chiller_003", "chiller", "power_consumption_kw", "kW")
+        "DG 2"             → ("dg_002", "dg", "active_power_kw", "kW")
+        "trf_005"          → ("trf_005", "trf", "active_power_kw", "kW")
+
+    Returns:
+        (table_name, prefix, default_metric_col, default_unit) or None
+    """
+    if not entity:
+        return None
+
+    normalized = entity.lower().strip()
+
+    # Replace number words with digits
+    for word, digit in _NUMBER_WORDS.items():
+        normalized = re.sub(rf'\b{word}\b', digit, normalized)
+
+    # Check if entity is already a valid table name (e.g., "trf_001")
+    table_match = re.match(r'^([a-z_]+)_(\d{3})$', normalized)
+    if table_match:
+        prefix = table_match.group(1)
+        for kw, (pfx, metric, unit) in ENTITY_TABLE_PREFIX_MAP.items():
+            if pfx == prefix:
+                return (normalized, prefix, metric, unit)
+        # If prefix not in map, still return it
+        return (normalized, prefix, "active_power_kw", "kW")
+
+    # Extract trailing number
+    num_match = re.search(r'(\d+)\s*$', normalized)
+    entity_number = int(num_match.group(1)) if num_match else None
+
+    # Match against known equipment keywords
+    for keyword, (prefix, default_metric, default_unit) in ENTITY_TABLE_PREFIX_MAP.items():
+        if keyword in normalized:
+            if entity_number is not None:
+                table_name = f"{prefix}_{entity_number:03d}"
+                return (table_name, prefix, default_metric, default_unit)
+            else:
+                # No number specified — default to _001
+                table_name = f"{prefix}_001"
+                return (table_name, prefix, default_metric, default_unit)
+
+    return None
+
+
+def resolve_metric_column(prefix: str, metric: str) -> tuple:
+    """
+    Resolve a metric alias to the actual PostgreSQL column name for an equipment type.
+
+    Args:
+        prefix: Equipment table prefix (e.g., "trf", "dg", "chiller")
+        metric: Metric alias (e.g., "power", "load", "temperature")
+
+    Returns:
+        (column_name, unit)
+    """
+    metric_map = EQUIPMENT_METRIC_MAP.get(prefix)
+    if not metric_map:
+        # For LT panels and unknown types, try common column names
+        metric_map = EQUIPMENT_METRIC_MAP.get("em", {})
+
+    if not metric:
+        return metric_map.get("default", ("active_power_kw", "kW"))
+
+    metric_lower = metric.lower().strip().replace(" ", "_")
+
+    # Direct match
+    if metric_lower in metric_map:
+        return metric_map[metric_lower]
+
+    # Try common aliases
+    aliases = {
+        "power_kw": "power", "consumption": "power", "energy": "power",
+        "demand": "power", "kw": "power", "watt": "power",
+        "power_factor": "power_factor", "pf": "power_factor",
+        "voltage_avg": "voltage", "volt": "voltage", "v": "voltage",
+        "current_avg": "current", "amp": "current", "ampere": "current",
+        "freq": "frequency", "hz": "frequency",
+        "temp": "temperature", "thermal": "temperature",
+    }
+    resolved = aliases.get(metric_lower, metric_lower)
+    if resolved in metric_map:
+        return metric_map[resolved]
+
+    return metric_map.get("default", ("active_power_kw", "kW"))
 
 
 def _validate_widget_data(scenario: str, data: dict) -> tuple[bool, list[str]]:
@@ -106,6 +302,167 @@ class SchemaDataCollector:
         if self._pipeline is None:
             self._pipeline = get_rag_pipeline()
         return self._pipeline
+
+    # ── PostgreSQL Timeseries Direct Queries ──
+
+    def _query_pg_latest(self, table_name: str, columns: list[str] = None) -> Optional[dict]:
+        """
+        Query the latest reading from a PostgreSQL timeseries table.
+
+        Args:
+            table_name: Equipment table name (e.g., 'trf_001')
+            columns: Specific columns to fetch (None = all)
+
+        Returns:
+            Dict with column values, or None if table doesn't exist
+        """
+        from django.db import connections
+        try:
+            col_str = ', '.join(columns) if columns else '*'
+            sql = f"SELECT {col_str} FROM {table_name} ORDER BY timestamp DESC LIMIT 1"
+            with connections['timeseries'].cursor() as cursor:
+                cursor.execute(sql)
+                cols = [desc[0] for desc in cursor.description]
+                row = cursor.fetchone()
+                if row:
+                    return dict(zip(cols, row))
+        except Exception as e:
+            logger.debug(f"PG latest query failed for {table_name}: {e}")
+        return None
+
+    def _query_pg_timeseries(self, table_name: str, metric_col: str,
+                              hours: int = 24, interval: str = '1 hour') -> list[dict]:
+        """
+        Query aggregated timeseries data from PostgreSQL.
+
+        Args:
+            table_name: Equipment table name (e.g., 'trf_001')
+            metric_col: Column to aggregate (e.g., 'active_power_kw')
+            hours: Hours of history to fetch
+            interval: Aggregation interval (e.g., '1 hour', '15 minutes')
+
+        Returns:
+            List of {timestamp, value} dicts
+        """
+        from django.db import connections
+        try:
+            sql = f"""
+                SELECT date_trunc('{interval}', timestamp) AS ts,
+                       AVG({metric_col}) AS value
+                FROM {table_name}
+                WHERE timestamp >= NOW() - INTERVAL '{hours} hours'
+                GROUP BY 1
+                ORDER BY 1
+            """
+            with connections['timeseries'].cursor() as cursor:
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+                return [{"time": str(row[0]), "value": round(float(row[1]), 2) if row[1] else 0}
+                        for row in rows]
+        except Exception as e:
+            logger.debug(f"PG timeseries query failed for {table_name}.{metric_col}: {e}")
+        return []
+
+    def _query_pg_stats(self, table_name: str, metric_col: str,
+                         hours: int = 24) -> Optional[dict]:
+        """
+        Query aggregated statistics (min, max, avg, latest) from PostgreSQL.
+
+        Args:
+            table_name: Equipment table name
+            metric_col: Column to aggregate
+
+        Returns:
+            Dict with min, max, avg, latest values
+        """
+        from django.db import connections
+        try:
+            sql = f"""
+                SELECT MIN({metric_col}), MAX({metric_col}), AVG({metric_col}),
+                       (SELECT {metric_col} FROM {table_name} ORDER BY timestamp DESC LIMIT 1)
+                FROM {table_name}
+                WHERE timestamp >= NOW() - INTERVAL '{hours} hours'
+            """
+            with connections['timeseries'].cursor() as cursor:
+                cursor.execute(sql)
+                row = cursor.fetchone()
+                if row and row[0] is not None:
+                    return {
+                        "min": round(float(row[0]), 2),
+                        "max": round(float(row[1]), 2),
+                        "avg": round(float(row[2]), 2),
+                        "latest": round(float(row[3]), 2) if row[3] is not None else None,
+                    }
+        except Exception as e:
+            logger.debug(f"PG stats query failed for {table_name}.{metric_col}: {e}")
+        return None
+
+    def _query_pg_multi_metric_latest(self, table_name: str, metrics: list[str]) -> Optional[dict]:
+        """
+        Query latest values for multiple metrics from a PostgreSQL table.
+
+        Returns:
+            Dict mapping metric_col → value
+        """
+        from django.db import connections
+        try:
+            cols = ', '.join(metrics)
+            sql = f"SELECT {cols} FROM {table_name} ORDER BY timestamp DESC LIMIT 1"
+            with connections['timeseries'].cursor() as cursor:
+                cursor.execute(sql)
+                row = cursor.fetchone()
+                if row:
+                    return {m: (round(float(v), 2) if v is not None else None)
+                            for m, v in zip(metrics, row)}
+        except Exception as e:
+            logger.debug(f"PG multi-metric query failed for {table_name}: {e}")
+        return None
+
+    def _resolve_and_query_entity(self, entity: str, metric: str = "") -> Optional[dict]:
+        """
+        Resolve a natural language entity to a PG table and query latest value.
+
+        Returns:
+            Dict with: table_name, label, value, unit, metric_col, prefix
+            or None if resolution fails.
+        """
+        resolved = resolve_entity_to_table(entity)
+        if not resolved:
+            return None
+
+        table_name, prefix, default_metric, default_unit = resolved
+        metric_col, unit = resolve_metric_column(prefix, metric) if metric else (default_metric, default_unit)
+
+        latest = self._query_pg_latest(table_name, ['timestamp', metric_col])
+        if not latest:
+            return None
+
+        value = latest.get(metric_col)
+        if value is None:
+            return None
+
+        # Build a human-readable label
+        prefix_labels = {
+            "trf": "Transformer", "dg": "DG Set", "ups": "UPS", "chiller": "Chiller",
+            "ahu": "AHU", "ct": "Cooling Tower", "pump": "Pump", "compressor": "Compressor",
+            "motor": "Motor", "em": "Energy Meter", "lt_mcc": "MCC Panel",
+            "lt_pcc": "PCC Panel", "lt_apfc": "APFC Panel", "lt_db": "Distribution Board",
+            "lt_vfd": "VFD Panel", "lt_plc": "PLC Panel", "lt_ats": "ATS Panel",
+            "lt_changeover": "Changeover", "lt_mldb": "Main LT DB", "lt_smdb": "Sub-Main DB",
+        }
+        num_match = re.search(r'(\d+)$', table_name)
+        num = int(num_match.group(1)) if num_match else 0
+        label = f"{prefix_labels.get(prefix, prefix.upper())} {num}"
+
+        return {
+            "table_name": table_name,
+            "prefix": prefix,
+            "label": label,
+            "value": round(float(value), 2) if isinstance(value, (int, float)) else value,
+            "unit": unit,
+            "metric_col": metric_col,
+            "timestamp": str(latest.get("timestamp", "")),
+        }
 
     def collect_all(self, widgets: list[WidgetPlanItem], query: str) -> list[dict]:
         """

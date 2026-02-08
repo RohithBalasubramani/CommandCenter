@@ -157,6 +157,10 @@ class ContinuousRL:
                     exp.follow_up_type = follow_up_type
                     break
 
+        # Debug: Log what we're receiving
+        logger.info(f"[record_experience] Creating experience with parsed_intent keys: {list((parsed_intent or {}).keys())[:10]}")
+        logger.info(f"[record_experience] parsed_intent type: {type(parsed_intent)}, len: {len(parsed_intent or {})}")
+
         # Create new experience
         experience = Experience(
             query_id=query_id,
@@ -172,6 +176,9 @@ class ContinuousRL:
             intent_confidence=(parsed_intent or {}).get("confidence", 0.0),
         )
 
+        # Debug: Verify intent in created experience
+        logger.info(f"[record_experience] Experience created, intent in object: {len(experience.parsed_intent)} fields")
+
         # Add to buffer
         self.buffer.add(experience)
 
@@ -186,17 +193,30 @@ class ContinuousRL:
         rating: str = None,
         interactions: list = None,
         correction: str = None,
+        # Rich evaluation fields from Claude Sonnet 4.5
+        evaluation_confidence: float = None,
+        evaluation_reasoning: str = None,
+        query_understanding: str = None,
+        per_widget_feedback: list = None,
+        missing_widgets: list = None,
+        suggested_improvements: list = None,
     ) -> bool:
         """
         Update an experience with user feedback.
 
-        Called when user provides explicit feedback via the UI.
+        Called when user provides explicit feedback via the UI or auto-evaluator.
 
         Args:
             query_id: The query ID from the original response
             rating: "up" or "down"
             interactions: List of widget interactions
             correction: User's correction text
+            evaluation_confidence: Confidence score (0.0-1.0) from evaluator
+            evaluation_reasoning: Detailed reasoning for the rating
+            query_understanding: What the user is trying to accomplish
+            per_widget_feedback: List of per-widget evaluation dicts
+            missing_widgets: List of widget types that should have been included
+            suggested_improvements: List of actionable improvement suggestions
 
         Returns:
             True if experience was found and updated
@@ -209,6 +229,20 @@ class ContinuousRL:
         if correction:
             feedback["correction"] = correction
 
+        # Add rich evaluation fields
+        if evaluation_confidence is not None:
+            feedback["evaluation_confidence"] = evaluation_confidence
+        if evaluation_reasoning:
+            feedback["evaluation_reasoning"] = evaluation_reasoning
+        if query_understanding:
+            feedback["query_understanding"] = query_understanding
+        if per_widget_feedback:
+            feedback["per_widget_feedback"] = per_widget_feedback
+        if missing_widgets:
+            feedback["missing_widgets"] = missing_widgets
+        if suggested_improvements:
+            feedback["suggested_improvements"] = suggested_improvements
+
         success = self.buffer.update_feedback(query_id, feedback)
 
         if success:
@@ -218,6 +252,25 @@ class ContinuousRL:
             exp = self.buffer.get_by_query_id(query_id)
             if exp:
                 exp.computed_reward = self.reward_aggregator.compute_reward(exp)
+
+            # Also save rating to database for Tier 2 DPO training
+            if rating:
+                try:
+                    from feedback.models import WidgetRating
+                    from django.utils import timezone
+
+                    WidgetRating.objects.update_or_create(
+                        entry_id=query_id,
+                        defaults={
+                            "rating": rating,
+                            "rated_at": timezone.now(),
+                            "device_id": "rl-system",
+                            "notes": f"Rating: {rating}" + (f", Correction: {correction}" if correction else ""),
+                        }
+                    )
+                    logger.debug(f"Saved rating to database for Tier 2 DPO training")
+                except Exception as e:
+                    logger.warning(f"Failed to save rating to database: {e}")
 
         return success
 

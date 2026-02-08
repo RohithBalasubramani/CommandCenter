@@ -12,31 +12,43 @@ class Layer2Config(AppConfig):
 
     def ready(self):
         """Initialize the RL system on app startup."""
+        logger.info("Layer2Config.ready() called")
         # Only run in the main process (not in management commands or migrations)
         if os.environ.get("RUN_MAIN") == "true" or os.environ.get("GUNICORN_WORKER"):
+            logger.info("RL system initialization triggered (GUNICORN_WORKER or RUN_MAIN set)")
             self._init_rl_system()
+        else:
+            logger.info("Skipping RL init (not main process)")
 
     def _init_rl_system(self):
         """Start the continuous RL system if enabled."""
+        logger.info("_init_rl_system() called")
+
         if os.environ.get("ENABLE_CONTINUOUS_RL", "true").lower() != "true":
             logger.info("Continuous RL disabled via ENABLE_CONTINUOUS_RL env var")
             return
 
         try:
+            logger.info("Importing RL modules...")
             from rl.continuous import init_rl_system
             from .orchestrator import get_orchestrator
 
+            logger.info("Getting orchestrator...")
             orchestrator = get_orchestrator()
+
+            logger.info("Calling init_rl_system()...")
             rl = init_rl_system(
                 widget_selector=getattr(orchestrator, 'widget_selector', None),
                 fixture_selector=getattr(orchestrator, 'fixture_selector', None),
             )
-            logger.info("Continuous RL system initialized successfully")
+            logger.info(f"Continuous RL system initialized successfully - Running: {rl.running}")
 
             # Preload embedding model to avoid cold-start latency on first request
             self._preload_embedding_model()
         except Exception as e:
-            logger.warning(f"Failed to initialize RL system: {e}")
+            import traceback
+            logger.error(f"Failed to initialize RL system: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
 
     def _preload_embedding_model(self):
         """Preload the sentence-transformers embedding model used by the scorer."""

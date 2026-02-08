@@ -28,11 +28,18 @@ def format_widget_selection_prompt(
     query: str,
     available_scenarios: list[str],
     context: Optional[dict] = None,
+    rich_evaluation: Optional[dict] = None,
 ) -> str:
     """
     Format the prompt for widget selection training.
 
     Mirrors the prompt structure used in widget_selector.py for consistency.
+
+    Args:
+        query: User query text
+        available_scenarios: List of available widget types
+        context: Intent context (domains, entities, etc.)
+        rich_evaluation: Rich evaluation from Claude Sonnet 4.5 (optional)
     """
     lines = [
         f"User query: {query}",
@@ -47,6 +54,20 @@ def format_widget_selection_prompt(
             lines.append(f"Entities: {entities_str}")
         if context.get("time_range"):
             lines.append(f"Time range: {context['time_range']}")
+
+    # Add rich evaluation context from Claude Sonnet 4.5
+    if rich_evaluation:
+        lines.append("")
+        if rich_evaluation.get("query_understanding"):
+            lines.append(f"Goal: {rich_evaluation['query_understanding']}")
+        if rich_evaluation.get("missing_widgets"):
+            missing = ", ".join(rich_evaluation["missing_widgets"])
+            lines.append(f"Consider adding: {missing}")
+        if rich_evaluation.get("suggested_improvements"):
+            # Include top 2 suggestions
+            suggestions = rich_evaluation["suggested_improvements"][:2]
+            if suggestions:
+                lines.append(f"Improvements: {'; '.join(suggestions)}")
 
     lines.append("")
     lines.append("Select the most appropriate widgets and their sizes.")

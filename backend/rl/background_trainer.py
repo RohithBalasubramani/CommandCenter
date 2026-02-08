@@ -511,7 +511,11 @@ class BackgroundTrainer:
         return True
 
     def _format_widget_prompt(self, experience: "Experience") -> str:
-        """Format experience into widget selection prompt."""
+        """
+        Format experience into widget selection prompt.
+
+        Enhanced with rich evaluation data from Claude Sonnet 4.5 when available.
+        """
         intent = experience.parsed_intent or {}
         lines = [
             f"User query: {experience.transcript}",
@@ -520,6 +524,19 @@ class BackgroundTrainer:
         entities = intent.get("entities", {})
         if entities:
             lines.append(f"Entities: {', '.join(f'{k}={v}' for k, v in entities.items())}")
+
+        # Add rich evaluation context from Claude Sonnet 4.5
+        if experience.query_understanding:
+            lines.append(f"Goal: {experience.query_understanding}")
+        if experience.missing_widgets:
+            missing = ", ".join(str(w) for w in experience.missing_widgets)
+            lines.append(f"Consider adding: {missing}")
+        if experience.suggested_improvements:
+            # Include top 2 suggestions
+            suggestions = experience.suggested_improvements[:2]
+            if suggestions:
+                lines.append(f"Improvements: {'; '.join(str(s) for s in suggestions)}")
+
         return "\n".join(lines)
 
     def get_stats(self) -> dict:

@@ -44,6 +44,12 @@ class RewardSignalAggregator:
         self.weights.setdefault("response_latency", 0.1)
         self.weights.setdefault("intent_confidence", 0.1)
 
+        # Rich evaluation weights (from Claude Sonnet 4.5)
+        self.weights.setdefault("evaluation_confidence_boost", 0.2)
+        self.weights.setdefault("per_widget_appropriateness", 0.4)
+        self.weights.setdefault("missing_widget_penalty", -0.3)
+        self.weights.setdefault("size_appropriateness", 0.2)
+
         # Reward bounds
         self.max_reward = CONTINUOUS_RL_CONFIG.get("max_reward", 2.0)
         self.min_reward = CONTINUOUS_RL_CONFIG.get("min_reward", -2.0)
@@ -74,6 +80,12 @@ class RewardSignalAggregator:
 
         # 5. Intent confidence
         reward += self._confidence_reward(experience)
+
+        # 6. Rich evaluation signals (from Claude Sonnet 4.5)
+        reward += self._evaluation_confidence_boost(experience)
+        reward += self._per_widget_appropriateness_reward(experience)
+        reward += self._missing_widget_penalty_reward(experience)
+        reward += self._size_appropriateness_reward(experience)
 
         # Clip to bounds
         reward = max(self.min_reward, min(self.max_reward, reward))
@@ -206,6 +218,117 @@ class RewardSignalAggregator:
         else:
             # No feedback yet, slight positive for high confidence
             return weight * confidence * 0.3
+
+    def _evaluation_confidence_boost(self, experience: "Experience") -> float:
+        """
+        Boost reward based on Claude's confidence in the evaluation.
+
+        High-confidence evaluations are more reliable, so we amplify them.
+        Low-confidence evaluations are uncertain, so we dampen them.
+        """
+        if experience.evaluation_confidence is None:
+            return 0.0
+
+        weight = self.weights["evaluation_confidence_boost"]
+        confidence = experience.evaluation_confidence
+
+        # Get base rating reward
+        if not experience.user_rating:
+            return 0.0
+
+        base_reward = 1.0 if experience.user_rating == "up" else -1.0
+
+        # Amplify if confident (>0.8), dampen if uncertain (<0.6)
+        if confidence > 0.8:
+            boost = (confidence - 0.8) * 2.0  # 0.0 to 0.4 boost
+            return weight * base_reward * boost
+        elif confidence < 0.6:
+            dampen = (0.6 - confidence) * 1.5  # 0.0 to 0.9 reduction
+            return weight * base_reward * -dampen
+        else:
+            return 0.0
+
+    def _per_widget_appropriateness_reward(self, experience: "Experience") -> float:
+        """
+        Compute reward from per-widget appropriateness scores.
+
+        Uses Claude's detailed analysis of each widget's suitability.
+        Averages scores across all widgets, weighted by position.
+        """
+        if not experience.per_widget_feedback:
+            return 0.0
+
+        weight = self.weights["per_widget_appropriateness"]
+
+        total_score = 0.0
+        total_weight = 0.0
+
+        for widget_feedback in experience.per_widget_feedback:
+            appropriateness = widget_feedback.get("appropriateness_score", 0.5)
+            widget_index = widget_feedback.get("widget_index", 0)
+
+            # Weight earlier widgets more heavily (hero > expanded > normal)
+            # Add 1 to prevent division by zero for index 0
+            position_weight = 1.0 / ((widget_index + 1) ** 0.5)  # sqrt decay
+
+            total_score += appropriateness * position_weight
+            total_weight += position_weight
+
+        if total_weight == 0:
+            return 0.0
+
+        # Average score (0.0 to 1.0) -> reward (-1.0 to 1.0)
+        avg_score = total_score / total_weight
+        normalized_reward = (avg_score - 0.5) * 2.0  # Map [0,1] to [-1,1]
+
+        return weight * normalized_reward
+
+    def _missing_widget_penalty_reward(self, experience: "Experience") -> float:
+        """
+        Penalty for missing widgets that Claude identified as needed.
+
+        Each missing widget type indicates a gap in the response.
+        """
+        if not experience.missing_widgets:
+            return 0.0
+
+        weight = self.weights["missing_widget_penalty"]
+
+        # Count distinct missing widget types
+        num_missing = len(experience.missing_widgets)
+
+        # Penalty scales with number of missing widgets (capped at 3)
+        penalty = min(num_missing / 3.0, 1.0)
+
+        return weight * penalty
+
+    def _size_appropriateness_reward(self, experience: "Experience") -> float:
+        """
+        Reward/penalty based on widget size appropriateness.
+
+        Claude evaluates if each widget's size (hero/expanded/normal/compact)
+        is appropriate for its content and importance.
+        """
+        if not experience.per_widget_feedback:
+            return 0.0
+
+        weight = self.weights["size_appropriateness"]
+
+        total_widgets = len(experience.per_widget_feedback)
+        size_appropriate_count = 0
+
+        for widget_feedback in experience.per_widget_feedback:
+            if widget_feedback.get("size_appropriate", False):
+                size_appropriate_count += 1
+
+        # Ratio of correctly-sized widgets (0.0 to 1.0)
+        size_ratio = size_appropriate_count / total_widgets if total_widgets > 0 else 0.0
+
+        # Map to reward (-1.0 to 1.0)
+        # 100% appropriate = +1.0, 0% appropriate = -1.0, 50% = 0.0
+        normalized_reward = (size_ratio - 0.5) * 2.0
+
+        return weight * normalized_reward
 
     def compute_batch_rewards(self, experiences: list["Experience"]) -> list[float]:
         """Compute rewards for a batch of experiences."""

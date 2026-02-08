@@ -71,6 +71,17 @@ backend/chroma_db/
 rl_checkpoints/
 rl_training_data/
 
+# Model files and training artifacts (too large for GitHub)
+*.safetensors
+*.pt
+*.bin
+*.gguf
+*.log
+unsloth_compiled_cache/
+**/data/models/
+**/data/traces/
+**/sft_checkpoints/
+
 # Logs
 logs/
 prodo/logs/

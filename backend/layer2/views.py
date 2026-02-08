@@ -290,6 +290,14 @@ def submit_feedback(request):
     interactions = request.data.get("interactions", [])
     correction = request.data.get("correction")
 
+    # Extract rich evaluation fields from Claude Sonnet 4.5 auto-evaluator
+    evaluation_confidence = request.data.get("evaluation_confidence")
+    evaluation_reasoning = request.data.get("evaluation_reasoning")
+    query_understanding = request.data.get("query_understanding")
+    per_widget_feedback = request.data.get("per_widget_feedback", [])
+    missing_widgets = request.data.get("missing_widgets", [])
+    suggested_improvements = request.data.get("suggested_improvements", [])
+
     if not query_id:
         return Response(
             {"error": "query_id is required"},
@@ -335,6 +343,13 @@ def submit_feedback(request):
             rating=rating,
             interactions=interactions,
             correction=correction,
+            # Rich evaluation fields
+            evaluation_confidence=evaluation_confidence,
+            evaluation_reasoning=evaluation_reasoning,
+            query_understanding=query_understanding,
+            per_widget_feedback=per_widget_feedback,
+            missing_widgets=missing_widgets,
+            suggested_improvements=suggested_improvements,
         )
 
         if success:

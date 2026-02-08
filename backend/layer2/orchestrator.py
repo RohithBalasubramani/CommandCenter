@@ -685,24 +685,50 @@ class Layer2Orchestrator:
 
         # Record experience for continuous RL (non-blocking)
         try:
-            if os.environ.get("ENABLE_CONTINUOUS_RL", "true").lower() == "true":
+            enable_rl = os.environ.get("ENABLE_CONTINUOUS_RL", "true").lower()
+            logger.info(f"[RL] ENABLE_CONTINUOUS_RL={enable_rl}")
+
+            if enable_rl == "true":
+                logger.info("[RL] Importing get_rl_system")
                 from rl.continuous import get_rl_system
                 rl = get_rl_system()
+                logger.info(f"[RL] RL system running: {rl.running}")
+
                 if rl.running:
                     # Extract fixtures from widget data
                     fixtures = {w["scenario"]: w.get("fixture", "") for w in widget_data}
+
+                    # Serialize intent properly
+                    if hasattr(parsed, "__dataclass_fields__"):
+                        intent_dict = asdict(parsed)
+                    elif hasattr(parsed, "__dict__"):
+                        intent_dict = parsed.__dict__
+                    else:
+                        intent_dict = vars(parsed) if parsed else {}
+
+                    logger.info(f"[RL] Intent serialization: hasattr(__dataclass_fields__)={hasattr(parsed, '__dataclass_fields__')}, hasattr(__dict__)={hasattr(parsed, '__dict__')}")
+                    logger.info(f"[RL] Intent dict keys: {list(intent_dict.keys())[:10]}")
+                    logger.info(f"[RL] Recording experience: query_id={query_id}, intent_type={intent_dict.get('type', 'unknown')}, confidence={intent_dict.get('confidence', 0)}")
+
                     rl.record_experience(
                         query_id=query_id,
                         transcript=transcript,
                         user_id=user_id,
-                        parsed_intent=asdict(parsed) if hasattr(parsed, "__dataclass_fields__") else vars(parsed),
+                        parsed_intent=intent_dict,
                         widget_plan=asdict(widget_plan) if hasattr(widget_plan, "__dataclass_fields__") else {},
                         fixtures=fixtures,
                         processing_time_ms=processing_time,
                         user_history=scenarios_used,
                     )
+                    logger.info(f"[RL] Experience recorded successfully: {query_id}")
+                else:
+                    logger.warning("[RL] RL system not running, skipping experience recording")
+            else:
+                logger.info(f"[RL] Continuous RL disabled (ENABLE_CONTINUOUS_RL={enable_rl})")
         except Exception as e:
-            logger.debug(f"RL experience recording skipped: {e}")
+            import traceback
+            logger.error(f"[RL] Experience recording failed: {e}")
+            logger.error(f"[RL] Traceback: {traceback.format_exc()}")
 
         # ══════════════════════════════════════════════════════════════
         # GROUNDING AUDIT: Finalize audit entry (Phase 5)

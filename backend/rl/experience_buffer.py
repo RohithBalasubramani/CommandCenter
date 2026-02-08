@@ -49,6 +49,14 @@ class Experience:
     widget_interactions: list = field(default_factory=list)
     correction_text: Optional[str] = None
 
+    # Rich evaluation feedback (from Claude Sonnet 4.5)
+    evaluation_confidence: Optional[float] = None  # 0.0-1.0 confidence in rating
+    evaluation_reasoning: Optional[str] = None  # Why Claude rated it this way
+    query_understanding: Optional[str] = None  # What Claude thinks user wants
+    per_widget_feedback: list = field(default_factory=list)  # Detailed per-widget analysis
+    missing_widgets: list = field(default_factory=list)  # Widget types that should be added
+    suggested_improvements: list = field(default_factory=list)  # Actionable suggestions
+
     # Computed reward (set by RewardSignalAggregator)
     computed_reward: Optional[float] = None
 
@@ -140,6 +148,7 @@ class ExperienceBuffer:
     def _save_to_disk(self):
         """Save buffer to disk."""
         if not self.persist_to_disk:
+            logger.debug("Persist to disk disabled, skipping save")
             return
 
         try:
@@ -153,30 +162,55 @@ class ExperienceBuffer:
             with open(buffer_path, "w") as f:
                 json.dump(data, f)
 
+            logger.info(f"Saved {len(self.buffer)} experiences to {buffer_path}")
+
         except Exception as e:
-            logger.warning(f"Failed to save buffer to disk: {e}")
+            import traceback
+            logger.error(f"Failed to save buffer to disk: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
 
     def add(self, experience: Experience):
         """
         Add a new experience (non-blocking).
 
         Called by orchestrator after each query.
+
+        NOTE: With multiple gunicorn workers, we reload from disk before adding
+        to prevent race conditions where workers overwrite each other's saves.
         """
         with self.lock:
+            # Reload from disk to get latest state from all workers
+            if self.persist_to_disk and not self.redis:
+                try:
+                    buffer_path = self._get_buffer_path()
+                    if buffer_path.exists():
+                        with open(buffer_path) as f:
+                            data = json.load(f)
+                        # Rebuild buffer from disk
+                        self.buffer = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        self._query_index = {exp.query_id: exp for exp in self.buffer}
+                        logger.debug(f"Reloaded {len(self.buffer)} experiences from disk before add")
+                except Exception as e:
+                    logger.warning(f"Failed to reload buffer before add: {e}")
+
             # Check if we're at capacity
             if len(self.buffer) >= self.max_size:
                 # Remove oldest from index
                 oldest = self.buffer[0]
                 self._query_index.pop(oldest.query_id, None)
+                self.buffer.pop(0)
 
             self.buffer.append(experience)
             self._query_index[experience.query_id] = experience
+
+            # Save to disk immediately after adding
+            self._save_to_disk()
 
         # Async persist to Redis if available
         if self.redis:
             self._persist_to_redis_async(experience)
 
-        logger.debug(f"Added experience {experience.query_id}, buffer size: {len(self.buffer)}")
+        logger.info(f"Added experience {experience.query_id}, buffer now has {len(self.buffer)} total")
 
     def update_feedback(self, query_id: str, feedback: dict) -> bool:
         """
@@ -190,12 +224,26 @@ class ExperienceBuffer:
             True if experience was found and updated
         """
         with self.lock:
+            # CRITICAL FIX: Reload from disk to get experiences created by other workers
+            if self.persist_to_disk and not self.redis:
+                try:
+                    buffer_path = self._get_buffer_path()
+                    if buffer_path.exists():
+                        with open(buffer_path) as f:
+                            data = json.load(f)
+                        # Rebuild buffer from disk
+                        self.buffer = [Experience.from_dict(exp_dict) for exp_dict in data.get("experiences", [])]
+                        self._query_index = {exp.query_id: exp for exp in self.buffer}
+                        logger.debug(f"Reloaded {len(self.buffer)} experiences from disk before update_feedback")
+                except Exception as e:
+                    logger.warning(f"Failed to reload buffer before update_feedback: {e}")
+
             exp = self._query_index.get(query_id)
             if not exp:
                 logger.warning(f"Experience not found for feedback: {query_id}")
                 return False
 
-            # Update fields
+            # Update basic fields
             if "rating" in feedback:
                 exp.user_rating = feedback["rating"]
             if "follow_up_type" in feedback:
@@ -205,7 +253,21 @@ class ExperienceBuffer:
             if "correction" in feedback:
                 exp.correction_text = feedback["correction"]
 
-            logger.debug(f"Updated feedback for {query_id}: {feedback}")
+            # Update rich evaluation fields (from Claude Sonnet 4.5)
+            if "evaluation_confidence" in feedback:
+                exp.evaluation_confidence = feedback["evaluation_confidence"]
+            if "evaluation_reasoning" in feedback:
+                exp.evaluation_reasoning = feedback["evaluation_reasoning"]
+            if "query_understanding" in feedback:
+                exp.query_understanding = feedback["query_understanding"]
+            if "per_widget_feedback" in feedback:
+                exp.per_widget_feedback = feedback["per_widget_feedback"]
+            if "missing_widgets" in feedback:
+                exp.missing_widgets = feedback["missing_widgets"]
+            if "suggested_improvements" in feedback:
+                exp.suggested_improvements = feedback["suggested_improvements"]
+
+            logger.debug(f"Updated feedback for {query_id}: rating={exp.user_rating}, confidence={exp.evaluation_confidence}")
 
             # CRITICAL FIX: Persist feedback to disk immediately
             self._save_to_disk()

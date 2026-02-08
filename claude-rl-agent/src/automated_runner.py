@@ -21,7 +21,15 @@ from typing import Dict, List, Tuple
 import logging
 
 from claude_trace_schema import ClaudeTrace, ToolCall, TraceStorage
-from reasoning_extractor import ReasoningSignalExtractor
+from reasoning_extractor import ReasoningSignalExtractor, ReasoningSignals
+from enhanced_extractor import EnhancedSignalExtractor, enhance_trace_with_maximum_extraction
+from enhanced_extraction import (
+    EnhancedReasoningSignals, ReasoningVector,
+    AssumptionStatement, ErrorValidationCheck, CounterfactualPath,
+    ProvenanceRecord, SafetySignal, SelfCritique, PreferenceRanking
+)
+import numpy as np
+from scipy.spatial.distance import cosine, euclidean
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +51,10 @@ class AutomatedRunner:
         self.claude_cli = claude_cli_path
         self.llama_model = llama_model
         self.storage = TraceStorage(storage_dir)
-        self.extractor = ReasoningSignalExtractor()
+        # Use ENHANCED extractor for maximum signal extraction (35 dimensions)
+        self.extractor = EnhancedSignalExtractor()
+        # Keep base extractor for fallback
+        self.base_extractor = ReasoningSignalExtractor()
 
         # Comparison results storage
         self.comparison_log = Path(storage_dir) / "comparison_log.jsonl"
@@ -113,17 +124,17 @@ class AutomatedRunner:
             logger.error(f"LLaMA error: {e}")
             return f"[ERROR: {e}]", 0.0
 
-    def extract_reasoning_signals(self, response: str) -> ReasoningSignals:
+    def extract_reasoning_signals(self, response: str) -> Tuple[ReasoningSignals, EnhancedReasoningSignals]:
         """
-        Extract ALL reasoning signals from a response.
+        Extract ALL reasoning signals from a response using MAXIMUM extraction.
 
-        Captures:
+        Captures 35+ dimensions:
         - Tool calls and sequences
         - Reasoning steps
         - Constraint detection
         - Self-corrections
         - Exploration depth
-        - Everything Claude thinks through
+        - **ENHANCED**: Assumptions, validations, counterfactuals, provenance, safety, critique, 35-dim vectors
         """
         # Create a mock trace for the extractor
         mock_trace = ClaudeTrace(
@@ -138,9 +149,13 @@ class AutomatedRunner:
             task_completed=True
         )
 
-        # Extract signals
-        signals = self.extractor.extract_signals(mock_trace)
-        return signals
+        # Extract base signals (backwards compatibility)
+        base_signals = self.base_extractor.extract_signals(mock_trace)
+
+        # Extract ENHANCED signals (MAXIMUM extraction - 35 dimensions)
+        enhanced_signals = self.extractor.extract_all(mock_trace)
+
+        return base_signals, enhanced_signals
 
     def compare_behavioral_patterns(
         self,
@@ -270,6 +285,244 @@ class AutomatedRunner:
 
         return behavioral_comparison
 
+    def compare_enhanced_behavioral_patterns(
+        self,
+        claude_base: ReasoningSignals,
+        llama_base: ReasoningSignals,
+        claude_enhanced: EnhancedReasoningSignals,
+        llama_enhanced: EnhancedReasoningSignals
+    ) -> Dict:
+        """
+        MAXIMUM EXTRACTION COMPARISON - All 35+ dimensions.
+
+        Compares:
+        BASE SIGNALS:
+        - Tool sequences, reasoning steps, constraints, self-corrections, exploration, pruning
+
+        ENHANCED SIGNALS:
+        - Assumptions (count, clarity)
+        - Validation checks (completeness)
+        - Counterfactual paths (alternative consideration)
+        - Provenance (source citations)
+        - Safety signals (refusal alignment)
+        - Self-critique (confidence)
+        - Reasoning vectors (35-dimensional behavioral profile)
+
+        Returns comprehensive comparison with fine-grained similarity scoring.
+        """
+        comparison = {}
+
+        # === BASE SIGNALS COMPARISON (backwards compatibility) ===
+        base_comparison = self.compare_behavioral_patterns(claude_base, llama_base)
+        comparison["base_signals"] = base_comparison
+
+        # === ENHANCED SIGNALS COMPARISON ===
+        enhanced = {}
+
+        # 1. ASSUMPTIONS COMPARISON
+        claude_assumptions = len(claude_enhanced.assumptions) if claude_enhanced.assumptions else 0
+        llama_assumptions = len(llama_enhanced.assumptions) if llama_enhanced.assumptions else 0
+
+        assumptions_clarity_score = 0.0
+        if claude_assumptions > 0 and llama_assumptions > 0:
+            # Compare assumption types and confidence
+            claude_types = set(a.assumption_type.value if hasattr(a.assumption_type, 'value') else str(a.assumption_type)
+                             for a in claude_enhanced.assumptions)
+            llama_types = set(a.assumption_type.value if hasattr(a.assumption_type, 'value') else str(a.assumption_type)
+                            for a in llama_enhanced.assumptions)
+            type_overlap = len(claude_types & llama_types) / max(len(claude_types | llama_types), 1)
+            assumptions_clarity_score = type_overlap
+
+        enhanced["assumptions"] = {
+            "claude_count": claude_assumptions,
+            "llama_count": llama_assumptions,
+            "clarity_score": assumptions_clarity_score,
+            "divergence": "MISSING" if claude_assumptions > llama_assumptions else ("SIMILAR" if abs(claude_assumptions - llama_assumptions) <= 1 else "DIFFERENT")
+        }
+
+        # 2. VALIDATION CHECKS COMPARISON
+        claude_validations = len(claude_enhanced.validation_checks) if claude_enhanced.validation_checks else 0
+        llama_validations = len(llama_enhanced.validation_checks) if llama_enhanced.validation_checks else 0
+
+        validation_completeness = 0.0
+        if claude_validations > 0 and llama_validations > 0:
+            validation_completeness = min(llama_validations, claude_validations) / max(claude_validations, llama_validations)
+
+        enhanced["validation_checks"] = {
+            "claude_count": claude_validations,
+            "llama_count": llama_validations,
+            "completeness_score": validation_completeness,
+            "divergence": "MISSING" if claude_validations > llama_validations else ("SIMILAR" if abs(claude_validations - llama_validations) <= 1 else "DIFFERENT")
+        }
+
+        # 3. COUNTERFACTUAL PATHS COMPARISON
+        claude_counterfactuals = len(claude_enhanced.counterfactual_paths) if claude_enhanced.counterfactual_paths else 0
+        llama_counterfactuals = len(llama_enhanced.counterfactual_paths) if llama_enhanced.counterfactual_paths else 0
+
+        counterfactual_consideration = 0.0
+        if claude_counterfactuals > 0 and llama_counterfactuals > 0:
+            counterfactual_consideration = min(llama_counterfactuals, claude_counterfactuals) / max(claude_counterfactuals, llama_counterfactuals)
+
+        enhanced["counterfactual_paths"] = {
+            "claude_count": claude_counterfactuals,
+            "llama_count": llama_counterfactuals,
+            "consideration_score": counterfactual_consideration,
+            "divergence": "MISSING" if claude_counterfactuals > llama_counterfactuals else ("SIMILAR" if claude_counterfactuals == llama_counterfactuals else "DIFFERENT")
+        }
+
+        # 4. PROVENANCE TRACKING COMPARISON
+        claude_provenance = len(claude_enhanced.provenance) if claude_enhanced.provenance else 0
+        llama_provenance = len(llama_enhanced.provenance) if llama_enhanced.provenance else 0
+
+        provenance_score = 0.0
+        if claude_provenance > 0 and llama_provenance > 0:
+            provenance_score = min(llama_provenance, claude_provenance) / max(claude_provenance, llama_provenance)
+
+        enhanced["provenance"] = {
+            "claude_count": claude_provenance,
+            "llama_count": llama_provenance,
+            "citation_score": provenance_score,
+            "divergence": "MISSING" if claude_provenance > llama_provenance else ("SIMILAR" if abs(claude_provenance - llama_provenance) <= 1 else "DIFFERENT")
+        }
+
+        # 5. SAFETY SIGNALS COMPARISON
+        claude_safety = len(claude_enhanced.safety_signals) if claude_enhanced.safety_signals else 0
+        llama_safety = len(llama_enhanced.safety_signals) if llama_enhanced.safety_signals else 0
+
+        safety_alignment = 1.0  # Default: both safe
+        if claude_safety > 0 or llama_safety > 0:
+            if claude_safety == llama_safety:
+                safety_alignment = 1.0
+            else:
+                safety_alignment = min(llama_safety, claude_safety) / max(claude_safety, llama_safety, 1)
+
+        enhanced["safety_signals"] = {
+            "claude_count": claude_safety,
+            "llama_count": llama_safety,
+            "alignment_score": safety_alignment,
+            "divergence": "MISALIGNED" if abs(claude_safety - llama_safety) > 0 else "ALIGNED"
+        }
+
+        # 6. SELF-CRITIQUE COMPARISON
+        claude_confidence = claude_enhanced.self_critique.confidence_level if claude_enhanced.self_critique else 0.5
+        llama_confidence = llama_enhanced.self_critique.confidence_level if llama_enhanced.self_critique else 0.5
+
+        confidence_alignment = 1.0 - abs(claude_confidence - llama_confidence)
+
+        enhanced["self_critique"] = {
+            "claude_confidence": claude_confidence,
+            "llama_confidence": llama_confidence,
+            "alignment_score": confidence_alignment,
+            "divergence": "SIMILAR" if abs(claude_confidence - llama_confidence) < 0.2 else "DIFFERENT"
+        }
+
+        # 7. REASONING VECTOR COMPARISON (35 dimensions)
+        vector_comparison = {}
+        if claude_enhanced.reasoning_vector and llama_enhanced.reasoning_vector:
+            claude_vec = claude_enhanced.reasoning_vector.to_numpy()
+            llama_vec = llama_enhanced.reasoning_vector.to_numpy()
+
+            # Cosine similarity (1 = identical, 0 = orthogonal)
+            cosine_sim = 1.0 - cosine(claude_vec, llama_vec)
+
+            # Euclidean distance (normalized)
+            euclidean_dist = euclidean(claude_vec, llama_vec)
+            max_dist = np.linalg.norm(np.ones(35))  # Max possible distance
+            normalized_euclidean = 1.0 - (euclidean_dist / max_dist)
+
+            # Per-dimension comparison
+            dimension_diffs = np.abs(claude_vec - llama_vec)
+            critical_divergences = []
+
+            dim_names = [
+                "reasoning_steps", "exploration_depth", "tool_calls", "constraints", "self_corrections",
+                "tools_pruned", "assumptions", "validations", "counterfactuals", "multi_step",
+                "used_rag", "used_terminal", "used_web", "parallel_tools", "explicit_planning",
+                "constraint_adherence", "reasoning_depth_score", "tool_efficiency", "self_correction_score",
+                "exploration_fit", "assumption_clarity", "validation_completeness", "counterfactual_consideration",
+                "overall_confidence", "task_success", "response_time", "response_length", "code_blocks",
+                "markdown", "json_output", "error", "user_feedback", "safety_concerns",
+                "provenance_citations", "edit_history"
+            ]
+
+            for i, (diff, name) in enumerate(zip(dimension_diffs, dim_names)):
+                if diff > 0.3:  # Significant divergence threshold
+                    critical_divergences.append({
+                        "dimension": name,
+                        "claude_value": float(claude_vec[i]),
+                        "llama_value": float(llama_vec[i]),
+                        "difference": float(diff)
+                    })
+
+            vector_comparison = {
+                "cosine_similarity": float(cosine_sim),
+                "normalized_euclidean_similarity": float(normalized_euclidean),
+                "average_dimension_difference": float(np.mean(dimension_diffs)),
+                "max_dimension_difference": float(np.max(dimension_diffs)),
+                "critical_divergences": critical_divergences,
+                "divergence": "SIMILAR" if cosine_sim > 0.85 else ("MODERATE" if cosine_sim > 0.7 else "DIFFERENT")
+            }
+        else:
+            vector_comparison = {
+                "cosine_similarity": 0.0,
+                "divergence": "NO_VECTORS",
+                "error": "Reasoning vectors not available"
+            }
+
+        enhanced["reasoning_vector"] = vector_comparison
+
+        comparison["enhanced_signals"] = enhanced
+
+        # === OVERALL SIMILARITY SCORE (weighted) ===
+        # Combine base (40%) + enhanced (60%) for comprehensive score
+        base_similarity = base_comparison["overall_similarity"]
+
+        enhanced_similarity_scores = [
+            assumptions_clarity_score if claude_assumptions > 0 else 1.0,
+            validation_completeness if claude_validations > 0 else 1.0,
+            counterfactual_consideration if claude_counterfactuals > 0 else 1.0,
+            provenance_score if claude_provenance > 0 else 1.0,
+            safety_alignment,
+            confidence_alignment,
+            vector_comparison.get("cosine_similarity", 0.0)
+        ]
+
+        enhanced_similarity = sum(enhanced_similarity_scores) / len(enhanced_similarity_scores)
+
+        overall_similarity = (base_similarity * 0.4) + (enhanced_similarity * 0.6)
+        comparison["overall_similarity"] = overall_similarity
+        comparison["base_similarity_weighted"] = base_similarity * 0.4
+        comparison["enhanced_similarity_weighted"] = enhanced_similarity * 0.6
+
+        # === TRAINING DECISION (enhanced criteria) ===
+        needs_training = (
+            base_comparison["should_train"] or  # Base signals diverge
+            assumptions_clarity_score < 0.7 or  # Assumptions mismatch
+            validation_completeness < 0.7 or    # Validation incomplete
+            counterfactual_consideration < 0.5 or  # Missing alternatives
+            safety_alignment < 0.9 or            # Safety misalignment
+            vector_comparison.get("cosine_similarity", 0.0) < 0.75 or  # Vector divergence
+            overall_similarity < 0.75            # Overall behavioral divergence
+        )
+
+        comparison["should_train"] = needs_training
+        comparison["training_reason"] = base_comparison.get("training_reason", []).copy()
+
+        if assumptions_clarity_score < 0.7 and claude_assumptions > 0:
+            comparison["training_reason"].append("Assumption clarity differs")
+        if validation_completeness < 0.7 and claude_validations > 0:
+            comparison["training_reason"].append("Validation completeness differs")
+        if counterfactual_consideration < 0.5 and claude_counterfactuals > 0:
+            comparison["training_reason"].append("Counterfactual consideration missing")
+        if provenance_score < 0.7 and claude_provenance > 0:
+            comparison["training_reason"].append("Provenance tracking differs")
+        if safety_alignment < 0.9:
+            comparison["training_reason"].append("Safety signal misalignment")
+        if vector_comparison.get("cosine_similarity", 0.0) < 0.75:
+            comparison["training_reason"].append(f"Reasoning vector divergence (similarity: {vector_comparison.get('cosine_similarity', 0.0):.2f})")
+
+        return comparison
+
     def compare_responses(
         self,
         prompt: str,
@@ -294,17 +547,19 @@ class AutomatedRunner:
             "llama_response": llama_response,
         }
 
-        # Extract reasoning signals from both responses
-        logger.info("Extracting Claude's reasoning signals...")
-        claude_signals = self.extract_reasoning_signals(claude_response)
+        # Extract reasoning signals from both responses (BASE + ENHANCED)
+        logger.info("Extracting Claude's reasoning signals (MAXIMUM extraction - 35 dimensions)...")
+        claude_base, claude_enhanced = self.extract_reasoning_signals(claude_response)
 
-        logger.info("Extracting LLaMA's reasoning signals...")
-        llama_signals = self.extract_reasoning_signals(llama_response)
+        logger.info("Extracting LLaMA's reasoning signals (MAXIMUM extraction - 35 dimensions)...")
+        llama_base, llama_enhanced = self.extract_reasoning_signals(llama_response)
 
-        # Deep behavioral comparison
-        behavioral_comparison = self.compare_behavioral_patterns(
-            claude_signals,
-            llama_signals
+        # COMPREHENSIVE behavioral comparison (BASE + ENHANCED signals)
+        behavioral_comparison = self.compare_enhanced_behavioral_patterns(
+            claude_base,
+            llama_base,
+            claude_enhanced,
+            llama_enhanced
         )
 
         comparison["behavioral_comparison"] = behavioral_comparison

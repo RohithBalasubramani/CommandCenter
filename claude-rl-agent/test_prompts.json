@@ -1,0 +1,109 @@
+{
+  "command_center_prompts": [
+    {
+      "id": 1,
+      "category": "equipment_query",
+      "prompt": "What's the average power consumption of chiller_001 compared to chiller_002?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["database schema exploration", "SQL query construction", "comparison analysis"]
+    },
+    {
+      "id": 2,
+      "category": "anomaly_detection",
+      "prompt": "Find all equipment with temperature readings above normal in the last 24 hours",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["schema exploration", "threshold detection", "time-range filtering"]
+    },
+    {
+      "id": 3,
+      "category": "maintenance_analysis",
+      "prompt": "Compare maintenance costs between transformer_001 and transformer_002 for this month",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["cost table lookup", "aggregation", "comparison"]
+    },
+    {
+      "id": 4,
+      "category": "schema_exploration",
+      "prompt": "What tables store equipment sensor data in the Command Center database?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["schema inspection", "table relationship analysis"]
+    },
+    {
+      "id": 5,
+      "category": "aggregation",
+      "prompt": "Calculate total energy consumption across all chillers this week",
+      "expected_tools": ["Bash"],
+      "expected_reasoning": ["aggregation query", "time-range filtering", "summation"]
+    },
+    {
+      "id": 6,
+      "category": "efficiency_analysis",
+      "prompt": "Which DG set has the highest runtime efficiency this month?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["efficiency calculation", "ranking", "comparison"]
+    },
+    {
+      "id": 7,
+      "category": "predictive",
+      "prompt": "Based on current data, which pumps are likely to need maintenance soon?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["pattern detection", "threshold analysis", "predictive logic"]
+    },
+    {
+      "id": 8,
+      "category": "relationship_query",
+      "prompt": "How are the chillers and cooling_towers tables related in the schema?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["foreign key detection", "relationship mapping"]
+    },
+    {
+      "id": 9,
+      "category": "threshold_detection",
+      "prompt": "List all transformers with voltage readings outside acceptable range",
+      "expected_tools": ["Bash"],
+      "expected_reasoning": ["threshold definition", "filtering", "listing"]
+    },
+    {
+      "id": 10,
+      "category": "uptime_analysis",
+      "prompt": "What's the uptime percentage for critical equipment in the last month?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["uptime calculation", "critical equipment filtering", "aggregation"]
+    },
+    {
+      "id": 11,
+      "category": "trend_analysis",
+      "prompt": "Show power consumption trends for all equipment over the past week",
+      "expected_tools": ["Bash"],
+      "expected_reasoning": ["time-series query", "trend calculation", "visualization preparation"]
+    },
+    {
+      "id": 12,
+      "category": "optimization",
+      "prompt": "Which chillers are operating below 80% efficiency and could be optimized?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["efficiency calculation", "threshold filtering", "optimization recommendation"]
+    },
+    {
+      "id": 13,
+      "category": "failure_prediction",
+      "prompt": "Are there any equipment showing early signs of failure based on sensor anomalies?",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["anomaly detection", "pattern matching", "failure correlation"]
+    },
+    {
+      "id": 14,
+      "category": "cost_analysis",
+      "prompt": "Calculate the total maintenance cost for all DG sets in February",
+      "expected_tools": ["Bash"],
+      "expected_reasoning": ["cost aggregation", "date filtering", "summation"]
+    },
+    {
+      "id": 15,
+      "category": "comparative_analysis",
+      "prompt": "Compare the performance metrics of all AHU units and rank them by efficiency",
+      "expected_tools": ["Bash", "Read"],
+      "expected_reasoning": ["metric extraction", "comparison", "ranking algorithm"]
+    }
+  ]
+}
